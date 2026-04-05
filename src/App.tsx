@@ -10,7 +10,7 @@ import {
   type NodeProps,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { memo, startTransition, useEffect, useMemo, useState } from 'react';
+import { memo, startTransition, useDeferredValue, useEffect, useMemo, useState } from 'react';
 import {
   getAlternativeTopicIds,
   getNextTopicIds,
@@ -22,9 +22,11 @@ import {
   getSuggestedTopicIds,
   getTopicStudyTips,
   roadmapMeta,
+  roadmapSections,
   topicCatalog,
   type Journey,
   type RoadmapNodeData,
+  type TopicLevel,
 } from './data/roadmap';
 
 type RoadmapFlowNode = Node<RoadmapNodeData, 'roadmapNode'>;
@@ -37,6 +39,9 @@ const COMPACT_VIEWPORT_QUERY = '(max-width: 760px)';
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 const DEFAULT_FIT_PADDING = 0.2;
 const COMPACT_FIT_PADDING = 0.14;
+const levelOptions: TopicLevel[] = ['ابدأ', 'أساسي', 'عملي', 'متقدم', '2026'];
+const arabicDiacriticsPattern = /[\u064b-\u065f\u0670\u06d6-\u06ed]/g;
+const nonSearchCharactersPattern = /[^\p{L}\p{N}]+/gu;
 
 const journeyStroke: Record<Journey, string> = {
   enter: '#16a34a',
@@ -113,6 +118,35 @@ function mapTopicIdsToTopics(ids: string[]): RoadmapTopic[] {
   return ids
     .map((topicId) => topicCatalog[topicId])
     .filter((topic): topic is RoadmapTopic => Boolean(topic));
+}
+
+function normalizeSearchText(value: string) {
+  return value
+    .normalize('NFKD')
+    .replace(arabicDiacriticsPattern, '')
+    .replace(/[ـ]/g, '')
+    .toLowerCase()
+    .replace(nonSearchCharactersPattern, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function buildTopicSearchDocument(topic: RoadmapTopic, trackTitle: string) {
+  return normalizeSearchText(
+    [
+      topic.title,
+      topic.category,
+      topic.level,
+      trackTitle,
+      topic.summary,
+      topic.note2026 ?? '',
+      ...topic.learn,
+      ...topic.build,
+      ...topic.tags,
+      ...(topic.searchKeywords ?? []),
+      ...topic.resources.flatMap((resource) => [resource.label, resource.url]),
+    ].join(' '),
+  );
 }
 
 function getTopicContextLine(topic: RoadmapTopic, journey: Journey) {
@@ -202,6 +236,8 @@ const RoadmapNode = memo(function RoadmapNode({ data }: NodeProps<RoadmapFlowNod
         'roadmap-node',
         data.variant === 'section' ? 'roadmap-node-section' : 'roadmap-node-topic',
         data.selected ? 'is-selected' : '',
+        data.matched ? 'is-matched' : '',
+        data.dimmed ? 'is-dimmed' : '',
       ]
         .filter(Boolean)
         .join(' ')}
@@ -236,6 +272,10 @@ function RoadmapWorkspace() {
   const [showLegend, setShowLegend] = useState(getInitialLegendVisibility);
   const [isCompactViewport, setCompactViewport] = useState(() => safeMatchMedia(COMPACT_VIEWPORT_QUERY));
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => safeMatchMedia(REDUCED_MOTION_QUERY));
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTrackId, setActiveTrackId] = useState('');
+  const [activeLevel, setActiveLevel] = useState<TopicLevel | ''>('');
+  const deferredSearchQuery = useDeferredValue(searchQuery);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -315,26 +355,112 @@ function RoadmapWorkspace() {
     };
   }, [selectedId]);
 
+  const trackOptions = useMemo(
+    () =>
+      roadmapSections.map((section) => ({
+        id: section.id,
+        title: topicCatalog[section.id]?.title ?? section.id,
+      })),
+    [],
+  );
+
+  const trackIdByTopicId = useMemo(() => {
+    const map = new Map<string, string>();
+
+    for (const section of roadmapSections) {
+      map.set(section.id, section.id);
+
+      for (const topicId of [...section.right, ...section.left]) {
+        map.set(topicId, section.id);
+      }
+    }
+
+    return map;
+  }, []);
+
+  const searchDocumentByTopicId = useMemo(() => {
+    const documents = new Map<string, string>();
+
+    for (const topic of Object.values(topicCatalog)) {
+      const trackId = trackIdByTopicId.get(topic.id) ?? topic.id;
+      const trackTitle = topicCatalog[trackId]?.title ?? '';
+      documents.set(topic.id, buildTopicSearchDocument(topic, trackTitle));
+    }
+
+    return documents;
+  }, [trackIdByTopicId]);
+
+  const filterState = useMemo(() => {
+    const normalizedQuery = normalizeSearchText(deferredSearchQuery);
+    const queryTokens = normalizedQuery ? normalizedQuery.split(' ') : [];
+    const hasActiveFilters = Boolean(queryTokens.length || activeTrackId || activeLevel);
+
+    if (!hasActiveFilters) {
+      return {
+        hasActiveFilters: false,
+        directlyMatchedIds: new Set<string>(),
+        contextualIds: new Set<string>(),
+        resultCount: 0,
+      };
+    }
+
+    const directlyMatchedIds = new Set<string>();
+    const contextualIds = new Set<string>();
+
+    for (const topic of Object.values(topicCatalog)) {
+      const trackId = trackIdByTopicId.get(topic.id) ?? topic.id;
+      const searchDocument = searchDocumentByTopicId.get(topic.id) ?? '';
+      const matchesTrack = !activeTrackId || trackId === activeTrackId;
+      const matchesLevel = !activeLevel || topic.level === activeLevel;
+      const matchesQuery = !queryTokens.length || queryTokens.every((token) => searchDocument.includes(token));
+
+      if (!matchesTrack || !matchesLevel || !matchesQuery) {
+        continue;
+      }
+
+      directlyMatchedIds.add(topic.id);
+      contextualIds.add(topic.id);
+      contextualIds.add(trackId);
+    }
+
+    if (activeTrackId) {
+      contextualIds.add(activeTrackId);
+    }
+
+    const topicMatches = [...directlyMatchedIds].filter((topicId) => nodeById.get(topicId)?.data.variant === 'topic').length;
+
+    return {
+      hasActiveFilters: true,
+      directlyMatchedIds,
+      contextualIds,
+      resultCount: topicMatches || directlyMatchedIds.size,
+    };
+  }, [activeLevel, activeTrackId, deferredSearchQuery, searchDocumentByTopicId, trackIdByTopicId]);
+
   const nodes = useMemo(() => {
-    if (!selectedId) {
+    if (!selectedId && !filterState.hasActiveFilters) {
       return flowNodes;
     }
 
-    return flowNodes.map((node) =>
-      node.id === selectedId
-        ? {
-            ...node,
-            data: {
-              ...node.data,
-              selected: true,
-            },
-          }
-        : node,
-    );
-  }, [selectedId]);
+    return flowNodes.map((node) => {
+      const isSelected = node.id === selectedId;
+      const isMatched = filterState.hasActiveFilters && filterState.directlyMatchedIds.has(node.id);
+      const isDimmed = filterState.hasActiveFilters && !filterState.contextualIds.has(node.id) && !isSelected;
+
+      return {
+        ...node,
+        data: {
+          ...node.data,
+          selected: isSelected || undefined,
+          matched: isMatched || undefined,
+          dimmed: isDimmed || undefined,
+        },
+      };
+    });
+  }, [filterState, selectedId]);
 
   const edges = useMemo(() => {
-    if (!selectedId) {
+    if (!selectedId && !filterState.hasActiveFilters) {
       return baseStyledEdges;
     }
 
@@ -343,22 +469,36 @@ function RoadmapWorkspace() {
     return baseStyledEdges.map((edge) => {
       const highlighted = edge.source === selectedId || edge.target === selectedId;
 
-      if (!highlighted) {
+      if (highlighted) {
+        return {
+          ...edge,
+          animated: true,
+          style: {
+            ...edge.style,
+            stroke: highlightStroke,
+            opacity: 1,
+            strokeWidth: 2.3,
+          },
+        };
+      }
+
+      if (!filterState.hasActiveFilters) {
         return edge;
       }
 
+      const endpointsVisible = filterState.contextualIds.has(edge.source) && filterState.contextualIds.has(edge.target);
+
       return {
         ...edge,
-        animated: true,
+        animated: false,
         style: {
           ...edge.style,
-          stroke: highlightStroke,
-          opacity: 1,
-          strokeWidth: 2.3,
+          opacity: endpointsVisible ? 0.76 : 0.14,
+          strokeWidth: endpointsVisible ? 1.55 : 1.1,
         },
       };
     });
-  }, [selectedId, selectedNode]);
+  }, [filterState, selectedId, selectedNode]);
 
   const fitPadding = isCompactViewport ? COMPACT_FIT_PADDING : DEFAULT_FIT_PADDING;
   const animationDuration = withMotionPreference(prefersReducedMotion, isCompactViewport ? 240 : 360);
@@ -434,35 +574,100 @@ function RoadmapWorkspace() {
     setShowLegend((current) => !current);
   }
 
+  function clearFilters() {
+    setSearchQuery('');
+    setActiveTrackId('');
+    setActiveLevel('');
+  }
+
   const { suggestedTopics, preparationTopics, nextTopics, alternativeTopics, projectIdeas, searchKeywords, studyTips } =
     relatedContent;
+  const filterSummary = filterState.hasActiveFilters
+    ? filterState.resultCount
+      ? `تُعرض الآن ${filterState.resultCount} نتيجة مطابقة داخل الخريطة.`
+      : 'لا توجد نتيجة مطابقة الآن. جرّب كلمة أدق أو وسّع الفلاتر.'
+    : 'ابحث بالعنوان أو الكلمات المفتاحية، أو صفِّ الخريطة حسب المسار والمستوى.';
 
   return (
     <div className="app-shell">
       <header className="topbar">
-        <div className="topbar-brand">
-          <strong>{roadmapMeta.title}</strong>
-          <span>
-            {roadmapMeta.totalTracks} مسار رئيسي / {roadmapMeta.totalTopics} موضوع / آخر تحديث {roadmapMeta.updatedAt}
-          </span>
+        <div className="topbar-main">
+          <div className="topbar-brand">
+            <strong>{roadmapMeta.title}</strong>
+            <span>
+              {roadmapMeta.totalTracks} مسار رئيسي / {roadmapMeta.totalTopics} موضوع / آخر تحديث {roadmapMeta.updatedAt}
+            </span>
+          </div>
+
+          <div className="topbar-actions">
+            <button type="button" className="topbar-button is-icon-button" onClick={zoomIn} aria-label="تكبير">
+              +
+            </button>
+            <button type="button" className="topbar-button is-icon-button" onClick={zoomOut} aria-label="تصغير">
+              -
+            </button>
+            <button type="button" className="topbar-button" onClick={resetViewport}>
+              ضبط العرض
+            </button>
+            <button type="button" className="topbar-button" onClick={toggleLegend} aria-pressed={showLegend}>
+              {showLegend ? 'إخفاء الدليل' : 'إظهار الدليل'}
+            </button>
+            <button type="button" className="topbar-button" onClick={toggleTheme} aria-pressed={theme === 'dark'}>
+              {theme === 'dark' ? 'وضع فاتح' : 'وضع داكن'}
+            </button>
+          </div>
         </div>
 
-        <div className="topbar-actions">
-          <button type="button" className="topbar-button is-icon-button" onClick={zoomIn} aria-label="تكبير">
-            +
+        <div className="topbar-filters" aria-label="أدوات البحث والفلترة">
+          <input
+            type="search"
+            className="topbar-input topbar-search-input"
+            placeholder="ابحث بعنوان الموضوع أو الكلمات المفتاحية أو المصدر"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            aria-label="ابحث داخل الخريطة"
+            spellCheck={false}
+            dir="rtl"
+          />
+
+          <select
+            className="topbar-select"
+            value={activeTrackId}
+            onChange={(event) => setActiveTrackId(event.target.value)}
+            aria-label="فلترة حسب المسار"
+          >
+            <option value="">كل المسارات</option>
+            {trackOptions.map((track) => (
+              <option key={track.id} value={track.id}>
+                {track.title}
+              </option>
+            ))}
+          </select>
+
+          <select
+            className="topbar-select"
+            value={activeLevel}
+            onChange={(event) => setActiveLevel(event.target.value as TopicLevel | '')}
+            aria-label="فلترة حسب المستوى"
+          >
+            <option value="">كل المستويات</option>
+            {levelOptions.map((level) => (
+              <option key={level} value={level}>
+                {level}
+              </option>
+            ))}
+          </select>
+
+          <button
+            type="button"
+            className="topbar-button topbar-button-secondary"
+            onClick={clearFilters}
+            disabled={!filterState.hasActiveFilters}
+          >
+            مسح الفلاتر
           </button>
-          <button type="button" className="topbar-button is-icon-button" onClick={zoomOut} aria-label="تصغير">
-            -
-          </button>
-          <button type="button" className="topbar-button" onClick={resetViewport}>
-            ضبط العرض
-          </button>
-          <button type="button" className="topbar-button" onClick={toggleLegend} aria-pressed={showLegend}>
-            {showLegend ? 'إخفاء الدليل' : 'إظهار الدليل'}
-          </button>
-          <button type="button" className="topbar-button" onClick={toggleTheme} aria-pressed={theme === 'dark'}>
-            {theme === 'dark' ? 'وضع فاتح' : 'وضع داكن'}
-          </button>
+
+          <span className="topbar-status">{filterSummary}</span>
         </div>
       </header>
 

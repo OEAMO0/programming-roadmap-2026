@@ -86,10 +86,20 @@ const docs = {
   mcp: 'https://modelcontextprotocol.io/',
   openai: 'https://platform.openai.com/docs/overview',
   python: 'https://docs.python.org/3/tutorial/',
+  pythonLibrary: 'https://docs.python.org/3/library/index.html',
   pythonTyping: 'https://docs.python.org/3/library/typing.html',
   pythonAsyncio: 'https://docs.python.org/3/library/asyncio.html',
+  pythonMath: 'https://docs.python.org/3/library/math.html',
+  pythonCmath: 'https://docs.python.org/3/library/cmath.html',
+  pythonDecimal: 'https://docs.python.org/3/library/decimal.html',
+  pythonFractions: 'https://docs.python.org/3/library/fractions.html',
   pythonPackaging: 'https://packaging.python.org/en/latest/',
   pytest: 'https://docs.pytest.org/en/stable/',
+  numpyQuickstart: 'https://numpy.org/doc/stable/user/quickstart.html',
+  numpyLinalg: 'https://numpy.org/doc/stable/reference/routines.linalg.html',
+  scipyTutorial: 'https://docs.scipy.org/doc/scipy/tutorial/index.html',
+  scipyIntegrate: 'https://docs.scipy.org/doc/scipy/tutorial/integrate.html',
+  scipyOptimize: 'https://docs.scipy.org/doc/scipy/tutorial/optimize.html',
   go: 'https://go.dev/doc/tutorial/getting-started',
   dotnet: 'https://learn.microsoft.com/aspnet/core/',
   fastapi: 'https://fastapi.tiangolo.com/',
@@ -132,11 +142,21 @@ const docs = {
   unity: 'https://docs.unity3d.com/',
   unreal: 'https://dev.epicgames.com/documentation/unreal-engine/',
   godot: 'https://docs.godotengine.org/en/stable/',
+  godotMath: 'https://docs.godotengine.org/en/stable/tutorials/math/index.html',
   vulkan: 'https://docs.vulkan.org/guide/latest/',
   vulkanTutorial: 'https://docs.vulkan.org/tutorial/latest/00_Introduction.html',
   directx12: 'https://learn.microsoft.com/en-us/windows/win32/direct3d12/directx-12-programming-guide',
   sdl: 'https://wiki.libsdl.org/',
+  sdlRender: 'https://wiki.libsdl.org/SDL3/CategoryRender',
   learnOpenGL: 'https://learnopengl.com/',
+  eigenGettingStarted: 'https://libeigen.gitlab.io/eigen/docs-nightly/GettingStarted.html',
+  eigenGeometry: 'https://libeigen.gitlab.io/eigen/docs-nightly/group__TutorialGeometry.html',
+  mdnGames: 'https://developer.mozilla.org/en-US/docs/Games',
+  mdnCanvas: 'https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial',
+  mdnWebgl: 'https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL',
+  emscriptenPorting: 'https://emscripten.org/docs/porting/index.html',
+  pygameDocs: 'https://www.pygame.org/docs/',
+  pygameMath: 'https://www.pygame.org/docs/ref/math.html',
 };
 
 const topicInputs = {
@@ -1255,11 +1275,12 @@ const topicInputs = {
     level: 'عملي',
     category: 'الألعاب',
     summary:
-      'هذا المسار يربط بين تطوير اللعبة نفسها وبين فهم المحرك الذي تعمل فوقه. تبدأ من دورة الإطار والـgameplay، ثم تنتقل إلى الرياضيات، أنظمة المحرك، والرندر منخفض المستوى.',
+      'هذا المسار يربط بين تطوير اللعبة نفسها وبين فهم المحرك الذي تعمل فوقه. تبدأ من دورة الإطار والـgameplay، ثم تنتقل إلى الرياضيات، أنظمة المحرك، والرندر منخفض المستوى عبر بيئات شائعة مثل C وC++ وPython والويب.',
     learn: [
       'افهم الفرق بين بناء لعبة باستخدام محرك جاهز وبين بناء أجزاء من المحرك بنفسك.',
       'ابدأ من لعبة صغيرة قابلة للإنهاء قبل القفز إلى طموحات عالم مفتوح أو محرك شامل.',
       'اربط بين البرمجة، الرياضيات، الأدوات، والرندر لأنها تعمل معًا داخل أي لعبة حقيقية.',
+      'اختر stack مناسبًا لهدفك: C وC++ للعمق والأداء، Python للبروتوتايب والأدوات، والويب لتجارب سريعة قابلة للمشاركة.',
     ],
     build: ['ابنِ لعبة صغيرة 2D أو prototype ثلاثي الأبعاد، ثم وثق كيف تدير التحديث والرندر والمدخلات والأصول.'],
     note2026:
@@ -1268,8 +1289,11 @@ const topicInputs = {
       { label: 'Unity Docs', url: docs.unity },
       { label: 'Unreal Engine Docs', url: docs.unreal },
       { label: 'Godot Docs', url: docs.godot },
+      { label: 'SDL Wiki', url: docs.sdl },
+      { label: 'MDN Games', url: docs.mdnGames },
     ],
-    tags: ['Game Dev', 'Engines', 'Gameplay'],
+    tags: ['Game Dev', 'Engines', 'Gameplay', 'C', 'C++', 'Python', 'Web'],
+    searchKeywords: ['game development roadmap c++ python web', 'engine programming learning path', 'game dev math roadmap'],
   },
   'game-dev-basics': {
     title: 'أساس الأساس: كيف تعمل اللعبة؟',
@@ -1339,21 +1363,58 @@ const topicInputs = {
     level: 'متقدم',
     category: 'الألعاب',
     summary:
-      'الألعاب لا تحتاج كل الرياضيات من أول يوم، لكنها تحتاج أساسًا قويًا في المتجهات والتحويلات والكاميرات والتصادم والحركة.',
+      'الألعاب لا تحتاج كل الرياضيات من أول يوم، لكنها تحتاج أساسًا قويًا في المتجهات والتحويلات والكاميرات والتصادم والحركة. المهم أن تعرف ما الذي تحتاجه فعلًا في C وC++ وPython والويب بدل جمع مواضيع رياضية بلا استخدام واضح.',
     learn: [
       'افهم vectors وdot product وcross product وmatrices والتحويلات الأساسية.',
-      'تعرف على الحركة، الجاذبية، الاصطدام، interpolation، والكاميرا.',
+      'في C وC++ ستحتاج حسًا أعلى بالدقة والأنواع وlayout البيانات لأن الرياضيات ترتبط بالأداء والرندر والمحاكاة مباشرة.',
+      'في Python ستستفيد من vectors وinterpolation والتصادم والزمن الثابت أكثر من حاجتك المبكرة إلى معادلات ثقيلة، خصوصًا مع prototyping أو Pygame.',
+      'في الويب ستحتاج فهم الإحداثيات داخل canvas والتحويلات وdelta time وmatrices عندما تدخل WebGL أو محاكاة كاميرا.',
       'اربط المفهوم الرياضي بالمشكلة التي تراها على الشاشة بدل حفظ القوانين مجردة.',
     ],
     build: ['نفذ حركة كاميرا أو مقذوفات أو نظام تصادم بسيط مع شرح رياضي مختصر لما يحدث.'],
     note2026:
       'هذا المجال هو من أهم ما يميز مطور الألعاب القادر على حل المشاكل بنفسه بدل الاعتماد الكامل على جاهزية المحرك.',
     resources: [
-      { label: 'LearnOpenGL', url: docs.learnOpenGL },
       { label: 'Godot Docs', url: docs.godot },
+      { label: 'Godot Math Docs', url: docs.godotMath },
       { label: 'Unity Docs', url: docs.unity },
+      { label: 'Eigen Geometry Tutorial', url: docs.eigenGeometry },
+      { label: 'MDN WebGL Tutorial', url: docs.mdnWebgl },
     ],
-    tags: ['Vectors', 'Matrices', 'Physics', 'Cameras'],
+    tags: ['Vectors', 'Matrices', 'Physics', 'Cameras', 'C++', 'Python', 'Web'],
+    searchKeywords: ['game math vectors matrices collision', 'webgl camera math basics', 'pygame vector movement tutorial'],
+  },
+  'engine-math-foundations': {
+    title: 'ما الرياضيات التي تحتاجها لبناء محرك؟',
+    level: 'متقدم',
+    category: 'المحركات',
+    summary:
+      'بناء محرك لا يحتاج “كل الرياضيات” دفعة واحدة، لكنه يحتاج باقة واضحة بحسب طبقتك: جبر خطي للتحويلات، هندسة للتصادمات، حسابًا عدديًا للاستقرار، وفهمًا عمليًا للدقة والوحدات. هذا الباب يوضح ما تحتاجه أولًا وماذا تؤجل.',
+    learn: [
+      'لبناء طبقة مشهد أو كاميرا أو renderer ستحتاج vectors وmatrices وcoordinate spaces وaffine transforms وprojection basics.',
+      'للدوران ثلاثي الأبعاد ستدخل quaternions وdot/cross products وnormals عندما تصبح مشاكل الالتفاف والاتجاه واقعية في مشروعك.',
+      'للفيزياء والمحاكاة ستحتاج مفهومًا عمليًا عن المشتقات والتكامل العددي والثبات stability وtolerances أكثر من حاجتك المبكرة إلى رياضيات أكاديمية ثقيلة.',
+      'في C وC++ يظهر أثر الرياضيات سريعًا في الأداء والدقة، وفي الويب وPython يظهر أثرها في timing وtransforms وسهولة بناء الأدوات والنماذج الأولية.',
+    ],
+    build: [
+      'ارسم قائمة طبقات لمحرك صغير 2D أو 3D ثم اكتب بجانب كل طبقة ما الرياضيات التي تحتاجها الآن وما الذي يمكنك تأجيله دون ضرر.',
+      'نفذ demo صغيرة تجمع transform hierarchy وكاميرا وتصادمًا بسيطًا، ثم وثّق أي جزء كان رياضيًا وأي جزء كان تنظيميًا أو هندسيًا فقط.',
+    ],
+    note2026:
+      'أكبر فخ في هذا المسار هو أن تفتح كتب رياضيات كثيرة بلا مشروع. ما تحتاجه فعلًا يتضح عندما تربط كل مفهوم بطبقة محددة من المحرك.',
+    resources: [
+      { label: 'Godot Math Docs', url: docs.godotMath },
+      { label: 'Eigen Geometry Tutorial', url: docs.eigenGeometry },
+      { label: 'SDL Render Category', url: docs.sdlRender },
+      { label: 'Vulkan Guide', url: docs.vulkan },
+      { label: 'MDN WebGL Tutorial', url: docs.mdnWebgl },
+    ],
+    tags: ['Engine Math', 'Linear Algebra', 'Transforms', 'Simulation', 'Rendering'],
+    searchKeywords: [
+      'engine math roadmap vectors matrices quaternions',
+      'renderer math basics projection spaces',
+      'simulation stability collision geometry',
+    ],
   },
   'engine-architecture': {
     title: 'معمارية محرك اللعبة',
@@ -1365,13 +1426,16 @@ const topicInputs = {
       'افهم كيف تنقسم المحركات إلى subsystems بدل كتلة واحدة.',
       'قارن بين scene graph وentity component systems وما الذي يناسب مشروعك.',
       'افصل بين runtime وبين الأدوات والمحرر والـasset pipeline.',
+      'اربط كل subsystem بالرياضيات التي تخدمه فقط: transforms للمشهد، هندسة للتصادم، وتوقيت واستقرار للمحاكاة.',
     ],
     build: ['ارسم معمارية محرك صغير 2D وحدد فيه الأنظمة الأساسية وحدود كل نظام.'],
     note2026:
       'أكبر خطأ شائع هو محاولة كتابة كل شيء دفعة واحدة. المحرك الجيد يبدأ بنواة صغيرة جدًا ثم تنمو حولها الأنظمة اللازمة فقط.',
     resources: [
       { label: 'Godot Docs', url: docs.godot },
+      { label: 'Godot Math Docs', url: docs.godotMath },
       { label: 'SDL Wiki', url: docs.sdl },
+      { label: 'SDL Render Category', url: docs.sdlRender },
       { label: 'Unreal Engine Docs', url: docs.unreal },
     ],
     tags: ['Engine Architecture', 'Subsystems', 'ECS', 'Scene Graph'],
@@ -3026,16 +3090,17 @@ const topicInputs = {
     ],
   },
   'linux-math-libraries': {
-    title: 'الرياضيات على Linux: libm و GSL والكتابة الدقيقة',
+    title: 'الرياضيات على Linux بلغة C: libm و GSL والكتابة الدقيقة',
     level: 'متقدم',
     category: 'اللغات والأنظمة',
     summary:
-      'الرياضيات في Linux ليست مجرد #include <math.h>. هنا تحتاج أن تفهم libm، الربط بـ -lm، التعامل مع floating point وNaN وInf والأخطاء العددية، ومتى تكفيك الدوال القياسية ومتى يصبح GSL أو BLAS أكثر ملاءمة لمسائل عددية أو علمية أعمق.',
+      'الرياضيات في Linux ليست مجرد #include <math.h>. هنا تحتاج أن تفهم libm، الربط بـ -lm، التعامل مع floating point وNaN وInf والأخطاء العددية، ومتى تكفيك الدوال القياسية في C ومتى يصبح GSL أو BLAS أكثر ملاءمة لمسائل عددية أو علمية أعمق.',
     learn: [
       'استخدم math.h وcomplex.h بوعي، وافهم لماذا تتطلب بعض البرامج الربط الصريح بـ libm عبر -lm بدل افتراض أن كل شيء يأتي تلقائيًا.',
       'تعلّم أساسيات الأخطاء العددية: التقريب، overflow وunderflow وdomain errors وكيف تكتشف مشاكل الرياضيات في C على Linux بدل تفسيرها كأخطاء عشوائية.',
       'افهم متى يكفيك libm للدوال القياسية مثل sin وcos وsqrt وpow، ومتى تحتاج GSL أو BLAS عندما تدخل في تكامل عددي أو جبر خطي أو خوارزميات عددية أكثر جدية.',
       'تمرّن على كتابة كود رياضي واضح: اختيار النوع المناسب، تقليل المزج غير المقصود بين int وdouble، وتوثيق الحدود والوحدات وافتراضات الدقة.',
+      'في مسار Linux نفسه ستحتاج غالبًا رياضيات عملية لا أكاديمية: حسابات الوقت، القياس profiling، وحدات البيانات، التقريب العددي، وأحيانًا الجبر الخطي أو الإحصاء عندما تدخل رسوميات أو أدوات علمية أو تحليل أداء.',
     ],
     build: [
       'ابنِ أداة CLI صغيرة تقارن بين مجموعة حسابات باستخدام libm مع تسجيل حالات الخطأ أو NaN أو Inf وشرح سبب ظهورها.',
@@ -3154,6 +3219,36 @@ const topicInputs = {
     tags: ['C++', 'Performance', 'Concurrency', 'Profiling'],
     searchKeywords: ['C++ profiling basics', 'C++ concurrency roadmap', 'data oriented performance C++'],
   },
+  'cpp-math-geometry': {
+    title: 'رياضيات C++: المتجهات، المصفوفات، والهندسة العملية',
+    level: 'متقدم',
+    category: 'اللغات والأنظمة',
+    summary:
+      'إذا دخلت C++ في الألعاب أو الرندر أو المحاكاة أو الأدوات الهندسية، فستحتاج إلى جبر خطي عملي لا نظري فقط: vectors, matrices, transforms, quaternions, precision, and data layout. هذا الباب يربط الرياضيات بما ستكتبه فعلًا في الكود.',
+    learn: [
+      'افهم vectors وmatrices وaffine transforms وquaternions من زاوية ما الذي تحله في الكاميرا والحركة والتصادم، لا من زاوية حفظ الصيغ فقط.',
+      'تعلّم متى تستخدم مكتبة جاهزة مثل Eigen للجبر الخطي والهندسة بدل كتابة كل شيء يدويًا، ومتى يكفيك struct بسيط لمشروع صغير أو مسألة محدودة.',
+      'انتبه إلى precision والـlayout وحركة البيانات لأن الرياضيات في C++ ترتبط بالأداء والذاكرة بقدر ارتباطها بالمعادلات.',
+    ],
+    build: [
+      'ابنِ demo صغيرة تحسب سلسلة world-view-projection أو transform hierarchy لكائنات 2D/3D ثم اختبرها بحالات واضحة وسهلة التتبع.',
+      'استخدم Eigen لحل مسألة جبر خطي أو تحويلات هندسية صغيرة، ثم قارن بين الوضوح والموثوقية وبين تنفيذ يدوي مبسط.',
+    ],
+    note2026:
+      'في C++ تحديدًا، قيمة الرياضيات تظهر عندما تتجنب الأخطاء الصامتة: اتجاهات مقلوبة، مسافات غير صحيحة، precision سيئة، أو نسخ غير ضرورية في البيانات.',
+    resources: [
+      { label: 'Eigen Getting Started', url: docs.eigenGettingStarted },
+      { label: 'Eigen Geometry Tutorial', url: docs.eigenGeometry },
+      { label: 'SDL Wiki', url: docs.sdl },
+      { label: 'Godot Math Docs', url: docs.godotMath },
+    ],
+    tags: ['C++', 'Linear Algebra', 'Geometry', 'Transforms', 'Eigen'],
+    searchKeywords: [
+      'C++ linear algebra for game engines',
+      'Eigen geometry transform tutorial',
+      'C++ vectors matrices quaternions basics',
+    ],
+  },
   'cpp-linux-build': {
     title: 'C++ مع Linux: build systems ومكتبات وأدوات',
     level: 'متقدم',
@@ -3196,10 +3291,12 @@ const topicInputs = {
       'في 2026 ما زالت Python من أقوى اللغات عندما تستخدم بانضباط هندسي لا فقط كسكربتات سريعة.',
     resources: [
       { label: 'Python Tutorial', url: docs.python },
-      { label: 'Node.js Learn', url: docs.node },
+      { label: 'Python Standard Library', url: docs.pythonLibrary },
+      { label: 'NumPy Quickstart', url: docs.numpyQuickstart },
+      { label: 'SciPy Tutorial', url: docs.scipyTutorial },
     ],
-    tags: ['Python', 'Engineering', 'Automation', 'Services'],
-    searchKeywords: ['python engineering roadmap', 'python project structure', 'python async service basics'],
+    tags: ['Python', 'Engineering', 'Automation', 'Services', 'Math'],
+    searchKeywords: ['python engineering roadmap', 'python project structure', 'python async service basics', 'python math numpy scipy roadmap'],
   },
   'python-language-core-deep': {
     title: 'Python بعمق: اللغة والأنماط الأساسية',
@@ -3304,6 +3401,72 @@ const topicInputs = {
     ],
     tags: ['Python', 'Async', 'Services', 'I/O'],
     searchKeywords: ['python async await explained', 'fastapi async basics', 'python background jobs'],
+  },
+  'python-math-computing': {
+    title: 'رياضيات Python: math و NumPy و SciPy بوعي عملي',
+    level: 'متقدم',
+    category: 'اللغات والأنظمة',
+    summary:
+      'Python ممتازة عندما تحتاج كتابة رياضيات واضحة بسرعة: من math وcmath وdecimal للمسائل الدقيقة، إلى NumPy للجبر الخطي والمصفوفات، ثم SciPy للتكامل والتحسين والخوارزميات العددية. الفكرة هنا أن تختار المستوى المناسب من الأدوات بدل القفز مباشرة إلى مكتبة ضخمة أو إعادة اختراع كل شيء يدويًا.',
+    learn: [
+      'ابدأ من math وcmath وdecimal وfractions قبل القفز إلى مكتبات أكبر، حتى تفهم نوع المسألة ونوع الأعداد الذي تحتاجه فعلًا.',
+      'استخدم NumPy عندما تصبح بياناتك متجهات أو مصفوفات أو عمليات عددية جماعية، ولا تتعامل معه كقائمة Python كبيرة فقط.',
+      'انتقل إلى SciPy عندما تدخل في integration أو optimization أو linear algebra الجدي بدل إعادة كتابة خوارزميات عددية حساسة بنفسك.',
+      'إذا كان هدفك الألعاب أو المحاكاة أو الرسوم، فاحرص على ربط الرياضيات بالتوقيت والـvectors والتجارب الصغيرة بدل الدراسة المجردة فقط.',
+    ],
+    build: [
+      'ابنِ mini lab في Python يحل مسألة واحدة بثلاث طبقات: math فقط، ثم NumPy، ثم SciPy أو أداة عددية أعلى، وقارن الوضوح والدقة.',
+      'نفّذ vector simulation أو curve fitting أو مسألة تحسين صغيرة، ثم اشرح لماذا كانت الأداة التي اخترتها مناسبة لهذه الدرجة من التعقيد.',
+    ],
+    note2026:
+      'ميزة Python هنا ليست “أنها أسهل فقط”، بل أنها تسمح لك بتجريب أفكار رياضية أو عددية بسرعة ثم نقلها لاحقًا إلى بيئة أسرع عندما تحتاج ذلك.',
+    resources: [
+      { label: 'Python math', url: docs.pythonMath },
+      { label: 'Python cmath', url: docs.pythonCmath },
+      { label: 'Python decimal', url: docs.pythonDecimal },
+      { label: 'NumPy Linear Algebra', url: docs.numpyLinalg },
+      { label: 'SciPy Integrate Tutorial', url: docs.scipyIntegrate },
+      { label: 'SciPy Optimize Tutorial', url: docs.scipyOptimize },
+    ],
+    tags: ['Python', 'Math', 'NumPy', 'SciPy', 'Numerics'],
+    searchKeywords: [
+      'python math numpy scipy roadmap',
+      'numpy linear algebra basics',
+      'scipy integrate optimize tutorial',
+      'python decimal vs float practical',
+    ],
+  },
+  'web-game-math-rendering': {
+    title: 'رياضيات الألعاب على الويب: Canvas و WebGL والتوقيت',
+    level: 'عملي',
+    category: 'الألعاب',
+    summary:
+      'إذا بنيت لعبة أو محاكاة على الويب، فستحتاج نفس جوهر الرياضيات الموجود في الألعاب عمومًا لكن بخصائص منصة الويب: screen coordinates, vectors, transforms, timing, interpolation، ثم matrices وprojection عندما تدخل WebGL أو ثلاثي الأبعاد.',
+    learn: [
+      'افهم نظام الإحداثيات داخل canvas، والتحويلات الأساسية، وحساب السرعة والموقع باستخدام delta time بدل الاعتماد على التخمين البصري.',
+      'استخدم vectors وinterpolation وbounding boxes في ألعاب 2D على الويب قبل القفز إلى رسوميات ثلاثية الأبعاد أو محاكاة أثقل.',
+      'عندما تدخل WebGL أو WebGPU لاحقًا، ستحتاج matrices وprojection وcamera spaces وshader thinking بشكل أوضح من ألعاب DOM أو canvas البسيطة.',
+      'إذا أردت تشغيل كود C أو C++ على الويب، فافهم من البداية أن Emscripten ليس فقط أداة build، بل جسر لقيود مختلفة في التوقيت والرسم والتعامل مع المنصة.',
+    ],
+    build: [
+      'ابنِ لعبة 2D صغيرة على canvas فيها حركة وتصادمات وتوقيت واضح، ثم دوّن أين استخدمت الرياضيات فعليًا بدل وصفها نظريًا.',
+      'أنشئ demo WebGL أو rendering simple prototype يوضح camera transform أو projection واحدًا بوضوح، أو جرّب نقل جزء صغير من مشروع C/C++ إلى الويب عبر Emscripten.',
+    ],
+    note2026:
+      'هذا الباب مهم جدًا لأن كثيرًا من مطوري الويب يدخلون الألعاب أو الرسوميات من باب JavaScript أولًا، بينما المشكلات الحقيقية التي تظهر لهم تكون رياضية وتوقيتية قبل أن تكون “framework problems”.',
+    resources: [
+      { label: 'MDN Games', url: docs.mdnGames },
+      { label: 'Canvas Tutorial', url: docs.mdnCanvas },
+      { label: 'MDN WebGL Tutorial', url: docs.mdnWebgl },
+      { label: 'Emscripten Porting', url: docs.emscriptenPorting },
+    ],
+    tags: ['Web Games', 'Canvas', 'WebGL', 'Timing', 'Transforms'],
+    searchKeywords: [
+      'canvas game math delta time',
+      'webgl projection matrix basics',
+      'browser game collision vectors',
+      'emscripten game porting web',
+    ],
   },
   'systems-programming-specialist': {
     title: 'مسار Systems Programming Specialist',
@@ -3481,6 +3644,7 @@ export const roadmapSections: SectionLayout[] = [
       'cpp-raii-memory',
       'cpp-stl-templates',
       'cpp-performance-concurrency',
+      'cpp-math-geometry',
       'cpp-linux-build',
       'linux-math-libraries',
     ],
@@ -3488,7 +3652,7 @@ export const roadmapSections: SectionLayout[] = [
   {
     id: 'python-engineering',
     tone: 'sky',
-    right: ['python-language-core-deep', 'python-packaging-venvs', 'python-stdlib-automation'],
+    right: ['python-language-core-deep', 'python-packaging-venvs', 'python-stdlib-automation', 'python-math-computing'],
     left: ['python-typing-testing', 'python-async-services'],
   },
   {
@@ -3498,11 +3662,13 @@ export const roadmapSections: SectionLayout[] = [
       'game-dev-basics',
       'unity-unreal-godot',
       'gameplay-programming',
+      'web-game-math-rendering',
       'game-tools-assets',
       'animation-audio-pipelines',
     ],
     left: [
       'game-math-physics',
+      'engine-math-foundations',
       'engine-architecture',
       'graphics-low-level',
       'build-your-own-engine',
@@ -3843,6 +4009,26 @@ const curatedTopicLinks: Record<string, TopicLinkHints> = {
     next: ['cpp-performance-specialist', 'systems-programming-specialist'],
     alternatives: ['cpp-performance-concurrency', 'python-engineering'],
   },
+  'cpp-math-geometry': {
+    before: ['cpp-modern-core', 'game-math-physics'],
+    next: ['cpp-linux-build', 'graphics-low-level'],
+    alternatives: ['linux-math-libraries', 'engine-math-foundations'],
+  },
+  'python-math-computing': {
+    before: ['python-language-core-deep', 'problem-solving'],
+    next: ['python-engineering-specialist', 'data-ai-specialist'],
+    alternatives: ['linux-math-libraries', 'web-game-math-rendering'],
+  },
+  'web-game-math-rendering': {
+    before: ['javascript-typescript', 'game-dev-basics'],
+    next: ['game-math-physics', 'graphics-low-level'],
+    alternatives: ['unity-unreal-godot', 'python-math-computing'],
+  },
+  'engine-math-foundations': {
+    before: ['game-math-physics', 'game-dev-basics'],
+    next: ['engine-architecture', 'graphics-low-level'],
+    alternatives: ['cpp-math-geometry', 'web-game-math-rendering'],
+  },
   'python-engineering-specialist': {
     before: ['python-engineering', 'backend-data'],
     next: ['portfolio-proof-of-work', 'product-engineering-specialist'],
@@ -3919,6 +4105,22 @@ const projectIdeasByTopicId: Record<string, string[]> = {
   'linux-math-libraries': [
     'ابنِ أداة عددية صغيرة في C أو C++ تستخدم libm وتتعامل بوضوح مع حالات NaN وInf وoverflow، ثم اشرح أين كان الخطأ العددي أو الربط بـ -lm مهمًا.',
     'جرّب مسألة جبر خطي أو تكامل عددي باستخدام GSL أو واجهات BLAS الأساسية، ثم قارن بينها وبين تنفيذ أبسط لتفهم متى تستحق مكتبة متخصصة.',
+  ],
+  'cpp-math-geometry': [
+    'ابنِ demo transforms صغيرة في C++ توضح الفرق بين translation وrotation وscale وlocal/world space، ثم اختبرها عدديًا وليس بصريًا فقط.',
+    'استخدم Eigen أو بنية رياضية بسيطة لبناء كاميرا أو تحويلات هندسية، ثم وثّق أين ساعدتك المكتبة وأين كان التنفيذ اليدوي كافيًا.',
+  ],
+  'python-math-computing': [
+    'ابنِ mini notebook أو أداة CLI تقارن بين float وdecimal وNumPy في مسألة صغيرة، ثم دوّن أين ظهرت الدقة أو الأداء أو الوضوح.',
+    'نفّذ vector math أو تكاملًا عدديًا أو optimization بسيطة في Python مع مصادر رسمية فقط، ثم اشرح لماذا كان NumPy أو SciPy مناسبًا هنا.',
+  ],
+  'web-game-math-rendering': [
+    'ابنِ لعبة 2D صغيرة في المتصفح باستخدام canvas وdelta time وcollision basic، ثم وثّق ما الذي كان رياضيًا بوضوح داخل اللعبة.',
+    'جهّز demo rendering صغيرة على الويب فيها transforms أو camera بسيطة، أو جرّب نقل وحدة رسومية من C/C++ إلى المتصفح عبر Emscripten.',
+  ],
+  'engine-math-foundations': [
+    'ابنِ mini engine toy أو framework صغير يمر عبر transform hierarchy وكاميرا وتصادم بسيط، ثم دوّن قائمة الرياضيات التي احتجتها فعلًا لا التي ظننت أنك تحتاجها.',
+    'خذ subsystem واحدة من محرك صغير مثل camera أو collision أو animation blending، ثم اشرح أي مفاهيم رياضية تخدمها وأي أجزاء تنظيمية أو معمارية حولها.',
   ],
   'python-engineering-specialist': [
     'ابنِ مشروع Python يجمع بين package واضح وCLI أو API واختبارات وملف تشغيل بسيط للفريق أو للمستخدم.',
