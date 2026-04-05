@@ -10,15 +10,17 @@ import {
   type NodeProps,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { useEffect, useState } from 'react';
+import { memo, startTransition, useEffect, useMemo, useState } from 'react';
 import {
   getAlternativeTopicIds,
   getNextTopicIds,
   getPreparationTopicIds,
   getProjectIdeas,
+  getSearchKeywords,
   baseEdges,
   baseNodes,
   getSuggestedTopicIds,
+  getTopicStudyTips,
   roadmapMeta,
   topicCatalog,
   type Journey,
@@ -27,6 +29,14 @@ import {
 
 type RoadmapFlowNode = Node<RoadmapNodeData, 'roadmapNode'>;
 type ThemeMode = 'light' | 'dark';
+type RoadmapTopic = (typeof topicCatalog)[string];
+
+const flowNodes = baseNodes as RoadmapFlowNode[];
+const nodeById = new Map(flowNodes.map((node) => [node.id, node]));
+const COMPACT_VIEWPORT_QUERY = '(max-width: 760px)';
+const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
+const DEFAULT_FIT_PADDING = 0.2;
+const COMPACT_FIT_PADDING = 0.14;
 
 const journeyStroke: Record<Journey, string> = {
   enter: '#16a34a',
@@ -46,18 +56,81 @@ const journeyShortLabel: Record<Journey, string> = {
   mastery: 'احتراف',
 };
 
-function getInitialTheme(): ThemeMode {
-  if (typeof window === 'undefined') {
-    return 'light';
+const journeyGuidance: Record<Journey, string> = {
+  enter: 'ابدأ به على مهل، لأنه يبني الأساس الذي تعتمد عليه الخطوات التالية.',
+  optional: 'يفيدك عندما تريد تقوية التطبيق العملي أو سد فجوة واضحة في فهمك.',
+  mastery: 'ادخله بعد ثبات الأساسيات، لأنه يوسّع العمق ويقربك من الاحتراف.',
+};
+
+const baseStyledEdges = baseEdges.map((edge) => ({
+  ...edge,
+  animated: false,
+  style: {
+    ...edge.style,
+    stroke: 'var(--edge-muted)',
+    opacity: 0.84,
+    strokeWidth: 1.35,
+  },
+}));
+
+function safeMatchMedia(query: string) {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return false;
   }
 
-  const savedTheme = window.localStorage.getItem('roadmap-theme');
+  return window.matchMedia(query).matches;
+}
+
+function safeLocalStorageGetItem(key: string) {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeLocalStorageSetItem(key: string, value: string) {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(key, value);
+  } catch {
+    // Ignore storage failures in restricted browsing modes.
+  }
+}
+
+function withMotionPreference(prefersReducedMotion: boolean, duration: number) {
+  return prefersReducedMotion ? 0 : duration;
+}
+
+function mapTopicIdsToTopics(ids: string[]): RoadmapTopic[] {
+  return ids
+    .map((topicId) => topicCatalog[topicId])
+    .filter((topic): topic is RoadmapTopic => Boolean(topic));
+}
+
+function getTopicContextLine(topic: RoadmapTopic, journey: Journey) {
+  return `ينتمي هذا الموضوع إلى ${topic.category}، ومستواه ${topic.level}. ${journeyGuidance[journey]}`;
+}
+
+function getInitialTheme(): ThemeMode {
+  const savedTheme = safeLocalStorageGetItem('roadmap-theme');
 
   if (savedTheme === 'light' || savedTheme === 'dark') {
     return savedTheme;
   }
 
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  return safeMatchMedia('(prefers-color-scheme: dark)') ? 'dark' : 'light';
+}
+
+function getInitialLegendVisibility() {
+  return !safeMatchMedia(COMPACT_VIEWPORT_QUERY);
 }
 
 function HiddenHandles() {
@@ -122,7 +195,7 @@ function JourneyBadge({
   );
 }
 
-function RoadmapNode({ data }: NodeProps<RoadmapFlowNode>) {
+const RoadmapNode = memo(function RoadmapNode({ data }: NodeProps<RoadmapFlowNode>) {
   return (
     <div
       className={[
@@ -147,7 +220,9 @@ function RoadmapNode({ data }: NodeProps<RoadmapFlowNode>) {
       </span>
     </div>
   );
-}
+});
+
+RoadmapNode.displayName = 'RoadmapNode';
 
 const nodeTypes = {
   roadmapNode: RoadmapNode,
@@ -158,68 +233,152 @@ function RoadmapWorkspace() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [theme, setTheme] = useState<ThemeMode>(getInitialTheme);
-  const [showLegend, setShowLegend] = useState(true);
+  const [showLegend, setShowLegend] = useState(getInitialLegendVisibility);
+  const [isCompactViewport, setCompactViewport] = useState(() => safeMatchMedia(COMPACT_VIEWPORT_QUERY));
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => safeMatchMedia(REDUCED_MOTION_QUERY));
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    window.localStorage.setItem('roadmap-theme', theme);
+    safeLocalStorageSetItem('roadmap-theme', theme);
   }, [theme]);
 
-  const selectedTopic = selectedId ? topicCatalog[selectedId] : null;
-  const selectedNode =
-    selectedId ? (baseNodes as RoadmapFlowNode[]).find((node) => node.id === selectedId) ?? null : null;
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      return;
+    }
+
+    const compactQuery = window.matchMedia(COMPACT_VIEWPORT_QUERY);
+    const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
+    const syncCompactViewport = () => setCompactViewport(compactQuery.matches);
+    const syncReducedMotion = () => setPrefersReducedMotion(reducedMotionQuery.matches);
+
+    syncCompactViewport();
+    syncReducedMotion();
+    compactQuery.addEventListener('change', syncCompactViewport);
+    reducedMotionQuery.addEventListener('change', syncReducedMotion);
+
+    return () => {
+      compactQuery.removeEventListener('change', syncCompactViewport);
+      reducedMotionQuery.removeEventListener('change', syncReducedMotion);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isDrawerOpen || typeof window === 'undefined') {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setDrawerOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isDrawerOpen]);
+
+  const selectedTopic = useMemo(() => {
+    return selectedId ? topicCatalog[selectedId] ?? null : null;
+  }, [selectedId]);
+
+  const selectedNode = useMemo(() => {
+    return selectedId ? nodeById.get(selectedId) ?? null : null;
+  }, [selectedId]);
+
   const selectedJourney = selectedNode?.data.journey ?? 'enter';
-  const suggestedTopics = selectedId
-    ? getSuggestedTopicIds(selectedId)
-        .map((topicId) => topicCatalog[topicId])
-        .filter(Boolean)
-    : [];
-  const preparationTopics = selectedId
-    ? getPreparationTopicIds(selectedId)
-        .map((topicId) => topicCatalog[topicId])
-        .filter(Boolean)
-    : [];
-  const nextTopics = selectedId
-    ? getNextTopicIds(selectedId)
-        .map((topicId) => topicCatalog[topicId])
-        .filter(Boolean)
-    : [];
-  const alternativeTopics = selectedId
-    ? getAlternativeTopicIds(selectedId)
-        .map((topicId) => topicCatalog[topicId])
-        .filter(Boolean)
-    : [];
-  const projectIdeas = selectedId ? getProjectIdeas(selectedId) : [];
-
-  const nodes = (baseNodes as RoadmapFlowNode[]).map((node) => ({
-    ...node,
-    data: {
-      ...node.data,
-      selected: node.id === selectedId,
-    },
-  }));
-
-  const edges = baseEdges.map((edge) => {
-    const highlighted = selectedId ? edge.source === selectedId || edge.target === selectedId : false;
-    const highlightStroke = selectedNode ? journeyStroke[selectedNode.data.journey] : 'var(--edge-accent)';
+  const topicContext = selectedTopic ? getTopicContextLine(selectedTopic, selectedJourney) : '';
+  const relatedContent = useMemo(() => {
+    if (!selectedId) {
+      return {
+        suggestedTopics: [] as RoadmapTopic[],
+        preparationTopics: [] as RoadmapTopic[],
+        nextTopics: [] as RoadmapTopic[],
+        alternativeTopics: [] as RoadmapTopic[],
+        projectIdeas: [] as string[],
+        searchKeywords: [] as string[],
+        studyTips: [] as string[],
+      };
+    }
 
     return {
-      ...edge,
-      animated: highlighted,
-      style: {
-        ...edge.style,
-        stroke: highlighted ? highlightStroke : 'var(--edge-muted)',
-        opacity: highlighted ? 1 : 0.84,
-        strokeWidth: highlighted ? 2.3 : 1.35,
-      },
+      suggestedTopics: mapTopicIdsToTopics(getSuggestedTopicIds(selectedId)),
+      preparationTopics: mapTopicIdsToTopics(getPreparationTopicIds(selectedId)),
+      nextTopics: mapTopicIdsToTopics(getNextTopicIds(selectedId)),
+      alternativeTopics: mapTopicIdsToTopics(getAlternativeTopicIds(selectedId)),
+      projectIdeas: getProjectIdeas(selectedId),
+      searchKeywords: getSearchKeywords(selectedId),
+      studyTips: getTopicStudyTips(selectedId),
     };
-  });
+  }, [selectedId]);
+
+  const nodes = useMemo(() => {
+    if (!selectedId) {
+      return flowNodes;
+    }
+
+    return flowNodes.map((node) =>
+      node.id === selectedId
+        ? {
+            ...node,
+            data: {
+              ...node.data,
+              selected: true,
+            },
+          }
+        : node,
+    );
+  }, [selectedId]);
+
+  const edges = useMemo(() => {
+    if (!selectedId) {
+      return baseStyledEdges;
+    }
+
+    const highlightStroke = selectedNode ? journeyStroke[selectedNode.data.journey] : 'var(--edge-accent)';
+
+    return baseStyledEdges.map((edge) => {
+      const highlighted = edge.source === selectedId || edge.target === selectedId;
+
+      if (!highlighted) {
+        return edge;
+      }
+
+      return {
+        ...edge,
+        animated: true,
+        style: {
+          ...edge.style,
+          stroke: highlightStroke,
+          opacity: 1,
+          strokeWidth: 2.3,
+        },
+      };
+    });
+  }, [selectedId, selectedNode]);
+
+  const fitPadding = isCompactViewport ? COMPACT_FIT_PADDING : DEFAULT_FIT_PADDING;
+  const animationDuration = withMotionPreference(prefersReducedMotion, isCompactViewport ? 240 : 360);
+  const zoomDuration = withMotionPreference(prefersReducedMotion, 220);
+
+  function fitCanvas(instance = flow) {
+    instance.fitView({ duration: animationDuration, padding: fitPadding });
+  }
 
   function focusTopic(topicId: string) {
-    setSelectedId(topicId);
-    setDrawerOpen(true);
+    if (!nodeById.has(topicId) || !topicCatalog[topicId]) {
+      return;
+    }
 
-    requestAnimationFrame(() => {
+    startTransition(() => {
+      setSelectedId(topicId);
+      setDrawerOpen(true);
+    });
+
+    const centerOnTopic = () => {
       const node = flow.getNode(topicId);
 
       if (!node) {
@@ -227,27 +386,40 @@ function RoadmapWorkspace() {
       }
 
       const absolutePosition = node.position;
-      const width = node.measured?.width ?? 288;
+      const width = node.measured?.width ?? (node.data.variant === 'section' ? 326 : 272);
       const height = node.measured?.height ?? 116;
-      const nextZoom = node.data.variant === 'section' ? 0.72 : 0.94;
+      const nextZoom = isCompactViewport
+        ? node.data.variant === 'section'
+          ? 0.58
+          : 0.76
+        : node.data.variant === 'section'
+          ? 0.72
+          : 0.94;
 
       flow.setCenter(absolutePosition.x + width / 2, absolutePosition.y + height / 2, {
-        duration: 360,
+        duration: animationDuration,
         zoom: nextZoom,
       });
-    });
+    };
+
+    if (typeof window === 'undefined') {
+      centerOnTopic();
+      return;
+    }
+
+    window.requestAnimationFrame(centerOnTopic);
   }
 
   function resetViewport() {
-    flow.fitView({ duration: 360, padding: 0.2 });
+    fitCanvas();
   }
 
   function zoomIn() {
-    flow.zoomIn({ duration: 220 });
+    flow.zoomIn({ duration: zoomDuration });
   }
 
   function zoomOut() {
-    flow.zoomOut({ duration: 220 });
+    flow.zoomOut({ duration: zoomDuration });
   }
 
   function closeDrawer() {
@@ -262,13 +434,16 @@ function RoadmapWorkspace() {
     setShowLegend((current) => !current);
   }
 
+  const { suggestedTopics, preparationTopics, nextTopics, alternativeTopics, projectIdeas, searchKeywords, studyTips } =
+    relatedContent;
+
   return (
     <div className="app-shell">
       <header className="topbar">
         <div className="topbar-brand">
           <strong>{roadmapMeta.title}</strong>
           <span>
-            {roadmapMeta.totalTracks} مسار / {roadmapMeta.totalTopics} موضوع / تحديث {roadmapMeta.updatedAt}
+            {roadmapMeta.totalTracks} مسار رئيسي / {roadmapMeta.totalTopics} موضوع / آخر تحديث {roadmapMeta.updatedAt}
           </span>
         </div>
 
@@ -282,10 +457,10 @@ function RoadmapWorkspace() {
           <button type="button" className="topbar-button" onClick={resetViewport}>
             ضبط العرض
           </button>
-          <button type="button" className="topbar-button" onClick={toggleLegend}>
+          <button type="button" className="topbar-button" onClick={toggleLegend} aria-pressed={showLegend}>
             {showLegend ? 'إخفاء الدليل' : 'إظهار الدليل'}
           </button>
-          <button type="button" className="topbar-button" onClick={toggleTheme}>
+          <button type="button" className="topbar-button" onClick={toggleTheme} aria-pressed={theme === 'dark'}>
             {theme === 'dark' ? 'وضع فاتح' : 'وضع داكن'}
           </button>
         </div>
@@ -299,12 +474,19 @@ function RoadmapWorkspace() {
             nodeTypes={nodeTypes}
             onNodeClick={(_, node) => focusTopic(node.id)}
             onPaneClick={closeDrawer}
-            onInit={(instance) => instance.fitView({ padding: 0.2 })}
+            onInit={fitCanvas}
             panOnScroll
+            panOnDrag
             zoomOnScroll
+            zoomOnPinch
+            zoomOnDoubleClick={false}
             nodesDraggable={false}
             nodesConnectable={false}
+            nodesFocusable={false}
+            edgesFocusable={false}
+            onlyRenderVisibleElements
             fitView
+            fitViewOptions={{ padding: fitPadding }}
             minZoom={0.32}
             maxZoom={1.6}
           >
@@ -315,15 +497,15 @@ function RoadmapWorkspace() {
             <div className="flow-legend" aria-label="دليل ألوان التقدم">
               <div className="flow-legend-item">
                 <JourneyBadge journey="enter" />
-                <span>أساسي لتبدأ</span>
+                <span>لبداية قوية وواضحة</span>
               </div>
               <div className="flow-legend-item">
                 <JourneyBadge journey="optional" />
-                <span>مفيد ويقوي مستواك</span>
+                <span>لتوسيع الفهم وتقوية المستوى</span>
               </div>
               <div className="flow-legend-item">
                 <JourneyBadge journey="mastery" />
-                <span>للتعمق والاحتراف</span>
+                <span>للتعمق وبناء احتراف حقيقي</span>
               </div>
             </div>
           ) : null}
@@ -331,9 +513,9 @@ function RoadmapWorkspace() {
 
         {isDrawerOpen && selectedTopic ? (
           <>
-            <button type="button" className="drawer-backdrop" aria-label="إغلاق الشرح" onClick={closeDrawer} />
+            <button type="button" className="drawer-backdrop" aria-label="إغلاق التفاصيل" onClick={closeDrawer} />
 
-            <aside className="details-drawer" aria-label="شرح الموضوع المحدد">
+            <aside className="details-drawer" aria-label="تفاصيل الموضوع المحدد">
               <div className="drawer-header">
                 <div className="drawer-title-wrap">
                   <h2>{selectedTopic.title}</h2>
@@ -345,15 +527,27 @@ function RoadmapWorkspace() {
                   </div>
                 </div>
 
-                <button type="button" className="drawer-close" onClick={closeDrawer} aria-label="إغلاق">
-                  x
+                <button type="button" className="drawer-close" onClick={closeDrawer} aria-label="إغلاق التفاصيل">
+                  ×
                 </button>
               </div>
 
               <p className="details-summary">{selectedTopic.summary}</p>
+              <p className="details-context">{topicContext}</p>
+
+              {studyTips.length ? (
+                <section className="details-section">
+                  <h3>كيف تدرسه بذكاء</h3>
+                  <ul>
+                    {studyTips.map((tip) => (
+                      <li key={tip}>{tip}</li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
 
               <section className="details-section">
-                <h3>تتعلم هنا</h3>
+                <h3>ما الذي ستفهمه هنا</h3>
                 <ul>
                   {selectedTopic.learn.map((item) => (
                     <li key={item}>{item}</li>
@@ -362,7 +556,7 @@ function RoadmapWorkspace() {
               </section>
 
               <section className="details-section">
-                <h3>طبّق عمليًا</h3>
+                <h3>كيف تطبّق عمليًا</h3>
                 <ul>
                   {selectedTopic.build.map((item) => (
                     <li key={item}>{item}</li>
@@ -372,14 +566,14 @@ function RoadmapWorkspace() {
 
               {selectedTopic.note2026 ? (
                 <section className="details-section">
-                  <h3>ملاحظة مهمة</h3>
+                  <h3>ملاحظة مهمّة في 2026</h3>
                   <p className="details-note-inline">{selectedTopic.note2026}</p>
                 </section>
               ) : null}
 
               {preparationTopics.length ? (
                 <section className="details-section">
-                  <h3>من المفيد تمر على</h3>
+                  <h3>يفضل أن تراجع أولًا</h3>
                   <div className="topic-link-list">
                     {preparationTopics.map((topic) => (
                       <button
@@ -387,6 +581,7 @@ function RoadmapWorkspace() {
                         type="button"
                         className="suggestion-card"
                         onClick={() => focusTopic(topic.id)}
+                        aria-label={`افتح موضوع ${topic.title}`}
                       >
                         <strong>{topic.title}</strong>
                         <span>
@@ -400,7 +595,7 @@ function RoadmapWorkspace() {
 
               {nextTopics.length ? (
                 <section className="details-section">
-                  <h3>بعده مباشرة</h3>
+                  <h3>ماذا بعد هذا الموضوع</h3>
                   <div className="topic-link-list">
                     {nextTopics.map((topic) => (
                       <button
@@ -408,6 +603,7 @@ function RoadmapWorkspace() {
                         type="button"
                         className="suggestion-card"
                         onClick={() => focusTopic(topic.id)}
+                        aria-label={`افتح موضوع ${topic.title}`}
                       >
                         <strong>{topic.title}</strong>
                         <span>
@@ -421,7 +617,7 @@ function RoadmapWorkspace() {
 
               {alternativeTopics.length ? (
                 <section className="details-section">
-                  <h3>مسار قريب أو بديل</h3>
+                  <h3>بدائل أو مسارات قريبة</h3>
                   <div className="topic-link-list">
                     {alternativeTopics.map((topic) => (
                       <button
@@ -429,6 +625,7 @@ function RoadmapWorkspace() {
                         type="button"
                         className="suggestion-card"
                         onClick={() => focusTopic(topic.id)}
+                        aria-label={`افتح موضوع ${topic.title}`}
                       >
                         <strong>{topic.title}</strong>
                         <span>
@@ -442,7 +639,7 @@ function RoadmapWorkspace() {
 
               {suggestedTopics.length ? (
                 <section className="details-section">
-                  <h3>اقتراحات تقوي هذا المسار</h3>
+                  <h3>اقتراحات تدعم هذا المسار</h3>
                   <div className="suggestion-list">
                     {suggestedTopics.map((topic) => (
                       <button
@@ -450,6 +647,7 @@ function RoadmapWorkspace() {
                         type="button"
                         className="suggestion-card"
                         onClick={() => focusTopic(topic.id)}
+                        aria-label={`افتح موضوع ${topic.title}`}
                       >
                         <strong>{topic.title}</strong>
                         <span>
@@ -463,7 +661,7 @@ function RoadmapWorkspace() {
 
               {projectIdeas.length ? (
                 <section className="details-section">
-                  <h3>مشاريع تقوي هذا المسار</h3>
+                  <h3>أفكار مشاريع تطبيقية</h3>
                   <ul>
                     {projectIdeas.map((idea) => (
                       <li key={idea}>{idea}</li>
@@ -472,11 +670,11 @@ function RoadmapWorkspace() {
                 </section>
               ) : null}
 
-              {selectedTopic.searchKeywords?.length ? (
+              {searchKeywords.length ? (
                 <section className="details-section">
-                  <h3>كلمات بحث مفيدة</h3>
+                  <h3>عبارات بحث مفيدة</h3>
                   <div className="keyword-list">
-                    {selectedTopic.searchKeywords.map((keyword) => (
+                    {searchKeywords.map((keyword) => (
                       <span key={keyword} className="keyword-chip">
                         {keyword}
                       </span>
@@ -486,7 +684,7 @@ function RoadmapWorkspace() {
               ) : null}
 
               <section className="details-section">
-                <h3>مصادر موثوقة</h3>
+                <h3>مصادر موثوقة ومقترحة</h3>
                 <div className="resource-list">
                   {selectedTopic.resources.map((resource) => (
                     <a
@@ -495,6 +693,7 @@ function RoadmapWorkspace() {
                       href={resource.url}
                       target="_blank"
                       rel="noreferrer"
+                      aria-label={`افتح المصدر ${resource.label}`}
                     >
                       <strong>{resource.label}</strong>
                       <span>{resource.url}</span>

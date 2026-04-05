@@ -106,12 +106,29 @@ const docs = {
   cloudflare: 'https://developers.cloudflare.com/fundamentals/',
   sqlite: 'https://www.sqlite.org/docs.html',
   man7: 'https://man7.org/linux/man-pages/',
+  manLibc: 'https://man7.org/linux/man-pages/man7/libc.7.html',
+  manDlopen: 'https://man7.org/linux/man-pages/man3/dlopen.3.html',
+  manDlsym: 'https://man7.org/linux/man-pages/man3/dlsym.3.html',
+  manLdSo: 'https://man7.org/linux/man-pages/man8/ld.so.8.html',
+  manFeatureTestMacros: 'https://man7.org/linux/man-pages/man7/feature_test_macros.7.html',
+  manMathError: 'https://man7.org/linux/man-pages/man7/math_error.7.html',
+  manComplex: 'https://man7.org/linux/man-pages/man7/complex.7.html',
   cppreferenceC: 'https://en.cppreference.com/w/c',
   cppreferenceCpp: 'https://en.cppreference.com/w/cpp',
   gcc: 'https://gcc.gnu.org/onlinedocs/',
   gdb: 'https://sourceware.org/gdb/current/onlinedocs/gdb/',
   cmake: 'https://cmake.org/documentation/',
+  glibc: 'https://sourceware.org/glibc/libc.html',
+  glibcMath: 'https://sourceware.org/glibc/manual/latest/html_node/Mathematics.html',
+  glibcDynamicLinker: 'https://sourceware.org/glibc/manual/latest/html_node/Dynamic-Linker.html',
   linuxKernel: 'https://docs.kernel.org/',
+  kernelUserspaceApi: 'https://docs.kernel.org/userspace-api/index.html',
+  kernelExternalModules: 'https://docs.kernel.org/kbuild/modules.html',
+  kernelDriverBasics: 'https://docs.kernel.org/driver-api/basics.html',
+  kernelCodingStyle: 'https://docs.kernel.org/6.6/process/coding-style.html',
+  gslDocs: 'https://www.gnu.org/software/gsl/doc/html/index.html',
+  gslMath: 'https://www.gnu.org/software/gsl/doc/html/math.html',
+  gslBlas: 'https://www.gnu.org/software/gsl/doc/html/blas.html',
   unity: 'https://docs.unity3d.com/',
   unreal: 'https://dev.epicgames.com/documentation/unreal-engine/',
   godot: 'https://docs.godotengine.org/en/stable/',
@@ -2938,6 +2955,110 @@ const topicInputs = {
     tags: ['C', 'Linux', 'System Calls', 'Processes'],
     searchKeywords: ['fork exec pipe tutorial', 'Linux system calls C', 'build a mini shell C'],
   },
+  'linux-libc-linking': {
+    title: 'مكتبات Linux و glibc: headers والربط الديناميكي',
+    level: 'متقدم',
+    category: 'اللغات والأنظمة',
+    summary:
+      'بعد فهم system calls الأساسية، تحتاج أن تعرف ما الذي يحدث بين كودك وبين بيئة Linux اليومية: ما دور glibc؟ ما الفرق بين header وlibrary وsymbol وABI؟ وكيف يعمل الربط static أو dynamic فعلًا عند البناء والتشغيل؟',
+    learn: [
+      'افهم الفرق بين واجهات libc وواجهات Linux الخاصة بالنواة، ومتى تمر عبر glibc ومتى تقترب من syscall أو دوال أكثر انخفاضًا.',
+      'تعلّم معنى shared objects وstatic libraries وSONAME والـloader، ولماذا قد يعمل البرنامج على جهاز ويكسر على جهاز آخر بسبب الربط أو النسخ.',
+      'تمرّن على قراءة include files وfeature test macros وشرح سبب استخدام -lm أو -ldl أو أعلام بناء أخرى بدل نسخ الأوامر عشوائيًا.',
+      'افهم كيف تتعامل dlopen وdlsym وld.so مع تحميل الرموز والمكتبات وقت التشغيل في برامج Linux الحقيقية.',
+    ],
+    build: [
+      'ابنِ مكتبة مشتركة صغيرة .so ثم اربط بها برنامجًا بسيطًا، وبعدها أنشئ مثالًا ثانيًا يحملها وقت التشغيل باستخدام dlopen وdlsym.',
+      'افحص برنامجك بعد البناء باستخدام أدوات مثل ldd أو readelf ثم دوّن ما الذي تم ربطه أثناء البناء وما الذي يُحل أثناء التشغيل.',
+    ],
+    note2026:
+      'جزء كبير من مشاكل “الكود يعمل عندي فقط” في Linux ليس من منطق البرنامج، بل من الربط والـABI وتحميل المكتبات والاعتماد على تفاصيل بيئة غير واضحة.',
+    resources: [
+      { label: 'GNU C Library', url: docs.glibc },
+      { label: 'glibc Manual: Dynamic Linker', url: docs.glibcDynamicLinker },
+      { label: 'libc(7)', url: docs.manLibc },
+      { label: 'ld.so(8)', url: docs.manLdSo },
+      { label: 'dlopen(3)', url: docs.manDlopen },
+      { label: 'dlsym(3)', url: docs.manDlsym },
+      { label: 'feature_test_macros(7)', url: docs.manFeatureTestMacros },
+    ],
+    tags: ['Linux', 'glibc', 'Dynamic Linking', 'ELF', 'Shared Libraries'],
+    searchKeywords: [
+      'glibc dynamic linker explained',
+      'linux shared library dlopen dlsym',
+      'ld.so SONAME tutorial',
+      'feature test macros linux C',
+    ],
+  },
+  'linux-kernel-uapi-modules': {
+    title: 'واجهات نواة Linux ومدخل كتابة modules',
+    level: '2026',
+    category: 'اللغات والأنظمة',
+    summary:
+      'هذا الموضوع يوضح الفرق المهم بين user space وkernel space: ما هي UAPI headers؟ متى يكفيك /proc و/sys وioctl؟ ومتى يصبح لكتابة module أو driver مصغر معنى؟ الفكرة هنا ليست القفز مباشرة إلى driver معقد، بل فهم الحدود الصحيحة ثم كتابة شيء صغير واعٍ.',
+    learn: [
+      'افهم ما الذي تعتبره النواة واجهة مستقرة نسبيًا للمستخدم، وما الذي يبقى داخليًا وقد يتغير بين الإصدارات.',
+      'تعرّف على UAPI headers وواجهات مثل /proc و/sys وioctl وكيف يتواصل برنامج المستخدم مع قدرات Linux أو الأجهزة دون خلط بين الجانبين.',
+      'تعلّم أساسيات بناء external module باستخدام kbuild وما معنى أن تبني ضد شجرة kernel أو headers مطابقة للنواة العاملة.',
+      'افهم أن كتابة module ليست الخطوة الأولى دائمًا؛ أحيانًا الحل الصحيح هو برنامج userland جيد، وأحيانًا تحتاج hook أو driver أو امتدادًا للنواة.',
+      'التزم بأسلوب كتابة محافظ وواضح لأن كود النواة لا يسامح مثل userland: الذاكرة، التزامن، والسياق التنفيذي كلها أكثر حساسية.',
+    ],
+    build: [
+      'اكتب أداة userland صغيرة تقرأ معلومات من /proc أو /sys وتشرح ما الذي تحصل عليه من النواة مباشرة وما الذي يظل مسؤولية برنامجك.',
+      'ابنِ external module تجريبية صغيرة جدًا وفق kbuild، مثل hello module أو module تسجل رسائل بسيطة، ثم وثّق حدودها ومتى لا ينبغي أصلًا الذهاب إلى kernel space.',
+    ],
+    note2026:
+      'في 2026 ما يزال الفرق بين من “يحب Linux” ومن يفهمه فعلًا يظهر بسرعة عند الحديث عن حدود UAPI، بناء modules، وتحديد متى يبقى الحل في userland بدل الحماس الزائد للغوص في النواة.',
+    resources: [
+      { label: 'Linux Kernel Docs', url: docs.linuxKernel },
+      { label: 'Userspace API Guide', url: docs.kernelUserspaceApi },
+      { label: 'Building External Modules', url: docs.kernelExternalModules },
+      { label: 'Driver API Basics', url: docs.kernelDriverBasics },
+      { label: 'Kernel Coding Style', url: docs.kernelCodingStyle },
+      { label: 'man7 Linux man pages', url: docs.man7 },
+    ],
+    tags: ['Linux Kernel', 'UAPI', 'Kernel Modules', 'kbuild', 'Drivers'],
+    searchKeywords: [
+      'linux userspace api kernel module basics',
+      'kbuild external module tutorial',
+      'linux kernel coding style module',
+      'proc sysfs ioctl explained',
+    ],
+  },
+  'linux-math-libraries': {
+    title: 'الرياضيات على Linux: libm و GSL والكتابة الدقيقة',
+    level: 'متقدم',
+    category: 'اللغات والأنظمة',
+    summary:
+      'الرياضيات في Linux ليست مجرد #include <math.h>. هنا تحتاج أن تفهم libm، الربط بـ -lm، التعامل مع floating point وNaN وInf والأخطاء العددية، ومتى تكفيك الدوال القياسية ومتى يصبح GSL أو BLAS أكثر ملاءمة لمسائل عددية أو علمية أعمق.',
+    learn: [
+      'استخدم math.h وcomplex.h بوعي، وافهم لماذا تتطلب بعض البرامج الربط الصريح بـ libm عبر -lm بدل افتراض أن كل شيء يأتي تلقائيًا.',
+      'تعلّم أساسيات الأخطاء العددية: التقريب، overflow وunderflow وdomain errors وكيف تكتشف مشاكل الرياضيات في C على Linux بدل تفسيرها كأخطاء عشوائية.',
+      'افهم متى يكفيك libm للدوال القياسية مثل sin وcos وsqrt وpow، ومتى تحتاج GSL أو BLAS عندما تدخل في تكامل عددي أو جبر خطي أو خوارزميات عددية أكثر جدية.',
+      'تمرّن على كتابة كود رياضي واضح: اختيار النوع المناسب، تقليل المزج غير المقصود بين int وdouble، وتوثيق الحدود والوحدات وافتراضات الدقة.',
+    ],
+    build: [
+      'ابنِ أداة CLI صغيرة تقارن بين مجموعة حسابات باستخدام libm مع تسجيل حالات الخطأ أو NaN أو Inf وشرح سبب ظهورها.',
+      'نفّذ برنامجًا عدديًا بسيطًا يستخدم GSL أو واجهات BLAS الأساسية، مثل تقريب تكامل أو حل مسألة جبر خطي صغيرة، ثم قارن بينه وبين نسخة أبسط تعتمد على libm فقط.',
+    ],
+    note2026:
+      'كثير من أخطاء “الرياضيات” في Linux تأتي من سوء الربط أو سوء اختيار الأنواع أو تجاهل خصائص floating point، لا من صعوبة المعادلات نفسها فقط.',
+    resources: [
+      { label: 'glibc Manual: Mathematics', url: docs.glibcMath },
+      { label: 'math_error(7)', url: docs.manMathError },
+      { label: 'complex(7)', url: docs.manComplex },
+      { label: 'GNU Scientific Library', url: docs.gslDocs },
+      { label: 'GSL Mathematical Functions', url: docs.gslMath },
+      { label: 'GSL BLAS Support', url: docs.gslBlas },
+    ],
+    tags: ['Linux', 'libm', 'GSL', 'BLAS', 'Numerics', 'Floating Point'],
+    searchKeywords: [
+      'libm -lm tutorial linux',
+      'math_error floating point linux C',
+      'GSL tutorial C numerical methods',
+      'GSL BLAS matrix example',
+    ],
+  },
   'cpp-modern-core': {
     title: 'C++ الحديث: الأساس الصحيح بدل C with classes',
     level: 'عملي',
@@ -3347,8 +3468,22 @@ export const roadmapSections: SectionLayout[] = [
   {
     id: 'systems-native',
     tone: 'slate',
-    right: ['c-language-core', 'c-pointers-memory', 'c-toolchain-debugging', 'c-linux-systems'],
-    left: ['cpp-modern-core', 'cpp-raii-memory', 'cpp-stl-templates', 'cpp-performance-concurrency', 'cpp-linux-build'],
+    right: [
+      'c-language-core',
+      'c-pointers-memory',
+      'c-toolchain-debugging',
+      'c-linux-systems',
+      'linux-libc-linking',
+      'linux-kernel-uapi-modules',
+    ],
+    left: [
+      'cpp-modern-core',
+      'cpp-raii-memory',
+      'cpp-stl-templates',
+      'cpp-performance-concurrency',
+      'cpp-linux-build',
+      'linux-math-libraries',
+    ],
   },
   {
     id: 'python-engineering',
@@ -3436,7 +3571,7 @@ export const roadmapMeta = {
   title: 'خريطة تعلّم البرمجة 2026',
   subtitle:
     'واجهة تفاعلية بالعربية تغطي الرحلة من لماذا وُجدت البرمجة والكمبيوتر أصلًا، حتى التخصص والمرجعية المهنية الحديثة.',
-  updatedAt: '2026-04-05',
+  updatedAt: '2026-04-06',
   totalTracks: roadmapSections.length,
   totalTopics: Object.keys(topicCatalog).length,
 };
@@ -3608,6 +3743,31 @@ type TopicLinkHints = {
   alternatives?: string[];
 };
 
+function uniqueText(items: Array<string | null | undefined>) {
+  return [...new Set(items)].filter((item): item is string => typeof item === 'string' && item.trim().length > 0);
+}
+
+function formatTopicList(ids: string[], limit = 2) {
+  const titles = ids
+    .map((topicId) => topicCatalog[topicId]?.title)
+    .filter((title): title is string => Boolean(title))
+    .slice(0, limit);
+
+  if (!titles.length) {
+    return '';
+  }
+
+  if (titles.length === 1) {
+    return titles[0];
+  }
+
+  if (titles.length === 2) {
+    return `${titles[0]} و${titles[1]}`;
+  }
+
+  return `${titles.slice(0, -1).join('، ')}، و${titles[titles.length - 1]}`;
+}
+
 function uniqueTopicIds(ids: Array<string | null | undefined>, currentId?: string) {
   return [...new Set(ids)].filter(
     (topicId): topicId is string =>
@@ -3667,6 +3827,21 @@ const curatedTopicLinks: Record<string, TopicLinkHints> = {
     before: ['systems-native', 'computer-science'],
     next: ['portfolio-proof-of-work', 'research-open-source-specialist'],
     alternatives: ['embedded-linux-specialist', 'cpp-performance-specialist'],
+  },
+  'linux-libc-linking': {
+    before: ['c-linux-systems', 'c-toolchain-debugging'],
+    next: ['linux-kernel-uapi-modules', 'cpp-linux-build'],
+    alternatives: ['linux-math-libraries', 'cpp-linux-build'],
+  },
+  'linux-kernel-uapi-modules': {
+    before: ['linux-libc-linking', 'c-linux-systems'],
+    next: ['systems-programming-specialist', 'embedded-linux-specialist'],
+    alternatives: ['cpp-linux-build', 'linux-math-libraries'],
+  },
+  'linux-math-libraries': {
+    before: ['linux-libc-linking', 'cpp-linux-build'],
+    next: ['cpp-performance-specialist', 'systems-programming-specialist'],
+    alternatives: ['cpp-performance-concurrency', 'python-engineering'],
   },
   'python-engineering-specialist': {
     before: ['python-engineering', 'backend-data'],
@@ -3732,6 +3907,18 @@ const projectIdeasByTopicId: Record<string, string[]> = {
   'systems-programming-specialist': [
     'ابنِ mini shell أو file tool بواجهة CLI نظيفة وتصحيح فعلي للأخطاء وشرح لتعامل البرنامج مع العمليات أو الملفات.',
     'ابنِ parser أو runtime صغير أو daemon بسيط على Linux مع logging واختبار يدوي منظم.',
+  ],
+  'linux-libc-linking': [
+    'ابنِ مكتبة مشتركة صغيرة فيها واجهة header واضحة وملف تنفيذ .so ثم اربط بها برنامجين: واحد وقت البناء وآخر وقت التشغيل عبر dlopen.',
+    'خذ برنامجًا صغيرًا في Linux ودوّن شجرة الاعتماديات التي يحملها، ثم اشرح أين يدخل glibc وأين يتدخل ld.so وأين يظهر الـABI في القصة.',
+  ],
+  'linux-kernel-uapi-modules': [
+    'ابنِ أداة userland تستخرج معلومات من /proc و/sys وتربط كل قيمة بمكانها داخل واجهات Linux بدل قراءتها كملفات غامضة فقط.',
+    'أنشئ external module تعليمية صغيرة جدًا مع kbuild، ثم وثّق لماذا كان هذا المثال مناسبًا للتعلم ولماذا لا ينبغي القفز مباشرة إلى driver معقد.',
+  ],
+  'linux-math-libraries': [
+    'ابنِ أداة عددية صغيرة في C أو C++ تستخدم libm وتتعامل بوضوح مع حالات NaN وInf وoverflow، ثم اشرح أين كان الخطأ العددي أو الربط بـ -lm مهمًا.',
+    'جرّب مسألة جبر خطي أو تكامل عددي باستخدام GSL أو واجهات BLAS الأساسية، ثم قارن بينها وبين تنفيذ أبسط لتفهم متى تستحق مكتبة متخصصة.',
   ],
   'python-engineering-specialist': [
     'ابنِ مشروع Python يجمع بين package واضح وCLI أو API واختبارات وملف تشغيل بسيط للفريق أو للمستخدم.',
@@ -3812,6 +3999,45 @@ function mergeTopicLinks(id: string, kind: keyof TopicLinkHints, limit: number) 
   return uniqueTopicIds([...curated, ...automatic], id).slice(0, limit);
 }
 
+function getFallbackProjectIdeas(topic: TopicDetail) {
+  if (topic.category === 'المسارات') {
+    return [
+      `حوّل ${topic.title} إلى خطة 4 أسابيع فيها هدف أسبوعي واحد ومشروع صغير يثبت التقدم.`,
+      `اختر مشروعًا من المجال الذي يخدمه ${topic.title} ثم دوّن المهارات التي تحتاجها الآن وما الذي ستؤجله لمرحلة لاحقة.`,
+    ];
+  }
+
+  if (topic.level === 'ابدأ' || topic.level === 'أساسي') {
+    return [
+      `حوّل ${topic.title} إلى mini lab صغير: مثال صحيح، مثال خاطئ، ثم ملاحظة قصيرة تشرح الفرق بينهما.`,
+      `اشرح ${topic.title} لصديق أو لنفسك في صفحة واحدة مع مثال عملي بسيط يثبت أنك فهمت الفكرة لا الاسم فقط.`,
+    ];
+  }
+
+  if (topic.level === 'عملي') {
+    return [
+      `ابنِ تطبيقًا أو أداة صغيرة تستخدم ${topic.title} في سيناريو قريب من الواقع ثم سجّل أين ساعدك فعليًا.`,
+      `أعد تنفيذ جزء صغير مرتين باستخدام ${topic.title}: مرة بسرعة، ومرة بعناية هندسية، ثم قارن النتيجة.`,
+    ];
+  }
+
+  return [
+    `نفّذ تجربة أعمق حول ${topic.title} مع قياس أو logging أو ملاحظات هندسية توضّح الحدود والقرارات.`,
+    `ابنِ نسخة مصغرة أقرب لبيئة حقيقية تستخدم ${topic.title} ثم دوّن trade-offs بدل الاكتفاء بالقراءة.`,
+  ];
+}
+
+function getFallbackSearchKeywords(topic: TopicDetail) {
+  const firstTag = topic.tags[0] ?? topic.category;
+
+  return [
+    `${topic.title} شرح عملي`,
+    `${topic.title} common mistakes`,
+    `${topic.title} project ideas`,
+    `${firstTag} ${topic.level} roadmap`,
+  ];
+}
+
 export function getSuggestedTopicIds(id: string, limit = 2) {
   const section = sectionByTopicId.get(id);
 
@@ -3877,6 +4103,55 @@ export function getAlternativeTopicIds(id: string, limit = 2) {
   return mergeTopicLinks(id, 'alternatives', limit);
 }
 
+export function getTopicStudyTips(id: string, limit = 3) {
+  const topic = topicCatalog[id];
+
+  if (!topic) {
+    return [];
+  }
+
+  const beforeTopics = formatTopicList(getPreparationTopicIds(id, 2));
+  const nextTopics = formatTopicList(getNextTopicIds(id, 2));
+  const suggestedTopics = formatTopicList(getSuggestedTopicIds(id, 2));
+  const alternativeTopics = formatTopicList(getAlternativeTopicIds(id, 2));
+
+  const levelTip =
+    topic.level === 'ابدأ' || topic.level === 'أساسي'
+      ? `اجعل هدفك هنا أن تشرح ${topic.title} بلغة بسيطة ثم تطبقه في مثال صغير بدل حفظ المصطلحات فقط.`
+      : topic.level === 'عملي'
+        ? `لا تكتفِ بالفهم النظري؛ ابنِ تطبيقًا مصغرًا يوظف ${topic.title} في موقف قريب من الواقع.`
+        : `في هذا المستوى ستستفيد أكثر إذا وثّقت قراراتك وحدودك أثناء التطبيق، لا إذا اكتفيت بالقراءة السريعة.`;
+
+  return uniqueText([
+    beforeTopics ? `مر سريعًا على ${beforeTopics} قبل التعمق هنا حتى يدخل الموضوع في سياقه الطبيعي.` : null,
+    levelTip,
+    nextTopics ? `بعد ثبات الفكرة، انتقل إلى ${nextTopics} حتى يتحول الفهم إلى تسلسل واضح لا معرفة متفرقة.` : null,
+    suggestedTopics ? `إذا أردت تقوية هذا الباب أكثر فمرّ أيضًا على ${suggestedTopics}.` : null,
+    alternativeTopics
+      ? `إذا شعرت أن هذا الاتجاه لا يخدم هدفك الحالي، فقارن بينه وبين ${alternativeTopics} قبل أن تغيّر المسار بالكامل.`
+      : null,
+    topic.resources.length
+      ? `اختر من المصادر أدناه مصدرًا أساسيًا واحدًا أولًا، ثم أكمله قبل التنقل بين شروحات كثيرة.`
+      : null,
+  ]).slice(0, limit);
+}
+
+export function getSearchKeywords(id: string, limit = 4) {
+  const topic = topicCatalog[id];
+
+  if (!topic) {
+    return [];
+  }
+
+  return uniqueText([...(topic.searchKeywords ?? []), ...getFallbackSearchKeywords(topic)]).slice(0, limit);
+}
+
 export function getProjectIdeas(id: string, limit = 2) {
-  return (projectIdeasByTopicId[id] ?? []).slice(0, limit);
+  const topic = topicCatalog[id];
+
+  if (!topic) {
+    return [];
+  }
+
+  return uniqueText([...(projectIdeasByTopicId[id] ?? []), ...getFallbackProjectIdeas(topic)]).slice(0, limit);
 }
