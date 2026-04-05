@@ -378,6 +378,19 @@ function RoadmapWorkspace() {
                 </section>
               ) : null}
 
+              {selectedTopic.searchKeywords?.length ? (
+                <section className="details-section">
+                  <h3>كلمات بحث مفيدة</h3>
+                  <div className="keyword-list">
+                    {selectedTopic.searchKeywords.map((keyword) => (
+                      <span key={keyword} className="keyword-chip">
+                        {keyword}
+                      </span>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
+
               <section className="details-section">
                 <h3>مصادر موثوقة</h3>
                 <div className="resource-list">

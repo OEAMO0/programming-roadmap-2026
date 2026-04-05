@@ -371,6 +371,25 @@ a {
   gap: 8px;
 }
 
+.keyword-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.keyword-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-subtle) 86%, var(--surface) 14%);
+  color: var(--text);
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
 .suggestion-card {
   display: grid;
   gap: 4px;
@@ -530,17 +549,31 @@ a {
   .flow-legend {
     max-width: calc(100vw - 140px);
   }
+
+  .flow-legend-item {
+    white-space: normal;
+    align-items: start;
+  }
 }
 
 @media (max-width: 760px) {
   .app-shell {
-    grid-template-rows: 50px minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
     gap: 10px;
     padding: 10px;
   }
 
   .topbar {
-    padding: 0 10px;
+    align-items: stretch;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .topbar-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   .topbar-button {
@@ -557,6 +590,18 @@ a {
 
   .details-drawer {
     width: calc(100vw - 20px);
+    padding-inline: 14px;
+    padding-bottom: 20px;
+  }
+
+  .drawer-header {
+    top: -18px;
+    margin-inline: -14px;
+    padding-inline: 14px;
+  }
+
+  .drawer-title-wrap h2 {
+    font-size: 1.16rem;
   }
 
   .roadmap-node {
@@ -565,5 +610,9 @@ a {
 
   .roadmap-node-section {
     width: 292px;
+  }
+
+  .suggestion-card {
+    padding: 10px;
   }
 }

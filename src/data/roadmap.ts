@@ -33,6 +33,7 @@ export type TopicDetail = {
   note2026?: string;
   resources: ResourceLink[];
   tags: string[];
+  searchKeywords?: string[];
 };
 
 type TopicInput = Omit<TopicDetail, 'id'>;
@@ -100,6 +101,13 @@ const docs = {
   graphql: 'https://graphql.org/learn/',
   cloudflare: 'https://developers.cloudflare.com/fundamentals/',
   sqlite: 'https://www.sqlite.org/docs.html',
+  man7: 'https://man7.org/linux/man-pages/',
+  cppreferenceC: 'https://en.cppreference.com/w/c',
+  cppreferenceCpp: 'https://en.cppreference.com/w/cpp',
+  gcc: 'https://gcc.gnu.org/onlinedocs/',
+  gdb: 'https://sourceware.org/gdb/current/onlinedocs/gdb/',
+  cmake: 'https://cmake.org/documentation/',
+  linuxKernel: 'https://docs.kernel.org/',
   unity: 'https://docs.unity3d.com/',
   unreal: 'https://dev.epicgames.com/documentation/unreal-engine/',
   godot: 'https://docs.godotengine.org/en/stable/',
@@ -2806,6 +2814,457 @@ const topicInputs = {
     ],
     tags: ['Lifelong Learning', 'Research', 'Focus', 'Career'],
   },
+  'systems-native': {
+    title: 'C و C++ و Linux وبرمجة الأنظمة',
+    level: 'عملي',
+    category: 'اللغات والأنظمة',
+    summary:
+      'هذا المسار لمن يريد التعمق تحت طبقات الأطر الجاهزة: لغات قريبة من النظام، بناء الأدوات، إدارة الذاكرة، الربط مع Linux، وفهم ما يجري قرب العتاد ونظام التشغيل.',
+    learn: [
+      'افهم متى تكون C وC++ خيارًا صحيحًا: الأداء، الأدوات، الأنظمة، الألعاب، والبرمجيات القريبة من النظام.',
+      'اربط بين اللغة والـtoolchain والـruntime الفعلي والتصحيح وبيئة Linux.',
+      'توقع أن هذا المسار يحتاج صبرًا وتجريبًا أكثر من مسارات الأطر الجاهزة، لكنه يعطي عمقًا هندسيًا عاليًا.',
+    ],
+    build: [
+      'حدد مشروعًا صغيرًا واحدًا في الأنظمة، مثل أداة CLI أو برنامج ملفات أو خادم بسيط، واتخذه نقطة بداية لهذا المسار.',
+    ],
+    note2026:
+      'ما زالت C وC++ في 2026 من أكثر المسارات قيمة عندما تحتاج أداءً ووضوحًا في حدود النظام أو أدوات قوية تبنى فوقها بقية الطبقات.',
+    resources: [
+      { label: 'cppreference C', url: docs.cppreferenceC },
+      { label: 'cppreference C++', url: docs.cppreferenceCpp },
+      { label: 'Linux Kernel Docs', url: docs.linuxKernel },
+    ],
+    tags: ['C', 'C++', 'Linux', 'Systems'],
+    searchKeywords: ['systems programming roadmap', 'C Linux projects', 'C++ low level engineering'],
+  },
+  'c-language-core': {
+    title: 'C بعمق: اللغة، الذاكرة، وحدودك مع النظام',
+    level: 'عملي',
+    category: 'اللغات والأنظمة',
+    summary:
+      'ابدأ هنا إذا أردت C بشكل جدي: المتغيرات، المؤشرات، المصفوفات، الـstructs، الملفات الرأسية، وطرق التفكير التي تميز C عن اللغات الأعلى تجريدًا.',
+    learn: [
+      'أتقن أنواع البيانات، المؤشرات، والتمرير بالعناوين بدل حفظ أمثلة متفرقة فقط.',
+      'افهم العلاقة بين الكود والذاكرة والـstack والـheap.',
+      'تعلّم كتابة برامج صغيرة وواضحة بدل القفز مباشرة إلى مشاريع ضخمة منخفضة المستوى.',
+    ],
+    build: [
+      'ابنِ أداة CLI صغيرة في C تقرأ ملفات أو تعالج نصًا أو تنفذ أوامر بسيطة.',
+    ],
+    note2026:
+      'أفضل طريقة لتعلم C اليوم هي مشاريع صغيرة متكررة مع تصحيح وفحص للذاكرة، لا مجرد قراءة قواعد اللغة.',
+    resources: [
+      { label: 'cppreference C', url: docs.cppreferenceC },
+      { label: 'GCC Docs', url: docs.gcc },
+      { label: 'GDB Docs', url: docs.gdb },
+    ],
+    tags: ['C', 'Pointers', 'Memory', 'CLI'],
+    searchKeywords: ['C pointers explained', 'C memory model basics', 'C small project ideas'],
+  },
+  'c-pointers-memory': {
+    title: 'المؤشرات، إدارة الذاكرة، والأخطاء الشائعة في C',
+    level: 'متقدم',
+    category: 'اللغات والأنظمة',
+    summary:
+      'هذا من أهم أبواب C: كيف تُحجز الذاكرة، كيف تُمرر العناوين، ما معنى المؤشر فعليًا، ولماذا تظهر أخطاء مثل التسرب أو الوصول الخاطئ أو الاستخدام بعد التحرير.',
+    learn: [
+      'افهم malloc وfree والفرق بين الذاكرة المكدسية والديناميكية.',
+      'تعلّم قراءة مشاكل segmentation fault كأعراض لفهم ناقص للذاكرة لا كأخطاء غامضة.',
+      'اربط بين المؤشرات والتراكيب والصفائف والسلاسل النصية في C.',
+    ],
+    build: [
+      'ابنِ بنية بيانات صغيرة بنفسك في C مثل قائمة مترابطة أو مخزن نصوص بسيط مع إدارة ذاكرة واضحة.',
+    ],
+    note2026:
+      'التعمق في الذاكرة داخل C يرفع فهمك لاحقًا في C++ والأداء وأنظمة التشغيل بشكل مباشر.',
+    resources: [
+      { label: 'cppreference C', url: docs.cppreferenceC },
+      { label: 'GDB Docs', url: docs.gdb },
+      { label: 'OSTEP', url: docs.ostep },
+    ],
+    tags: ['C', 'Memory', 'Malloc', 'Pointers'],
+    searchKeywords: ['segmentation fault debugging C', 'malloc free tutorial C', 'pointer arithmetic C'],
+  },
+  'c-toolchain-debugging': {
+    title: 'الـ toolchain في C: build و debug وملفات التنفيذ',
+    level: 'عملي',
+    category: 'اللغات والأنظمة',
+    summary:
+      'تعلم C الحقيقي لا يكتمل دون فهم أداة البناء والمترجم والتصحيح. هنا تدخل GCC أو Clang، ملفات الرؤوس، الربط، والتحليل أثناء التنفيذ.',
+    learn: [
+      'افهم المراحل الأساسية: preprocessing ثم compilation ثم linking.',
+      'تعلّم استخدام GCC وGDB وقراءة رسائل الخطأ بشكل هادئ ومنهجي.',
+      'افهم الفرق بين ملفات المصدر وملفات الرؤوس والملفات التنفيذية والمكتبات.',
+    ],
+    build: [
+      'نظّم مشروع C صغيرًا إلى عدة ملفات، ثم ابنِه يدويًا ولاحقًا بأداة build بسيطة.',
+    ],
+    note2026:
+      'إتقان الـtoolchain يختصر عليك ألمًا كبيرًا في المشاريع الأنظمية والأدوات والمكتبات منخفضة المستوى.',
+    resources: [
+      { label: 'GCC Docs', url: docs.gcc },
+      { label: 'GDB Docs', url: docs.gdb },
+      { label: 'man7 Linux man pages', url: docs.man7 },
+    ],
+    tags: ['C', 'Toolchain', 'GCC', 'GDB', 'Linking'],
+    searchKeywords: ['linker vs compiler C', 'GDB beginner C', 'C multi file project setup'],
+  },
+  'c-linux-systems': {
+    title: 'C مع Linux: ملفات، عمليات، و system calls',
+    level: '2026',
+    category: 'اللغات والأنظمة',
+    summary:
+      'إذا أردت C + Linux بعمق، فهذا الباب مهم جدًا. هنا تبدأ بالملفات والعمليات والوصفات file descriptors والاستدعاءات النظامية الأساسية وبناء أدوات قريبة من بيئة Unix.',
+    learn: [
+      'افهم open وread وwrite وclose وفكرة file descriptors.',
+      'تعلّم أساسيات fork وexec وpipe والإشارات بشكل مبسط ثم عملي.',
+      'اربط بين برامج المستخدم userland وبين ما يقدمه Linux فعلًا من واجهات منخفضة المستوى.',
+    ],
+    build: [
+      'ابنِ نسخة مبسطة من أداة Unix صغيرة مثل cat أو grep البسيط أو mini shell محدود جدًا.',
+    ],
+    note2026:
+      'هذا الباب هو أقرب نقطة تجمع بين C ونظام التشغيل وLinux بشكل عملي جدًا.',
+    resources: [
+      { label: 'Linux Kernel Docs', url: docs.linuxKernel },
+      { label: 'man7 Linux man pages', url: docs.man7 },
+      { label: 'OSTEP', url: docs.ostep },
+    ],
+    tags: ['C', 'Linux', 'System Calls', 'Processes'],
+    searchKeywords: ['fork exec pipe tutorial', 'Linux system calls C', 'build a mini shell C'],
+  },
+  'cpp-modern-core': {
+    title: 'C++ الحديث: الأساس الصحيح بدل C with classes',
+    level: 'عملي',
+    category: 'اللغات والأنظمة',
+    summary:
+      'تعلم C++ الحديث يبدأ من فهم قيمه وأدواته الصحيحة: الأنواع، الكائنات، المراجع، النقل move semantics، والتعبير الواضح، لا من خلط قديم بين أنماط C وC++ بلا وعي.',
+    learn: [
+      'افهم الفروقات الجوهرية بين C وC++ بدل التعامل مع C++ كلغة أكبر فقط.',
+      'تعلّم المراجع، الكائنات، الـconst correctness، وأساسيات الإدارة الآمنة للموارد.',
+      'ابنِ فهمًا واضحًا لأجزاء اللغة الحديثة التي تستخدم يوميًا فعلًا.',
+    ],
+    build: [
+      'حوّل مشروع CLI صغيرًا من C أو pseudo code إلى C++ حديث منظم وواضح.',
+    ],
+    note2026:
+      'تعلم C++ الحديث بشكل نظيف من البداية أسهل بكثير من إصلاح عادات قديمة لاحقًا.',
+    resources: [
+      { label: 'cppreference C++', url: docs.cppreferenceCpp },
+      { label: 'GCC Docs', url: docs.gcc },
+      { label: 'CMake Docs', url: docs.cmake },
+    ],
+    tags: ['C++', 'Modern C++', 'Types', 'RAII'],
+    searchKeywords: ['modern C++ roadmap', 'C++ core guidelines beginner', 'C++ move semantics basics'],
+  },
+  'cpp-raii-memory': {
+    title: 'RAII والموارد والذاكرة في C++',
+    level: 'متقدم',
+    category: 'اللغات والأنظمة',
+    summary:
+      'هنا تنتقل من “إدارة ذاكرة يدويًا” إلى “إدارة موارد صحيحة” في C++. RAII من أهم مفاهيم اللغة لأنه يربط عمر الكائن بعمر المورد ويقلل الأخطاء بشكل جذري.',
+    learn: [
+      'افهم RAII وsmart pointers ولماذا هي مركزية في C++ الحديث.',
+      'اربط بين البناء destructor والاستثناءات وإدارة الملفات والذاكرة والمقابس.',
+      'تعلّم متى تستخدم unique_ptr ومتى shared_ptr ومتى تتجنب كليهما.',
+    ],
+    build: [
+      'أعد بناء جزء صغير يتعامل مع ملف أو ذاكرة أو اتصال بطريقة RAII واضحة.',
+    ],
+    note2026:
+      'فهم RAII جيدًا يختصر جزءًا كبيرًا من سبب حب الناس لـ C++ الحديث أو معاناتهم منه.',
+    resources: [
+      { label: 'cppreference C++', url: docs.cppreferenceCpp },
+      { label: 'CMake Docs', url: docs.cmake },
+      { label: 'GDB Docs', url: docs.gdb },
+    ],
+    tags: ['C++', 'RAII', 'Smart Pointers', 'Resources'],
+    searchKeywords: ['RAII explained C++', 'unique_ptr vs shared_ptr', 'resource management C++'],
+  },
+  'cpp-stl-templates': {
+    title: 'STL و templates في C++ بدون خوف',
+    level: 'متقدم',
+    category: 'اللغات والأنظمة',
+    summary:
+      'جزء كبير من قوة C++ يأتي من STL والـtemplates. المهم هنا ألا تحفظ أسماء فقط، بل تفهم كيف تستخدم الحاويات والخوارزميات والأنماط الجاهزة بوعي وتدرج.',
+    learn: [
+      'تعرف على vector وstring وmap وunordered_map وalgorithms الشائعة.',
+      'افهم templates كآلية تعميم قوية وليست سحرًا غامضًا فقط.',
+      'تعلّم قراءة رسائل أخطاء C++ الطويلة تدريجيًا بدل النفور منها.',
+    ],
+    build: [
+      'ابنِ أداة صغيرة تعتمد على STL بشكل واضح ثم حسّنها بتعميم جزء صغير عبر template بسيط.',
+    ],
+    note2026:
+      'أفضل طريقة لفهم STL والـtemplates هي استخدامها في أدوات صغيرة جدًا ومتكررة بدل البدء بميتا-برمجة معقدة.',
+    resources: [
+      { label: 'cppreference C++', url: docs.cppreferenceCpp },
+      { label: 'GCC Docs', url: docs.gcc },
+    ],
+    tags: ['C++', 'STL', 'Templates', 'Containers'],
+    searchKeywords: ['STL containers overview', 'C++ templates basics', 'reading template errors C++'],
+  },
+  'cpp-performance-concurrency': {
+    title: 'الأداء والتوازي في C++',
+    level: '2026',
+    category: 'اللغات والأنظمة',
+    summary:
+      'هذا المسار يربط C++ بالأداء الحقيقي: التخصيصات، الوصول إلى الذاكرة، القياس profiling، والخيوط والتزامن. هنا تظهر قيمة اللغة في البرمجيات الحساسة للأداء.',
+    learn: [
+      'افهم أن الأداء في C++ لا يعني “كتابة كود صعب”، بل فهم حركة البيانات والتخصيصات والاختناقات.',
+      'تعرّف على أساسيات threads وmutex وatomic بشكل عملي ومسؤول.',
+      'تعلّم أن تقيس أولًا، ثم تحسن بناءً على دليل لا إحساس.',
+    ],
+    build: [
+      'خذ برنامجًا صغيرًا وقس أداءه، ثم نفذ تحسينًا واحدًا واضح السبب والأثر.',
+    ],
+    note2026:
+      'أفضل مهندس C++ ليس من يطارد micro-optimizations دائمًا، بل من يفهم أين تضيع الموارد فعلًا.',
+    resources: [
+      { label: 'cppreference C++', url: docs.cppreferenceCpp },
+      { label: 'GDB Docs', url: docs.gdb },
+      { label: 'Linux Kernel Docs', url: docs.linuxKernel },
+    ],
+    tags: ['C++', 'Performance', 'Concurrency', 'Profiling'],
+    searchKeywords: ['C++ profiling basics', 'C++ concurrency roadmap', 'data oriented performance C++'],
+  },
+  'cpp-linux-build': {
+    title: 'C++ مع Linux: build systems ومكتبات وأدوات',
+    level: 'متقدم',
+    category: 'اللغات والأنظمة',
+    summary:
+      'هذا الباب عملي جدًا لمن يريد C++ + Linux. ستحتاج هنا إلى CMake، الربط مع مكتبات، فهم الـABI بشكل عام، والتعامل مع بيئات بناء أقرب إلى المشاريع الحقيقية.',
+    learn: [
+      'تعلم أساسيات CMake وتنظيم مشروع C++ متوسط بدل ملفات مفردة.',
+      'افهم معنى linking وstatic/dynamic libraries بشكل عملي.',
+      'اربط بين Linux وبيئة البناء والتصحيح والتشغيل والاعتماديات.',
+    ],
+    build: [
+      'نظّم مشروع C++ صغيرًا باستخدام CMake مع أكثر من ملف ومكتبة خارجية بسيطة.',
+    ],
+    note2026:
+      'هذا الباب يجهزك فعليًا للتعامل مع مشاريع C++ الحقيقية أكثر من تعلم اللغة وحدها.',
+    resources: [
+      { label: 'CMake Docs', url: docs.cmake },
+      { label: 'GCC Docs', url: docs.gcc },
+      { label: 'man7 Linux man pages', url: docs.man7 },
+    ],
+    tags: ['C++', 'Linux', 'CMake', 'Build Systems'],
+    searchKeywords: ['CMake beginner project', 'Linux shared library C++', 'C++ project structure Linux'],
+  },
+  'python-engineering': {
+    title: 'Python بعمق والهندسة العملية',
+    level: 'عملي',
+    category: 'اللغات والأنظمة',
+    summary:
+      'هذا المسار ليس لتعلم Python كسكربت فقط، بل كأداة هندسية: تنظيم المشاريع، البيئات، الـstdlib، الأنواع، الأداء، الـasync، والخدمات أو الأتمتة العملية.',
+    learn: [
+      'انقل Python من مجرد لغة سهلة إلى أداة هندسية منظمة وموثوقة.',
+      'افهم متى تناسب Python الأتمتة والخدمات والبيانات وأين يجب الانتباه للأداء والتوزيع.',
+      'تعلّم بناء مشاريع Python قابلة للصيانة بدل ملفات متفرقة متراكمة.',
+    ],
+    build: [
+      'ابنِ مشروع Python صغيرًا منظمًا ببيئة واضحة واختبارات أساسية وأوامر تشغيل مقروءة.',
+    ],
+    note2026:
+      'في 2026 ما زالت Python من أقوى اللغات عندما تستخدم بانضباط هندسي لا فقط كسكربتات سريعة.',
+    resources: [
+      { label: 'Python Tutorial', url: docs.python },
+      { label: 'Node.js Learn', url: docs.node },
+    ],
+    tags: ['Python', 'Engineering', 'Automation', 'Services'],
+    searchKeywords: ['python engineering roadmap', 'python project structure', 'python async service basics'],
+  },
+  'python-language-core-deep': {
+    title: 'Python بعمق: اللغة والأنماط الأساسية',
+    level: 'عملي',
+    category: 'اللغات والأنظمة',
+    summary:
+      'تعلم Python بجدية يعني أن تفهم الأنواع والكائنات والنطاقات والاستثناءات والـiterators والـcomprehensions والأنماط الشائعة التي تجعل الكود واضحًا ومقروءًا.',
+    learn: [
+      'أتقن الأساس الذي يجعل كود Python مختصرًا لكن واضحًا لا مختصرًا ومربكًا.',
+      'افهم كيف تبنى الأنواع والكائنات والوظائف والسلوكيات المتكررة في اللغة.',
+      'تجنب التحول إلى “كتابة كل شيء بسرعة” دون تنظيم أو naming جيد.',
+    ],
+    build: [
+      'أعد كتابة مشروع Python صغير بأسلوب أوضح مع دوال أصغر وأسماء أفضل وتدفق أسهل للقراءة.',
+    ],
+    resources: [
+      { label: 'Python Tutorial', url: docs.python },
+    ],
+    tags: ['Python', 'Core', 'Readability', 'Idioms'],
+    searchKeywords: ['python iterators comprehensions', 'python exception handling style', 'python clean code basics'],
+  },
+  'python-packaging-venvs': {
+    title: 'البيئات، الحزم، وتوزيع مشاريع Python',
+    level: 'عملي',
+    category: 'اللغات والأنظمة',
+    summary:
+      'أحد أكبر الفروق بين الهواية والهندسة في Python هو فهم البيئات الافتراضية والاعتماديات وبنية المشروع والتوزيع، بحيث لا يصبح المشروع هشًا أو معلقًا على جهاز واحد.',
+    learn: [
+      'افهم virtual environments والاعتماديات والإصدارات وكيفية تثبيت المشروع بشكل منظم.',
+      'نظّم مشروع Python إلى package واضح بدل ملف أو ملفين عشوائيين.',
+      'تعلّم أساسيات التشغيل والأوامر والاعتماديات بما يسهل المشاركة أو النشر لاحقًا.',
+    ],
+    build: [
+      'حوّل سكربت Python واحدًا إلى مشروع منظم ببيئة واعتماديات ووثيقة تشغيل مختصرة.',
+    ],
+    resources: [
+      { label: 'Python Tutorial', url: docs.python },
+    ],
+    tags: ['Python', 'Packaging', 'venv', 'Project Structure'],
+    searchKeywords: ['python packaging beginner', 'venv vs poetry basics', 'python project layout'],
+  },
+  'python-stdlib-automation': {
+    title: 'Python للأتمتة والـ stdlib بشكل يفيد فعلاً',
+    level: 'عملي',
+    category: 'اللغات والأنظمة',
+    summary:
+      'قوة Python الحقيقية كثيرًا ما تظهر في مكتبتها القياسية وفي الأتمتة العملية: ملفات، JSON، CSV، subprocess، pathlib، argparse، الشبكات البسيطة، وتحويل العمل اليدوي إلى أدوات نافعة.',
+    learn: [
+      'تعلم استخدام المكتبة القياسية بدل إضافة مكتبات لكل شيء صغير.',
+      'ابنِ حسًا في أتمتة المهام المتكررة داخل جهازك أو مشروعك.',
+      'استخدم Python كأداة إنتاج شخصية لا كلغة تعليم فقط.',
+    ],
+    build: [
+      'ابنِ أداتين صغيرتين للأتمتة: واحدة للملفات أو النصوص، وأخرى للتقارير أو المعالجة أو التشغيل الآلي.',
+    ],
+    resources: [
+      { label: 'Python Tutorial', url: docs.python },
+    ],
+    tags: ['Python', 'Automation', 'Stdlib', 'CLI'],
+    searchKeywords: ['python automation projects', 'argparse pathlib json tutorial', 'python subprocess examples'],
+  },
+  'python-typing-testing': {
+    title: 'الأنواع والاختبارات وجودة الكود في Python',
+    level: 'متقدم',
+    category: 'اللغات والأنظمة',
+    summary:
+      'عندما يكبر مشروع Python، تظهر أهمية typing والاختبارات والانضباط الأسلوبي. هذا الباب يجعلك تستخدم Python بطريقة هندسية قابلة للصيانة وليست فقط سريعة في البداية.',
+    learn: [
+      'استخدم type hints لتحسين الفهم والقراءة والتكامل مع الأدوات.',
+      'اربط بين الاختبارات وبين الثقة في التغيير لا مجرد زيادة عدد الملفات.',
+      'تعلّم متى يكفي البساطة ومتى تحتاج تنظيمًا أشد في الجودة.',
+    ],
+    build: [
+      'أضف أنواعًا واختبارات أساسية إلى مشروع Python قائم ثم لاحظ كيف تحسن القراءة والأمان عند التعديل.',
+    ],
+    resources: [
+      { label: 'Python Tutorial', url: docs.python },
+      { label: 'Vitest Guide', url: docs.vitest },
+    ],
+    tags: ['Python', 'Typing', 'Testing', 'Quality'],
+    searchKeywords: ['python type hints roadmap', 'pytest basics project', 'python maintainable code'],
+  },
+  'python-async-services': {
+    title: 'Python للخدمات و async I/O',
+    level: '2026',
+    category: 'اللغات والأنظمة',
+    summary:
+      'هذا الباب مناسب إذا أردت Python في الخدمات الخلفية أو المهام الشبكية أو المعالجة المتوازية على مستوى I/O. هنا تفهم async/await، حدودها، ومتى تكون مفيدة فعلًا.',
+    learn: [
+      'افهم الفرق بين concurrency في I/O وبين الأداء الحسابي البحت.',
+      'تعلّم async/await بوعي بدل إضافتها لكل مكان.',
+      'اربط Python بالخدمات وAPIs والمعالجات الخلفية والـjobs بشكل عملي.',
+    ],
+    build: [
+      'ابنِ خدمة Python بسيطة أو أداة تسحب بيانات من عدة مصادر ثم تعالجها بشكل منظم.',
+    ],
+    resources: [
+      { label: 'Python Tutorial', url: docs.python },
+      { label: 'FastAPI Docs', url: docs.fastapi },
+    ],
+    tags: ['Python', 'Async', 'Services', 'I/O'],
+    searchKeywords: ['python async await explained', 'fastapi async basics', 'python background jobs'],
+  },
+  'systems-programming-specialist': {
+    title: 'مسار Systems Programming Specialist',
+    level: 'متقدم',
+    category: 'المسارات',
+    summary:
+      'يناسبك إذا كنت تستمتع بالعمق القريب من النظام: الأدوات، الأداء، الملفات، الذاكرة، العمليات، وبيئات Linux وما يدور تحت سطح التطبيقات الشائعة.',
+    learn: [
+      'اجمع بين C أو C++ وLinux والتصحيح والأداء بدل دراسة كل جزء منفصلًا فقط.',
+      'ابنِ مشاريع صغيرة أنظمية تنتهي فعلًا: أدوات، CLI، mini shell، parsers، أو خدمات منخفضة المستوى.',
+      'تدرج من البسيط إلى القريب من النظام بدل محاولة بناء kernel أو compiler من اليوم الأول.',
+    ],
+    build: [
+      'أنهِ مشروعين صغيرين في Linux باستخدام C أو C++ يثبتان فهمك للملفات أو العمليات أو أدوات النظام.',
+    ],
+    resources: [
+      { label: 'Linux Kernel Docs', url: docs.linuxKernel },
+      { label: 'cppreference C', url: docs.cppreferenceC },
+      { label: 'cppreference C++', url: docs.cppreferenceCpp },
+    ],
+    tags: ['Systems', 'Linux', 'C', 'C++'],
+    searchKeywords: ['systems programming portfolio ideas', 'linux systems engineer roadmap'],
+  },
+  'python-engineering-specialist': {
+    title: 'مسار Python Engineering Specialist',
+    level: 'عملي',
+    category: 'المسارات',
+    summary:
+      'يناسبك إذا كنت تحب الإنتاجية العالية مع انضباط هندسي جيد: أتمتة، خدمات، أدوات داخلية، بيانات، وتطبيقات عملية تُبنى بسرعة لكن تبقى قابلة للصيانة.',
+    learn: [
+      'وحّد بين Python والأتمتة والخدمات والاختبارات والتنظيم بدل اعتبارها لغة سكربتات فقط.',
+      'ابنِ مشاريع نافعة ومتكررة الاستعمال لتستفيد من قوة Python الفعلية.',
+      'حافظ على الوضوح والبنية لأن سرعة Python قد تغري بالفوضى.',
+    ],
+    build: [
+      'ابنِ مشروع Python متكامل فيه package واضح وCLI أو API واختبارات أساسية.',
+    ],
+    resources: [
+      { label: 'Python Tutorial', url: docs.python },
+      { label: 'FastAPI Docs', url: docs.fastapi },
+    ],
+    tags: ['Python', 'Engineering', 'Automation', 'Services'],
+    searchKeywords: ['python engineer roadmap', 'python service project ideas'],
+  },
+  'embedded-linux-specialist': {
+    title: 'مسار Embedded / Linux Specialist',
+    level: '2026',
+    category: 'المسارات',
+    summary:
+      'يناسبك إذا كنت تميل إلى الأجهزة والأنظمة القريبة من العتاد وLinux والبرمجيات التي تعيش في بيئات مقيدة أو متخصصة. هذا المسار يحتاج صبرًا وعمقًا لكنه قوي جدًا.',
+    learn: [
+      'اربط بين C أو C++ وبين Linux وبيئات تشغيل أقرب إلى الأجهزة أو الأنظمة المخصصة.',
+      'تعرّف على حدود الذاكرة والأداء والأدوات والـcross-compilation تدريجيًا.',
+      'ابنِ حسًا هندسيًا عمليًا حول ما يعنيه تشغيل البرمجيات خارج بيئة التطوير المريحة.',
+    ],
+    build: [
+      'ابدأ بأداة صغيرة على Linux ثم وسّعها لاحقًا إلى مشروع أقرب إلى embedded tooling أو runtime محدود.',
+    ],
+    resources: [
+      { label: 'Linux Kernel Docs', url: docs.linuxKernel },
+      { label: 'GCC Docs', url: docs.gcc },
+      { label: 'man7 Linux man pages', url: docs.man7 },
+    ],
+    tags: ['Embedded', 'Linux', 'C', 'Tooling'],
+    searchKeywords: ['embedded linux beginner roadmap', 'cross compilation basics linux'],
+  },
+  'cpp-performance-specialist': {
+    title: 'مسار C++ Performance Specialist',
+    level: '2026',
+    category: 'المسارات',
+    summary:
+      'يناسبك إذا كنت تحب الأداء العالي والأنظمة الحساسة للزمن والذاكرة والألعاب والأدوات القوية. هذا المسار يركز على C++ عندما تكون السرعة والموارد والموثوقية عوامل رئيسية.',
+    learn: [
+      'تعمق في C++ الحديث مع RAII والـSTL والأداء والقياس والتوازي.',
+      'تعلّم أن تقرأ الاختناقات وتفهم حركة البيانات قبل التفكير في التحسينات الصغيرة.',
+      'ابنِ مشاريع تثبت أنك لا تكتب C++ فقط، بل تفهم لماذا يستخدم ومتى.',
+    ],
+    build: [
+      'أنهِ مشروع C++ متوسطًا مع build system وقياس أداء وتوثيق قراراتك الفنية.',
+    ],
+    resources: [
+      { label: 'cppreference C++', url: docs.cppreferenceCpp },
+      { label: 'CMake Docs', url: docs.cmake },
+      { label: 'GDB Docs', url: docs.gdb },
+    ],
+    tags: ['C++', 'Performance', 'Systems', 'Tooling'],
+    searchKeywords: ['C++ performance roadmap', 'C++ systems portfolio ideas'],
+  },
 } satisfies Record<string, TopicInput>;
 
 export const topicCatalog = Object.fromEntries(
@@ -2880,6 +3339,18 @@ export const roadmapSections: SectionLayout[] = [
     left: ['concurrency-runtime', 'distributed-systems', 'database-internals'],
   },
   {
+    id: 'systems-native',
+    tone: 'slate',
+    right: ['c-language-core', 'c-pointers-memory', 'c-toolchain-debugging', 'c-linux-systems'],
+    left: ['cpp-modern-core', 'cpp-raii-memory', 'cpp-stl-templates', 'cpp-performance-concurrency', 'cpp-linux-build'],
+  },
+  {
+    id: 'python-engineering',
+    tone: 'sky',
+    right: ['python-language-core-deep', 'python-packaging-venvs', 'python-stdlib-automation'],
+    left: ['python-typing-testing', 'python-async-services'],
+  },
+  {
     id: 'game-development',
     tone: 'slate',
     right: [
@@ -2919,8 +3390,16 @@ export const roadmapSections: SectionLayout[] = [
       'mobile-specialist',
       'game-specialist',
       'product-engineering-specialist',
+      'systems-programming-specialist',
+      'python-engineering-specialist',
     ],
-    left: ['data-ai-specialist', 'platform-specialist', 'research-open-source-specialist'],
+    left: [
+      'data-ai-specialist',
+      'platform-specialist',
+      'research-open-source-specialist',
+      'embedded-linux-specialist',
+      'cpp-performance-specialist',
+    ],
   },
   {
     id: 'mastery-growth',
