@@ -86,6 +86,10 @@ const docs = {
   mcp: 'https://modelcontextprotocol.io/',
   openai: 'https://platform.openai.com/docs/overview',
   python: 'https://docs.python.org/3/tutorial/',
+  pythonTyping: 'https://docs.python.org/3/library/typing.html',
+  pythonAsyncio: 'https://docs.python.org/3/library/asyncio.html',
+  pythonPackaging: 'https://packaging.python.org/en/latest/',
+  pytest: 'https://docs.pytest.org/en/stable/',
   go: 'https://go.dev/doc/tutorial/getting-started',
   dotnet: 'https://learn.microsoft.com/aspnet/core/',
   fastapi: 'https://fastapi.tiangolo.com/',
@@ -3112,6 +3116,7 @@ const topicInputs = {
     ],
     resources: [
       { label: 'Python Tutorial', url: docs.python },
+      { label: 'Python Packaging User Guide', url: docs.pythonPackaging },
     ],
     tags: ['Python', 'Packaging', 'venv', 'Project Structure'],
     searchKeywords: ['python packaging beginner', 'venv vs poetry basics', 'python project layout'],
@@ -3151,8 +3156,8 @@ const topicInputs = {
       'أضف أنواعًا واختبارات أساسية إلى مشروع Python قائم ثم لاحظ كيف تحسن القراءة والأمان عند التعديل.',
     ],
     resources: [
-      { label: 'Python Tutorial', url: docs.python },
-      { label: 'Vitest Guide', url: docs.vitest },
+      { label: 'Python Typing Docs', url: docs.pythonTyping },
+      { label: 'Pytest Docs', url: docs.pytest },
     ],
     tags: ['Python', 'Typing', 'Testing', 'Quality'],
     searchKeywords: ['python type hints roadmap', 'pytest basics project', 'python maintainable code'],
@@ -3173,6 +3178,7 @@ const topicInputs = {
     ],
     resources: [
       { label: 'Python Tutorial', url: docs.python },
+      { label: 'asyncio Docs', url: docs.pythonAsyncio },
       { label: 'FastAPI Docs', url: docs.fastapi },
     ],
     tags: ['Python', 'Async', 'Services', 'I/O'],
@@ -3596,6 +3602,216 @@ export function getRelatedTopicIds(id: string) {
   );
 }
 
+type TopicLinkHints = {
+  before?: string[];
+  next?: string[];
+  alternatives?: string[];
+};
+
+function uniqueTopicIds(ids: Array<string | null | undefined>, currentId?: string) {
+  return [...new Set(ids)].filter(
+    (topicId): topicId is string =>
+      typeof topicId === 'string' && topicId !== currentId && Object.hasOwn(topicCatalog, topicId),
+  );
+}
+
+function getSectionBranchContext(id: string) {
+  const section = sectionByTopicId.get(id);
+
+  if (!section) {
+    return null;
+  }
+
+  const branch = section.right.includes(id) ? section.right : section.left.includes(id) ? section.left : null;
+
+  return { section, branch };
+}
+
+const curatedTopicLinks: Record<string, TopicLinkHints> = {
+  'systems-native': {
+    before: ['computer-science', 'operating-systems'],
+    next: ['systems-programming-specialist', 'embedded-linux-specialist'],
+    alternatives: ['python-engineering', 'game-development'],
+  },
+  'python-engineering': {
+    before: ['core-programming', 'developer-workflow'],
+    next: ['python-engineering-specialist', 'backend-specialist'],
+    alternatives: ['backend-data', 'data-ai-specialist'],
+  },
+  'frontend-specialist': {
+    before: ['frontend-web', 'developer-workflow'],
+    next: ['portfolio-proof-of-work', 'writing-teaching-communication'],
+    alternatives: ['product-engineering-specialist', 'mobile-specialist'],
+  },
+  'backend-specialist': {
+    before: ['backend-data', 'architecture-systems'],
+    next: ['portfolio-proof-of-work', 'platform-specialist'],
+    alternatives: ['product-engineering-specialist', 'python-engineering-specialist'],
+  },
+  'mobile-specialist': {
+    before: ['frontend-web', 'developer-workflow'],
+    next: ['portfolio-proof-of-work', 'product-engineering-specialist'],
+    alternatives: ['frontend-specialist', 'backend-specialist'],
+  },
+  'game-specialist': {
+    before: ['game-development', 'cpp-modern-core'],
+    next: ['portfolio-proof-of-work', 'cpp-performance-specialist'],
+    alternatives: ['systems-programming-specialist', 'product-engineering-specialist'],
+  },
+  'product-engineering-specialist': {
+    before: ['frontend-web', 'backend-data'],
+    next: ['portfolio-proof-of-work', 'leadership-systems-thinking'],
+    alternatives: ['frontend-specialist', 'backend-specialist'],
+  },
+  'systems-programming-specialist': {
+    before: ['systems-native', 'computer-science'],
+    next: ['portfolio-proof-of-work', 'research-open-source-specialist'],
+    alternatives: ['embedded-linux-specialist', 'cpp-performance-specialist'],
+  },
+  'python-engineering-specialist': {
+    before: ['python-engineering', 'backend-data'],
+    next: ['portfolio-proof-of-work', 'product-engineering-specialist'],
+    alternatives: ['backend-specialist', 'data-ai-specialist'],
+  },
+  'data-ai-specialist': {
+    before: ['python-engineering', 'ai-engineering'],
+    next: ['portfolio-proof-of-work', 'research-open-source-specialist'],
+    alternatives: ['python-engineering-specialist', 'backend-specialist'],
+  },
+  'platform-specialist': {
+    before: ['cloud-platform', 'quality-security'],
+    next: ['portfolio-proof-of-work', 'leadership-systems-thinking'],
+    alternatives: ['backend-specialist', 'systems-programming-specialist'],
+  },
+  'research-open-source-specialist': {
+    before: ['computer-science', 'writing-teaching-communication'],
+    next: ['lifelong-learning-research', 'portfolio-proof-of-work'],
+    alternatives: ['systems-programming-specialist', 'data-ai-specialist'],
+  },
+  'embedded-linux-specialist': {
+    before: ['systems-native', 'linux-networking'],
+    next: ['portfolio-proof-of-work', 'research-open-source-specialist'],
+    alternatives: ['systems-programming-specialist', 'cpp-performance-specialist'],
+  },
+  'cpp-performance-specialist': {
+    before: ['systems-native', 'game-development'],
+    next: ['portfolio-proof-of-work', 'research-open-source-specialist'],
+    alternatives: ['systems-programming-specialist', 'game-specialist'],
+  },
+};
+
+const projectIdeasByTopicId: Record<string, string[]> = {
+  'systems-native': [
+    'ابنِ mini shell بسيط يدعم أوامر أساسية وعمليات فرعية ثم وثّق كيف يعمل fork وexec لديك.',
+    'ابنِ أداة فهرسة ملفات CLI في C أو C++ مع تحليل أداء بسيط وقرارات واضحة حول الذاكرة.',
+  ],
+  'python-engineering': [
+    'ابنِ مجموعة أدوات أتمتة CLI تنظف ملفات أو تقارير أو بيانات وتعمل من مشروع منظم باختبارات أساسية.',
+    'ابنِ خدمة Python صغيرة مع API و jobs خلفية واستخدام واضح للـasync أو الـstdlib حيث يلزم.',
+  ],
+  'frontend-specialist': [
+    'ابنِ تطبيق واجهة غني بالحالات مثل dashboard أو knowledge app مع اهتمام واضح بالوصولية والأداء.',
+    'أنهِ مشروع واجهة responsive كامل مع forms وfetching وrouting وتوثيق قرارات الـUX التي اتخذتها.',
+  ],
+  'backend-specialist': [
+    'ابنِ API حقيقية فيها auth وSQL وtransactions وbackground jobs ثم اكتب runbook تشغيل مختصر.',
+    'ابنِ خدمة تكاملات أو notifications متعددة المراحل مع retries وlogging ومراقبة أساسية.',
+  ],
+  'mobile-specialist': [
+    'ابنِ تطبيق موبايل offline-first نسبيًا مع مزامنة بسيطة وإدارة حالة وتجربة استخدام نظيفة.',
+    'أنهِ تطبيقًا صغيرًا فيه رفع ملفات أو موقع جغرافي أو notifications ليثبت فهمك لقيود الهاتف الفعلية.',
+  ],
+  'game-specialist': [
+    'أنهِ لعبة صغيرة كاملة loop واضحة مع قائمة ومراحل وحفظ بسيط ثم حلل ما كسر الأداء أو الإنتاجية لديك.',
+    'ابنِ أداة داخلية أو subsystem صغيرة للمحرك مثل level editor مصغر أو asset pipeline مبسط.',
+  ],
+  'product-engineering-specialist': [
+    'ابنِ منتجًا صغيرًا من الواجهة إلى الخلفية مع analytics وأخطاء وملاحظات استخدام وتحسينين متتاليين.',
+    'نفذ feature كاملة مع experiment أو flags ثم وثّق كيف قست أثرها على الاستخدام والجودة.',
+  ],
+  'systems-programming-specialist': [
+    'ابنِ mini shell أو file tool بواجهة CLI نظيفة وتصحيح فعلي للأخطاء وشرح لتعامل البرنامج مع العمليات أو الملفات.',
+    'ابنِ parser أو runtime صغير أو daemon بسيط على Linux مع logging واختبار يدوي منظم.',
+  ],
+  'python-engineering-specialist': [
+    'ابنِ مشروع Python يجمع بين package واضح وCLI أو API واختبارات وملف تشغيل بسيط للفريق أو للمستخدم.',
+    'ابنِ خدمة أو automation pipeline تعالج ملفات أو بيانات أو تكاملات ثم وثّق حدود Python فيها بصدق.',
+  ],
+  'data-ai-specialist': [
+    'ابنِ pipeline بيانات صغيرة تنتهي بلوحة أو تقرير أو تنبؤ واضح مع تقييم للجودة وانحرافات البيانات.',
+    'ابنِ تطبيق RAG أو agent صغير مع مصادر موثوقة وقياس بسيط للجودة والهلوسة والتكلفة.',
+  ],
+  'platform-specialist': [
+    'ابنِ template منصة مشروع فيه CI/CD ومراقبة ونشر وrunbook مختصر حتى لو على نطاق صغير.',
+    'أنشئ بيئة تشغيل محلية تشبه الإنتاج نسبيًا مع containers وdashboards وتنبيهات أساسية.',
+  ],
+  'research-open-source-specialist': [
+    'ساهم بإصلاح أو تحسين صغير في مشروع مفتوح المصدر ثم اكتب شرحًا يبين كيف فهمت الكود وكيف اختبرت التعديل.',
+    'ابنِ repo تجريبي يقارن فكرتين أو مكتبتين أو approachين مع benchmark أو ملاحظات واضحة قابلة للمراجعة.',
+  ],
+  'embedded-linux-specialist': [
+    'ابنِ أداة Linux صغيرة تتواصل مع ملفات أجهزة أو socket أو serial واجعلها قابلة للبناء على بيئة مختلفة.',
+    'جهز مشروعًا مبسطًا يوضح cross-compilation أو deployment إلى جهاز محدود مع توثيق الخطوات والعقبات.',
+  ],
+  'cpp-performance-specialist': [
+    'ابنِ أداة أو محاكاة صغيرة في C++ ثم قس الأداء فعليًا وحسّن bottleneck واحدًا موثقًا بالأرقام.',
+    'أنهِ مشروع C++ متوسطًا باستخدام CMake وprofiling وشرح لقرارات الذاكرة والحاويات والتوازي التي اخترتها.',
+  ],
+};
+
+function getAutomaticTopicLinks(id: string) {
+  const context = getSectionBranchContext(id);
+
+  if (!context) {
+    return {
+      before: [] as string[],
+      next: [] as string[],
+      alternatives: [] as string[],
+    };
+  }
+
+  const { section, branch } = context;
+  const sectionIndex = sectionIndexById.get(section.id) ?? -1;
+  const previousSection = sectionIndex > 0 ? roadmapSections[sectionIndex - 1] : null;
+  const nextSection = sectionIndex >= 0 ? roadmapSections[sectionIndex + 1] : null;
+  const oppositeBranch = branch === section.right ? section.left : section.right;
+
+  if (!branch) {
+    return {
+      before: uniqueTopicIds(
+        [
+          previousSection?.id ?? '',
+          ...(previousSection ? [...previousSection.right.slice(0, 1), ...previousSection.left.slice(0, 1)] : []),
+        ],
+        id,
+      ),
+      next: uniqueTopicIds([...section.right.slice(0, 1), ...section.left.slice(0, 1), nextSection?.id ?? ''], id),
+      alternatives: uniqueTopicIds([...section.right, ...section.left].slice(0, 3), id),
+    };
+  }
+
+  const branchIndex = branch.indexOf(id);
+
+  return {
+    before: uniqueTopicIds([branch[branchIndex - 1], section.id, previousSection?.id], id),
+    next: uniqueTopicIds([branch[branchIndex + 1], nextSection?.id, ...(nextSection?.right.slice(0, 1) ?? [])], id),
+    alternatives: uniqueTopicIds(
+      [
+        ...oppositeBranch.slice(0, 2),
+        ...branch.filter((topicId) => topicId !== id).slice(Math.max(0, branchIndex - 1), branchIndex + 1),
+      ],
+      id,
+    ),
+  };
+}
+
+function mergeTopicLinks(id: string, kind: keyof TopicLinkHints, limit: number) {
+  const automatic = getAutomaticTopicLinks(id)[kind] ?? [];
+  const curated = curatedTopicLinks[id]?.[kind] ?? [];
+
+  return uniqueTopicIds([...curated, ...automatic], id).slice(0, limit);
+}
+
 export function getSuggestedTopicIds(id: string, limit = 2) {
   const section = sectionByTopicId.get(id);
 
@@ -3647,4 +3863,20 @@ export function getSuggestedTopicIds(id: string, limit = 2) {
   }
 
   return suggestions.filter((topicId) => topicCatalog[topicId] && topicId !== id).slice(0, limit);
+}
+
+export function getPreparationTopicIds(id: string, limit = 2) {
+  return mergeTopicLinks(id, 'before', limit);
+}
+
+export function getNextTopicIds(id: string, limit = 2) {
+  return mergeTopicLinks(id, 'next', limit);
+}
+
+export function getAlternativeTopicIds(id: string, limit = 2) {
+  return mergeTopicLinks(id, 'alternatives', limit);
+}
+
+export function getProjectIdeas(id: string, limit = 2) {
+  return (projectIdeasByTopicId[id] ?? []).slice(0, limit);
 }

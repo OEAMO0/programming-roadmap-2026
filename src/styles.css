@@ -371,6 +371,11 @@ a {
   gap: 8px;
 }
 
+.topic-link-list {
+  display: grid;
+  gap: 8px;
+}
+
 .keyword-list {
   display: flex;
   flex-wrap: wrap;
@@ -583,15 +588,24 @@ a {
   }
 
   .flow-legend {
-    top: 10px;
+    top: auto;
+    right: 10px;
+    bottom: 10px;
     left: 10px;
-    max-width: calc(100vw - 104px);
+    max-width: none;
+    gap: 6px;
+    padding: 8px 10px;
   }
 
   .details-drawer {
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
     width: calc(100vw - 20px);
     padding-inline: 14px;
     padding-bottom: 20px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
   }
 
   .drawer-header {
@@ -614,5 +628,9 @@ a {
 
   .suggestion-card {
     padding: 10px;
+  }
+
+  .flow-legend-item {
+    font-size: 0.75rem;
   }
 }

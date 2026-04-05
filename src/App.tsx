@@ -12,6 +12,10 @@ import {
 import '@xyflow/react/dist/style.css';
 import { useEffect, useState } from 'react';
 import {
+  getAlternativeTopicIds,
+  getNextTopicIds,
+  getPreparationTopicIds,
+  getProjectIdeas,
   baseEdges,
   baseNodes,
   getSuggestedTopicIds,
@@ -170,6 +174,22 @@ function RoadmapWorkspace() {
         .map((topicId) => topicCatalog[topicId])
         .filter(Boolean)
     : [];
+  const preparationTopics = selectedId
+    ? getPreparationTopicIds(selectedId)
+        .map((topicId) => topicCatalog[topicId])
+        .filter(Boolean)
+    : [];
+  const nextTopics = selectedId
+    ? getNextTopicIds(selectedId)
+        .map((topicId) => topicCatalog[topicId])
+        .filter(Boolean)
+    : [];
+  const alternativeTopics = selectedId
+    ? getAlternativeTopicIds(selectedId)
+        .map((topicId) => topicCatalog[topicId])
+        .filter(Boolean)
+    : [];
+  const projectIdeas = selectedId ? getProjectIdeas(selectedId) : [];
 
   const nodes = (baseNodes as RoadmapFlowNode[]).map((node) => ({
     ...node,
@@ -357,6 +377,69 @@ function RoadmapWorkspace() {
                 </section>
               ) : null}
 
+              {preparationTopics.length ? (
+                <section className="details-section">
+                  <h3>من المفيد تمر على</h3>
+                  <div className="topic-link-list">
+                    {preparationTopics.map((topic) => (
+                      <button
+                        key={topic.id}
+                        type="button"
+                        className="suggestion-card"
+                        onClick={() => focusTopic(topic.id)}
+                      >
+                        <strong>{topic.title}</strong>
+                        <span>
+                          {topic.category} / {topic.level}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
+
+              {nextTopics.length ? (
+                <section className="details-section">
+                  <h3>بعده مباشرة</h3>
+                  <div className="topic-link-list">
+                    {nextTopics.map((topic) => (
+                      <button
+                        key={topic.id}
+                        type="button"
+                        className="suggestion-card"
+                        onClick={() => focusTopic(topic.id)}
+                      >
+                        <strong>{topic.title}</strong>
+                        <span>
+                          {topic.category} / {topic.level}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
+
+              {alternativeTopics.length ? (
+                <section className="details-section">
+                  <h3>مسار قريب أو بديل</h3>
+                  <div className="topic-link-list">
+                    {alternativeTopics.map((topic) => (
+                      <button
+                        key={topic.id}
+                        type="button"
+                        className="suggestion-card"
+                        onClick={() => focusTopic(topic.id)}
+                      >
+                        <strong>{topic.title}</strong>
+                        <span>
+                          {topic.category} / {topic.level}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
+
               {suggestedTopics.length ? (
                 <section className="details-section">
                   <h3>اقتراحات تقوي هذا المسار</h3>
@@ -375,6 +458,17 @@ function RoadmapWorkspace() {
                       </button>
                     ))}
                   </div>
+                </section>
+              ) : null}
+
+              {projectIdeas.length ? (
+                <section className="details-section">
+                  <h3>مشاريع تقوي هذا المسار</h3>
+                  <ul>
+                    {projectIdeas.map((idea) => (
+                      <li key={idea}>{idea}</li>
+                    ))}
+                  </ul>
                 </section>
               ) : null}
 
