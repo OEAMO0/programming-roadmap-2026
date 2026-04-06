@@ -180,7 +180,7 @@ function getSearchResultScore(topic: RoadmapTopic, filterState: RoadmapFilterSta
 }
 
 export function getQuickSearchResults(filterState: RoadmapFilterState, limit = 6): QuickSearchResult[] {
-  if (!filterState.hasActiveFilters) {
+  if (!filterState.hasActiveFilters || !filterState.queryTokens.length) {
     return [];
   }
 

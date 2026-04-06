@@ -31,4 +31,14 @@ describe('roadmap filtering helpers', () => {
     expect(filterState.directlyMatchedIds.has('linux-math-libraries')).toBe(true);
     expect(filterState.directlyMatchedIds.has('cpp-math-geometry')).toBe(true);
   });
+
+  it('returns quick search cards only when the user typed a query', () => {
+    const filterState = buildRoadmapFilterState({
+      searchQuery: '',
+      activeTrackId: 'python-engineering',
+      activeLevel: '',
+    });
+
+    expect(getQuickSearchResults(filterState)).toEqual([]);
+  });
 });

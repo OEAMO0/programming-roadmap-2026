@@ -123,6 +123,9 @@ const docs = {
   manFeatureTestMacros: 'https://man7.org/linux/man-pages/man7/feature_test_macros.7.html',
   manMathError: 'https://man7.org/linux/man-pages/man7/math_error.7.html',
   manComplex: 'https://man7.org/linux/man-pages/man7/complex.7.html',
+  manPthreads: 'https://man7.org/linux/man-pages/man7/pthreads.7.html',
+  manSocket: 'https://man7.org/linux/man-pages/man2/socket.2.html',
+  manEpoll: 'https://man7.org/linux/man-pages/man7/epoll.7.html',
   cppreferenceC: 'https://en.cppreference.com/w/c',
   cppreferenceCpp: 'https://en.cppreference.com/w/cpp',
   gcc: 'https://gcc.gnu.org/onlinedocs/',
@@ -157,6 +160,32 @@ const docs = {
   emscriptenPorting: 'https://emscripten.org/docs/porting/index.html',
   pygameDocs: 'https://www.pygame.org/docs/',
   pygameMath: 'https://www.pygame.org/docs/ref/math.html',
+  postgresIndexes: 'https://www.postgresql.org/docs/current/indexes.html',
+  postgresExplain: 'https://www.postgresql.org/docs/current/using-explain.html',
+  rabbitmqTutorials: 'https://www.rabbitmq.com/tutorials',
+  systemd: 'https://systemd.io/',
+  systemdService: 'https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html',
+  nginxBeginnersGuide: 'https://nginx.org/en/docs/beginners_guide.html',
+  letsEncryptGettingStarted: 'https://letsencrypt.org/getting-started/',
+  pythonPackagingProjects: 'https://packaging.python.org/en/latest/tutorials/packaging-projects/',
+  pythonProfile: 'https://docs.python.org/3/library/profile.html',
+  mypyGettingStarted: 'https://mypy.readthedocs.io/en/stable/getting_started.html',
+  ruffTutorial: 'https://docs.astral.sh/ruff/tutorial/',
+  pybind11Basics: 'https://pybind11.readthedocs.io/en/stable/basics.html',
+  unityEntities: 'https://docs.unity3d.com/Packages/com.unity.entities@1.0/manual/index.html',
+  godotShaders: 'https://docs.godotengine.org/en/stable/tutorials/shaders/index.html',
+  androidGuide: 'https://developer.android.com/guide',
+  swiftuiTutorial: 'https://developer.apple.com/tutorials/swiftui',
+  portswiggerWebSecurity: 'https://portswigger.net/web-security',
+  airflowDocs: 'https://airflow.apache.org/docs/',
+  dbtIntro: 'https://docs.getdbt.com/docs/introduction',
+  duckdbDocs: 'https://duckdb.org/docs/',
+  sparkDocs: 'https://spark.apache.org/docs/latest/',
+  arduinoDocs: 'https://docs.arduino.cc/',
+  rosDocs: 'https://docs.ros.org/en/rolling/index.html',
+  platformio: 'https://platformio.org/platformio-ide',
+  llvmDocs: 'https://llvm.org/docs/',
+  treeSitter: 'https://tree-sitter.github.io/tree-sitter/',
 };
 
 const topicInputs = {
@@ -2361,6 +2390,68 @@ const topicInputs = {
     ],
     tags: ['Jobs', 'Queues', 'Integrations', 'Reliability'],
   },
+  'database-indexes-explain': {
+    title: 'الفهارس و EXPLAIN وتحسين الاستعلامات',
+    level: 'متقدم',
+    category: 'الخلفية والبيانات',
+    summary:
+      'كثير من بطء الخلفية لا يأتي من “اختيار لغة خاطئ”، بل من استعلامات لا تستخدم الفهارس جيدًا أو لا تُقرأ خطتها أصلًا. هذا الباب يجعلك ترى قاعدة البيانات كمنفذ تنفيذ حقيقي لا كصندوق أسود خلف ORM.',
+    learn: [
+      'افهم الفرق بين sequential scan وindex scan وbitmap scan، ومتى يصبح كل واحد منطقيًا أو مكلفًا.',
+      'استخدم EXPLAIN وEXPLAIN ANALYZE لقراءة خطة التنفيذ بعين عملية: أين يضيع الوقت؟ وأين تتضخم الصفوف؟',
+      'صمّم الفهارس بناءً على أنماط القراءة والفرز والربط الفعلية، لا بمجرد إضافة index لكل عمود يظهر كثيرًا.',
+      'انتبه إلى أثر الفهارس على الكتابة والتخزين، لأن التحسين الجيد يوازن بين القراءة والكلفة اليومية للنظام.',
+    ],
+    build: [
+      'خذ استعلامين بطيئين من مشروع تجريبي أو قاعدة بيانات محلية، ثم اقرأ خطتهما قبل وبعد إضافة فهرس واحد مدروس ودوّن الفرق.',
+      'ابنِ تقريرًا صغيرًا أو صفحة إدارة فيها فلترة وفرز، ثم اختبر كيف تتغير الخطة عند تغيير ترتيب الشروط أو الفهرس.',
+    ],
+    note2026:
+      'مع انتشار الخدمات المدارة وORMs السهلة، صار من يقرأ خطة التنفيذ بوعي يختصر ساعات طويلة من التخمين ويقدّم أثرًا واضحًا بسرعة.',
+    resources: [
+      { label: 'PostgreSQL: Indexes', url: docs.postgresIndexes },
+      { label: 'PostgreSQL: Using EXPLAIN', url: docs.postgresExplain },
+      { label: 'PostgreSQL SQL Tutorial', url: docs.postgresSql },
+    ],
+    tags: ['PostgreSQL', 'Indexes', 'EXPLAIN', 'Query Performance'],
+    searchKeywords: [
+      'postgres explain analyze tutorial',
+      'postgres indexes practical guide',
+      'query plan index scan seq scan',
+      'sql performance debugging postgres',
+    ],
+  },
+  'backend-queues-webhooks': {
+    title: 'الرسائل والـ webhooks وإعادة المحاولة',
+    level: '2026',
+    category: 'الخلفية والبيانات',
+    summary:
+      'حين يبدأ نظامك بالتكامل مع خدمات خارجية أو يعتمد على الأحداث، تظهر مشاكل جديدة: التكرار، الترتيب، الفشل الجزئي، وضياع الرسائل. هذا الباب يربط بين الطوابير والـwebhooks وidempotency بطريقة عملية جدًا.',
+    learn: [
+      'ميّز بين queue داخلية وwebhook خارجي وevent bus، لأن لكل واحد حدودًا مختلفة في الملكية والموثوقية.',
+      'صمّم retries وbackoff وdead-letter handling بحيث لا يتحول الفشل المؤقت إلى انهيار أو تكرار غير مسيطر عليه.',
+      'استخدم idempotency keys أو أساليب مكافئة عندما تتوقع إعادة الإرسال أو ازدواج التنفيذ.',
+      'أضف tracing أو logging منظّم حتى تستطيع متابعة الرسالة من نقطة دخولها حتى معالجتها النهائية.',
+    ],
+    build: [
+      'ابنِ webhook receiver بسيطًا يسجل الحدث ويمنع التكرار، ثم اختبر إعادة الإرسال المتعمدة أكثر من مرة.',
+      'أضف queue صغيرة لمهمة بطيئة مثل إرسال بريد أو مزامنة بيانات، ثم وثق كيف تتعامل مع الفشل وإعادة المحاولة.',
+    ],
+    note2026:
+      'في 2026 كثير من الأنظمة تعتمد على تكاملات SaaS وwebhooks، لذلك النضج الخلفي الحقيقي يظهر في التعامل الهادئ مع الفشل لا في وصول الحدث المثالي فقط.',
+    resources: [
+      { label: 'RabbitMQ Tutorials', url: docs.rabbitmqTutorials },
+      { label: 'OpenTelemetry Docs', url: docs.opentelemetry },
+      { label: 'FastAPI Docs', url: docs.fastapi },
+    ],
+    tags: ['Queues', 'Webhooks', 'Retries', 'Idempotency', 'Tracing'],
+    searchKeywords: [
+      'webhooks idempotency retries',
+      'rabbitmq tutorials retry dead letter',
+      'event driven backend reliability',
+      'background jobs webhook handling',
+    ],
+  },
   'domain-boundaries': {
     title: 'حدود المجال وتقسيم المسؤوليات',
     level: 'متقدم',
@@ -2534,6 +2625,68 @@ const topicInputs = {
     ],
     tags: ['Operations', 'Runbooks', 'Cost', 'Reliability'],
   },
+  'systemd-service-operations': {
+    title: 'systemd والخدمات والسجلات اليومية',
+    level: 'متقدم',
+    category: 'السحابة والمنصة',
+    summary:
+      'بعد أن تعمل الخدمة محليًا، تحتاج تشغيلًا منضبطًا على Linux: service units، restart policies، environment files، وقراءة السجلات بشكل هادئ عند المشكلة. هذا الباب عملي جدًا لأي خدمة تريدها قريبة من الإنتاج.',
+    learn: [
+      'افهم unit files وExecStart وRestart وWantedBy حتى لا تبقى الخدمة مجرد أمر طويل في الطرفية.',
+      'استخدم journalctl وsystemctl لفهم لماذا لم تبدأ الخدمة أو لماذا أعادت التشغيل أكثر من مرة.',
+      'افصل بين إعدادات التطبيق والملفات والهوية والصلاحيات بدل تشغيل كل شيء كمستخدمك الشخصي.',
+      'دوّن خطوات التشغيل الأساسية بحيث يستطيع شخص آخر أو خادم جديد إعادة نفس النتيجة بلا تخمين.',
+    ],
+    build: [
+      'حوّل خدمة API أو worker صغيرة إلى systemd service حقيقية مع ملف unit واضح وrunbook قصير للتشغيل والإيقاف والفحص.',
+      'اختبر فشلًا متعمدًا في الخدمة ثم راقب كيف تظهر المشكلة داخل journalctl وما الذي يجب أن تضبطه لتصبح الرسائل أوضح.',
+    ],
+    note2026:
+      'حتى مع الحاويات والمنصات المدارة، يظل systemd من أكثر الأدوات أهمية لفهم التشغيل الفعلي على Linux وخوادم التطوير والبيئات الداخلية.',
+    resources: [
+      { label: 'systemd.io', url: docs.systemd },
+      { label: 'systemd.service Manual', url: docs.systemdService },
+      { label: 'Ubuntu Command Line', url: docs.ubuntuCli },
+    ],
+    tags: ['systemd', 'Linux Services', 'journalctl', 'Operations'],
+    searchKeywords: [
+      'systemd service tutorial linux',
+      'journalctl systemctl debugging',
+      'linux service unit file example',
+      'systemd restart policy basics',
+    ],
+  },
+  'reverse-proxy-tls-dns': {
+    title: 'Nginx وTLS وDNS قبل الإنتاج',
+    level: '2026',
+    category: 'السحابة والمنصة',
+    summary:
+      'قبل أن تضع خدمتك أمام المستخدمين تحتاج فهمًا عمليًا لثلاثية شائعة جدًا: DNS للوصول، reverse proxy للتوجيه والحماية الأساسية، وTLS للتشفير والشهادات. هذا الباب يربطها ببعضها دون تعقيد غير ضروري.',
+    learn: [
+      'افهم كيف يصل اسم النطاق إلى خدمتك، وما الذي يفعله DNS فعلًا قبل أن يبدأ HTTP.',
+      'استخدم Nginx أو ما يشبهه كطبقة أمامية للـrouting، الضغط، headers، والملفات الثابتة عندما يلزم.',
+      'طبّق HTTPS بطريقة واعية: الشهادة، التجديد، والرؤوس الأساسية بدل الاكتفاء بقفل أخضر في المتصفح.',
+      'راقب أثر misconfiguration البسيطة في proxy أو TLS أو DNS، لأنها من أكثر أسباب أعطال الإطلاق الأولى شيوعًا.',
+    ],
+    build: [
+      'شغّل تطبيقًا محليًا خلف Nginx ثم أضف دومينًا أو subdomain تجريبيًا ودوّن كيف يمر الطلب من DNS إلى الخادم ثم التطبيق.',
+      'فعّل HTTPS لموقع تجريبي أو بيئة staging بسيطة، ثم اختبر ماذا يحدث عند شهادة منتهية أو إعداد header ناقص.',
+    ],
+    note2026:
+      'في 2026 ما زال كثير من إطلاقات النسخ الأولى يفشل بسبب تفاصيل تشغيلية صغيرة في DNS أو proxy أو TLS أكثر من فشل منطق التطبيق نفسه.',
+    resources: [
+      { label: 'Nginx Beginner’s Guide', url: docs.nginxBeginnersGuide },
+      { label: 'Let’s Encrypt Getting Started', url: docs.letsEncryptGettingStarted },
+      { label: 'Cloudflare Fundamentals', url: docs.cloudflare },
+    ],
+    tags: ['Nginx', 'TLS', 'DNS', 'Reverse Proxy', 'HTTPS'],
+    searchKeywords: [
+      'nginx reverse proxy https basics',
+      'lets encrypt getting started',
+      'dns reverse proxy application flow',
+      'cloudflare dns fundamentals',
+    ],
+  },
   'computer-architecture': {
     title: 'معمارية الحاسوب: من التعليمات إلى التنفيذ',
     level: 'متقدم',
@@ -2654,6 +2807,68 @@ const topicInputs = {
       { label: 'Godot Docs', url: docs.godot },
     ],
     tags: ['Multiplayer', 'Netcode', 'Latency', 'Synchronization'],
+  },
+  'ecs-game-architecture': {
+    title: 'ECS وتنظيم اللعبة على شكل بيانات وأنظمة',
+    level: 'متقدم',
+    category: 'المحركات',
+    summary:
+      'عندما تكبر اللعبة، يبدأ السؤال المهم: كيف تنظّم الحالة والسلوك؟ ECS ليس شعارًا سحريًا، لكنه أسلوب قوي عندما تريد فصل البيانات عن الأنظمة وتحسين الوضوح أو الأداء في أجزاء معينة من اللعبة أو المحرك.',
+    learn: [
+      'افهم الفرق بين scene graph التقليدي وECS، ومتى يكفيك كل واحد منهما دون حروب فكرية فارغة.',
+      'قسّم عالم اللعبة إلى entities وcomponents وsystems بشكل يخدم التغيير والاختبار، لا بشكل أكاديمي فقط.',
+      'انتبه إلى ملكية البيانات وترتيب التحديث، لأن الفوضى في ECS قد تصبح أصعب من فوضى الكائنات إذا غاب الانضباط.',
+      'اربط ECS بفكرة data-oriented design عندما يكون الهدف أداءً أعلى أو سهولة أكبر في معالجة عدد كبير من الكيانات.',
+    ],
+    build: [
+      'حوّل ميكانيكية صغيرة مثل الحركة والتصادم إلى نموذج ECS مبسط، ثم قارن سهولة الإضافة والتعديل مع نموذج كائنات تقليدي.',
+      'صمّم جدولًا أو مخططًا يوضح أين تعيش البيانات وأين تعمل الأنظمة داخل prototype لعبة صغير.',
+    ],
+    note2026:
+      'كثير من مشاريع الألعاب تتبنى ECS بدافع الموضة، بينما القيمة الحقيقية تظهر عندما تستخدمه لحل ازدحام السلوك والبيانات في مشروع بدأ يكبر فعلًا.',
+    resources: [
+      { label: 'Unity Entities Manual', url: docs.unityEntities },
+      { label: 'Godot Docs', url: docs.godot },
+      { label: 'SDL Wiki', url: docs.sdl },
+    ],
+    tags: ['Game Dev', 'ECS', 'Data-Oriented Design', 'Engine Architecture'],
+    searchKeywords: [
+      'ecs game architecture basics',
+      'unity entities manual beginner',
+      'scene graph vs ecs practical',
+      'data oriented design game dev',
+    ],
+  },
+  'game-shaders-materials': {
+    title: 'Shaders والمواد والإضاءة العملية',
+    level: 'متقدم',
+    category: 'الألعاب والمحركات',
+    summary:
+      'عندما تريد أن تبدو لعبتك أو محركك مقصودًا لا مجرد أشكال مرسومة، ستدخل عالم الـmaterials والـshaders والإضاءة. هذا الباب يربط بين الفكرة البصرية والكود الذي ينفذها على الـGPU بشكل مبسط لكن عملي.',
+    learn: [
+      'افهم دور vertex وfragment shaders وكيف تنتقل البيانات بين المراحل المختلفة في pipeline الرندر.',
+      'تعامل مع المواد materials كطبقة تعبير عن السطح واللون والقيم البصرية، لا كملفات غامضة داخل المحرك فقط.',
+      'ابدأ بإضاءة بسيطة جدًا وتدرجات واضحة قبل الدخول في PBR أو المؤثرات الثقيلة، حتى ترى أثر كل خطوة بوضوح.',
+      'اربط بين الرياضيات هنا وبين الـnormals والاتجاهات والتحويلات، لأن مشاكل الشيدرز غالبًا تكون نصفها منطق بصري ونصفها رياضيات.',
+    ],
+    build: [
+      'اكتب shader واحدة بسيطة تغيّر اللون أو تعتمد على الوقت أو الاتجاه، ثم أضف material parameters يمكن تعديلها من المشهد.',
+      'ابنِ demo صغيرًا يوضح الفرق بين unlit وlit surface أو بين materialين مختلفين على نفس المجسم أو العنصر.',
+    ],
+    note2026:
+      'الطريق الأذكى هنا ليس جمع عشرات المؤثرات، بل فهم shader واحدة جيدة وmaterial واحدة واضحة ثم التوسع من هناك.',
+    resources: [
+      { label: 'Godot Shaders', url: docs.godotShaders },
+      { label: 'LearnOpenGL', url: docs.learnOpenGL },
+      { label: 'Vulkan Tutorial', url: docs.vulkanTutorial },
+    ],
+    tags: ['Shaders', 'Materials', 'Lighting', 'Rendering', 'GPU'],
+    searchKeywords: [
+      'godot shaders tutorial',
+      'learnopengl lighting basics',
+      'game materials shader fundamentals',
+      'vertex fragment shader practical',
+    ],
   },
   'prompting-context-tool-use': {
     title: 'الـ prompting، السياق، واستخدام الأدوات',
@@ -3124,6 +3339,68 @@ const topicInputs = {
       'GSL BLAS matrix example',
     ],
   },
+  'linux-threads-sync': {
+    title: 'الخيوط والتزامن على Linux: pthreads و mutex و atomics',
+    level: 'متقدم',
+    category: 'اللغات والأنظمة',
+    summary:
+      'بعد العمليات والملفات تأتي طبقة التزامن داخل user space: خيوط، ذاكرة مشتركة، أقفال، condition variables، وatomics. هذا الباب يشرحها من زاوية عملية حتى لا يتحول التزامن إلى أخطاء متقطعة يصعب إعادة إنتاجها.',
+    learn: [
+      'افهم lifecycle الخيط thread وما الذي تشاركه الخيوط داخل العملية وما الذي يبقى محليًا لكل واحدة.',
+      'استخدم mutex وcondition variable عندما تحتاج تنسيقًا واضحًا، ولا تقفز إلى atomics قبل فهم المشكلة التي تحلها.',
+      'انتبه إلى race conditions وdeadlocks وdata races، ودرّب نفسك على تبسيط التصميم قبل زيادة الأقفال.',
+      'اربط بين التزامن والأدوات: القياس، التسجيل، والاختبارات الصغيرة التي تعيد الخطأ بدل انتظار ظهوره صدفة.',
+    ],
+    build: [
+      'ابنِ worker pool صغيرة في C أو C++ تعالج queue مهام بسيطة مع إيقاف نظيف وإشارات واضحة لبداية ونهاية كل مهمة.',
+      'نفّذ مثالًا متعمدًا على race condition ثم أصلحه باستخدام mutex أو atomic واحد فقط، ودوّن لماذا اخترت هذا الحل.',
+    ],
+    note2026:
+      'كثير من مشاكل الأداء أو الانهيار في أدوات Linux والخدمات المحلية لا تأتي من “ضعف اللغة”، بل من تزامن غير منضبط يصعب تشخيصه بعد أن يكبر البرنامج.',
+    resources: [
+      { label: 'pthreads(7)', url: docs.manPthreads },
+      { label: 'OSTEP', url: docs.ostep },
+      { label: 'cppreference C++', url: docs.cppreferenceCpp },
+    ],
+    tags: ['Linux', 'Threads', 'pthreads', 'Mutex', 'Atomics', 'Concurrency'],
+    searchKeywords: [
+      'linux pthread mutex tutorial',
+      'race condition pthreads example',
+      'condition variable basics linux',
+      'atomics vs mutex practical',
+    ],
+  },
+  'linux-sockets-epoll': {
+    title: 'Sockets و epoll على Linux: خادم I/O عملي',
+    level: '2026',
+    category: 'اللغات والأنظمة',
+    summary:
+      'إذا أردت أدوات شبكة أو خوادم حقيقية على Linux، فستحتاج إلى sockets وnon-blocking I/O وepoll. هذا الباب يربط بين برمجة الشبكات وبيئة Linux اليومية دون الدخول في تعقيد إطار كامل من البداية.',
+    learn: [
+      'افهم socket وbind وlisten وaccept وconnect كواجهة أساسية لأي خادم أو عميل شبكي منخفض المستوى.',
+      'تعلّم متى يكفيك نموذج thread-per-connection ومتى تحتاج non-blocking I/O أو event loop يعتمد على epoll.',
+      'راقب file descriptors والأخطاء الشبكية والtimeouts لأن الخادم الجيد يحتاج تشخيصًا بقدر حاجته إلى منطق التطبيق.',
+      'اربط بين sockets وLinux tools مثل ss وstrace وlogs حتى تستطيع رؤية ما يحدث خارج الكود نفسه.',
+    ],
+    build: [
+      'ابنِ echo server أو chat server صغيرًا باستخدام sockets فقط، ثم أضف نسخة ثانية تستخدم epoll لمتابعة اتصالات متعددة بهدوء.',
+      'قارن بين خادم blocking بسيط وخادم non-blocking من حيث الكود والتصرف تحت أكثر من عميل متزامن.',
+    ],
+    note2026:
+      'هذا الباب من أكثر الأبواب التي ترفع فهمك للخدمات الخلفية والـruntime والأنظمة معًا، لأنك ترى الشبكة والملفات والأخطاء والتزامن في مكان واحد.',
+    resources: [
+      { label: 'socket(2)', url: docs.manSocket },
+      { label: 'epoll(7)', url: docs.manEpoll },
+      { label: 'man7 Linux man pages', url: docs.man7 },
+    ],
+    tags: ['Linux', 'Sockets', 'epoll', 'Networking', 'Servers'],
+    searchKeywords: [
+      'linux socket epoll tutorial',
+      'non blocking server epoll C',
+      'socket accept bind listen explained',
+      'linux echo server epoll example',
+    ],
+  },
   'cpp-modern-core': {
     title: 'C++ الحديث: الأساس الصحيح بدل C with classes',
     level: 'عملي',
@@ -3436,6 +3713,68 @@ const topicInputs = {
       'python decimal vs float practical',
     ],
   },
+  'python-tooling-quality': {
+    title: 'pyproject وRuff وMypy وتنظيم أدوات Python',
+    level: 'متقدم',
+    category: 'اللغات والأنظمة',
+    summary:
+      'عندما يكبر مشروع Python، لا يكفي وجود كود “يعمل”. تحتاج نقطة دخول واضحة للأدوات، تنسيقًا موحدًا، فحص أنواع تدريجيًا، وتشغيلًا يسهل على بقية الفريق فهمه. هذا الباب يجمع هذه الطبقة الهندسية في مكان واحد.',
+    learn: [
+      'استخدم pyproject.toml كنقطة تجمع للإعدادات كلما كان ذلك منطقيًا، بدل نشر الإعدادات في ملفات كثيرة بلا سبب.',
+      'شغّل Ruff للتنسيق أو الفحص السريع، ثم أدخل Mypy تدريجيًا في الأجزاء التي تستفيد فعلًا من وضوح الأنواع.',
+      'وحّد أوامر الفريق الشائعة: lint، test، run، build، حتى لا يصبح المشروع معرفة ضمنية داخل رأس شخص واحد.',
+      'تعامل مع الأدوات كوسيلة لتحسين القراءة والثقة في التغيير، لا كعقوبات شكلية على كل سطر.',
+    ],
+    build: [
+      'حوّل مشروع Python صغيرًا إلى pyproject واضح، وأضف Ruff وMypy وأمر اختبار واحد ثم وثق كيف يشغله شخص جديد خلال خمس دقائق.',
+      'اختر ملفين أو ثلاثة فقط وطبّق عليهما typing أدق، ثم قارن وضوح الأخطاء قبل وبعد إدخال الفحص.',
+    ],
+    note2026:
+      'في 2026 الفرق التي تبني Python بسرعة تحتاج طبقة أدوات أخف لكنها منضبطة، لأن سرعة التعديل مع AI أو السكربتات الكثيرة قد تولد فوضى أسرع من الماضي.',
+    resources: [
+      { label: 'Packaging Python Projects', url: docs.pythonPackagingProjects },
+      { label: 'Mypy Getting Started', url: docs.mypyGettingStarted },
+      { label: 'Ruff Tutorial', url: docs.ruffTutorial },
+    ],
+    tags: ['Python', 'pyproject', 'Ruff', 'Mypy', 'Tooling', 'Quality'],
+    searchKeywords: [
+      'pyproject ruff mypy tutorial',
+      'python tooling setup 2026',
+      'mypy getting started project',
+      'ruff tutorial python project',
+    ],
+  },
+  'python-profiling-bindings': {
+    title: 'قياس الأداء وربط Python مع C و C++',
+    level: '2026',
+    category: 'اللغات والأنظمة',
+    summary:
+      'أحيانًا لا تحتاج مغادرة Python بالكامل؛ تحتاج فقط أن تعرف أين البطء، ثم تقرر هل يكفي تحسين الكود نفسه أم يجب نقل جزء محدود إلى C أو C++ أو مكتبة أصلية. هذا الباب يربط بين القياس profiling وبين الحدود العملية للـbindings.',
+    learn: [
+      'استخدم cProfile أو أدوات قريبة أولًا لتحديد أين يضيع الوقت فعلًا، بدل افتراض أن المشكلة في اللغة كلها.',
+      'ميّز بين بطء Python بسبب الخوارزمية أو I/O أو كثرة الكائنات الصغيرة أو الحلقة الساخنة hot path.',
+      'افهم متى يكفيك NumPy أو stdlib، ومتى يصبح من المنطقي كتابة binding عبر pybind11 أو استخدام امتداد أصلي صغير.',
+      'حافظ على واجهة Python واضحة حتى لو نقلت جزءًا من الحساب أو المعالجة إلى C أو C++، لأن مكسب الأداء لا يستحق API مربكة أو صيانة مؤلمة.',
+    ],
+    build: [
+      'خذ سكربت Python بطيئًا نسبيًا، ثم قِسه بـ cProfile وحدد دالة واحدة فقط لتحسينها أو إعادة كتابتها بطريقة أوضح.',
+      'نفّذ binding بسيطة جدًا عبر pybind11 لدالة حسابية أو تحويل بيانات، ثم قارن المكسب والتكلفة المعرفية بصدق.',
+    ],
+    note2026:
+      'النضج في Python ليس أن تقول “Python بطيئة” بسرعة، بل أن تعرف أين تختنق، وما أصغر تدخل يعطي أثرًا حقيقيًا دون تهديم بساطة المشروع.',
+    resources: [
+      { label: 'Python profile and cProfile', url: docs.pythonProfile },
+      { label: 'pybind11 Basics', url: docs.pybind11Basics },
+      { label: 'NumPy Quickstart', url: docs.numpyQuickstart },
+    ],
+    tags: ['Python', 'Profiling', 'cProfile', 'pybind11', 'Performance'],
+    searchKeywords: [
+      'python cprofile tutorial practical',
+      'pybind11 basics example',
+      'python performance profiling roadmap',
+      'python C++ binding small example',
+    ],
+  },
   'web-game-math-rendering': {
     title: 'رياضيات الألعاب على الويب: Canvas و WebGL والتوقيت',
     level: 'عملي',
@@ -3555,6 +3894,142 @@ const topicInputs = {
     tags: ['C++', 'Performance', 'Systems', 'Tooling'],
     searchKeywords: ['C++ performance roadmap', 'C++ systems portfolio ideas'],
   },
+  'resource-atlas': {
+    title: 'أطلس المصادر لمسارات خارج الخريطة',
+    level: '2026',
+    category: 'المراجع',
+    summary:
+      'هذا المسار المنفصل لا يشرح مسارًا واحدًا بالتفصيل، بل يجمع مراجع موثوقة لمسارات لم تُفرد لها الخريطة بابًا كاملًا بعد. استخدمه عندما تريد الاستكشاف دون تضخيم المسار الرئيسي.',
+    learn: [
+      'ابدأ من الصفحة التعريفية الرسمية أو الدليل التمهيدي، ثم اختر أداة واحدة فقط للتجربة العملية الأولى.',
+      'لا تفتح كل الروابط دفعة واحدة؛ حدد مسارًا واحدًا من الأطلس ثم ابنِ له خطة قراءة وتجربة قصيرة.',
+      'إذا وجدت أن مسارًا من الأطلس أصبح مهمًا لمشروعك فعليًا، فهذه إشارة جيدة لإضافته لاحقًا إلى الخريطة الأساسية.',
+    ],
+    build: [
+      'اختر بابًا واحدًا من أطلس المصادر، ثم ابنِ خطة 10 أيام فيها مصدر رسمي واحد ومصدر تمهيدي وتجربة صغيرة واحدة فقط.',
+    ],
+    note2026:
+      'الإبقاء على هذه الأبواب في أطلس مستقل يحافظ على الخريطة الأساسية واضحة، لكنه يمنحك طريقًا منظمًا للتوسع عند الحاجة.',
+    resources: [
+      { label: 'GitHub Skills', url: docs.githubSkills },
+      { label: 'MIT OpenCourseWare', url: docs.mitOcw },
+      { label: 'MDN Web Docs', url: docs.mdn },
+    ],
+    tags: ['Resource Atlas', 'References', 'Exploration', 'Learning Paths'],
+    searchKeywords: ['resource atlas programming paths', 'official docs learning map', 'extra paths references'],
+  },
+  'mobile-native-resource-atlas': {
+    title: 'مراجع الموبايل الأصلي: Android و iOS وFlutter وReact Native',
+    level: 'عملي',
+    category: 'دليل المصادر',
+    summary:
+      'إذا أردت دخول عالم الموبايل بشكل أعمق من الويب، فهذا الباب يجمع لك المراجع الرسمية الأكثر فائدة للبدء واتخاذ قرار واعٍ بين Android وiOS وFlutter وReact Native.',
+    learn: [
+      'قارن بين native mobile وبين cross-platform من زاوية الفريق والأداء وسرعة البناء والصيانة.',
+      'ابدأ بإطار واحد فقط أو منصة واحدة فقط، لأن التشتت هنا أسرع من الاستفادة.',
+      'ابحث عن الدروس التي تنتهي بتطبيق صغير حقيقي: تنقل، حالة، استهلاك API، وبناء نسخة تشغيلية.',
+    ],
+    build: [
+      'اختر منصة واحدة من هذه المراجع وأنهِ tutorial رسميًا صغيرًا مع شاشة قائمة وتفاصيل واستهلاك API بسيط.',
+    ],
+    resources: [
+      { label: 'Android Developers Guide', url: docs.androidGuide },
+      { label: 'SwiftUI Tutorials', url: docs.swiftuiTutorial },
+      { label: 'Flutter Get Started', url: docs.flutter },
+      { label: 'React Native Docs', url: docs.reactNative },
+    ],
+    tags: ['Mobile', 'Android', 'iOS', 'Flutter', 'React Native'],
+    searchKeywords: ['android ios flutter react native official docs', 'mobile roadmap resources'],
+  },
+  'security-research-resource-atlas': {
+    title: 'مراجع الأمن والاختبار الأمني',
+    level: 'متقدم',
+    category: 'دليل المصادر',
+    summary:
+      'هذا الباب مخصص لمن يريد الانتقال من أمن التطبيـقات العام إلى تدريب أعمق في الاختبار الأمني وتحليل الثغرات ومسارات AppSec أو Web Security بشكل أكثر تركيزًا.',
+    learn: [
+      'ابدأ بفهم الأخطار والأنماط الشائعة، ثم انتقل إلى تدريب عملي موجّه بدل قراءة قوائم طويلة بلا تطبيق.',
+      'اجعل هدفك الأول معرفة كيف تُكتشف الثغرة وتُشرح وتُخفف، لا مجرد حفظ أسماء الهجمات.',
+      'التدرج مهم جدًا هنا لأن المجال واسع وحسّاس، والممارسة العشوائية قد تبني فهمًا مشوشًا.',
+    ],
+    build: [
+      'أنهِ مختبرًا تعليميًا واحدًا في Web Security، ثم وثق الثغرة وأثرها وطريقة إصلاحها بلغة بسيطة وواضحة.',
+    ],
+    resources: [
+      { label: 'OWASP Top 10', url: docs.owasp },
+      { label: 'OWASP Cheat Sheet Series', url: docs.owaspCheatsheets },
+      { label: 'PortSwigger Web Security Academy', url: docs.portswiggerWebSecurity },
+    ],
+    tags: ['Security', 'AppSec', 'Web Security', 'Learning Resources'],
+    searchKeywords: ['owasp web security academy roadmap', 'appsec resources official'],
+  },
+  'data-engineering-resource-atlas': {
+    title: 'مراجع هندسة البيانات والتحليلات',
+    level: 'متقدم',
+    category: 'دليل المصادر',
+    summary:
+      'إذا كان اهتمامك يتجه إلى ETL وpipelines والتحويلات والتحليلات ومستودعات البيانات، فهذا الباب يجمع نقاط بداية موثوقة لمسار هندسة البيانات الذي لم يُفصل بعد داخل الخريطة.',
+    learn: [
+      'افهم أن هندسة البيانات ليست مكتبة واحدة، بل تدفق عمل: ingest ثم transform ثم orchestration ثم serving أو analytics.',
+      'ابدأ بأداة واحدة للأوركسترا وأداة واحدة للتحويل أو التحليل قبل مقارنة عشر أدوات دفعة واحدة.',
+      'اختر مشروعًا صغيرًا مثل pipeline تقارير أو مزامنة بيانات حتى ترى القيمة العملية للمراجع.',
+    ],
+    build: [
+      'ابنِ pipeline صغيرة من ملف CSV أو API إلى طبقة تحويل ثم تقرير أو استعلام تحليلي نهائي باستخدام أداة واحدة فقط من هذه المراجع.',
+    ],
+    resources: [
+      { label: 'Apache Airflow Docs', url: docs.airflowDocs },
+      { label: 'dbt Introduction', url: docs.dbtIntro },
+      { label: 'DuckDB Docs', url: docs.duckdbDocs },
+      { label: 'Apache Spark Docs', url: docs.sparkDocs },
+    ],
+    tags: ['Data Engineering', 'Airflow', 'dbt', 'DuckDB', 'Spark'],
+    searchKeywords: ['data engineering official docs airflow dbt duckdb spark'],
+  },
+  'embedded-robotics-resource-atlas': {
+    title: 'مراجع الأنظمة المضمنة والروبوتات',
+    level: 'متقدم',
+    category: 'دليل المصادر',
+    summary:
+      'هذا الباب مناسب إذا أردت دخول embedded أو robotics دون أن تبدأ من فوضى فيديوهات متفرقة. الفكرة هنا أن تبدأ من أدوات رسمية توضح البيئة والتطوير والاختبار والربط مع العتاد.',
+    learn: [
+      'ابدأ بمتحكم أو بيئة واحدة فقط حتى تفهم دورة التطوير من البناء إلى الرفع والتجريب.',
+      'إذا دخلت robotics، فتعامل مع ROS كمنصة عمل تحتاج مشروعًا صغيرًا واضحًا، لا كمية هائلة من المصطلحات أولًا.',
+      'أبقِ التركيز على input/output والحساسات والمحركات وسير العمل التشغيلي قبل التعمق في النظريات الأعرض.',
+    ],
+    build: [
+      'أنهِ مشروعًا صغيرًا يقرأ حساسًا أو يشغّل actuator بسيطًا، أو prototype ROS صغيرًا يمرر رسالة واضحة بين عقدتين.',
+    ],
+    resources: [
+      { label: 'Arduino Docs', url: docs.arduinoDocs },
+      { label: 'PlatformIO', url: docs.platformio },
+      { label: 'ROS 2 Docs', url: docs.rosDocs },
+    ],
+    tags: ['Embedded', 'Robotics', 'Arduino', 'ROS', 'PlatformIO'],
+    searchKeywords: ['embedded robotics resources arduino ros platformio'],
+  },
+  'compiler-tools-resource-atlas': {
+    title: 'مراجع المترجمات وأدوات اللغات',
+    level: '2026',
+    category: 'دليل المصادر',
+    summary:
+      'إذا شدّك بناء لغات أو أدوات تحليل كود أو parsers أو linters، فهذا الباب يجمع لك مراجع أولية جيدة لمسار compilers وlanguage tooling الذي لم يُفرد له مسار كامل بعد.',
+    learn: [
+      'ابدأ بمشروع parser أو syntax tree صغير قبل الغوص في backend كامل للمترجم أو optimizer ثقيل.',
+      'قسّم المجال في ذهنك إلى parsing وAST وanalysis وcode generation بدل اعتباره كتلة واحدة غامضة.',
+      'استخدم المراجع الرسمية لتفهم الأدوات والبيئات، ثم ابنِ toy project يثبت المفهوم.',
+    ],
+    build: [
+      'ابنِ parser أو highlighter أو linter مصغرًا جدًا لجزء من لغة تعرفها، ثم اربطه بمصدر واحد رسمي من هذه القائمة.',
+    ],
+    resources: [
+      { label: 'LLVM Documentation', url: docs.llvmDocs },
+      { label: 'Tree-sitter Documentation', url: docs.treeSitter },
+      { label: 'Nand2Tetris', url: docs.nand2tetris },
+    ],
+    tags: ['Compilers', 'Language Tooling', 'LLVM', 'Tree-sitter', 'Parsing'],
+    searchKeywords: ['compiler tooling resources llvm tree sitter nand2tetris'],
+  },
 } satisfies Record<string, TopicInput>;
 
 export const topicCatalog = Object.fromEntries(
@@ -3601,8 +4076,8 @@ export const roadmapSections: SectionLayout[] = [
   {
     id: 'backend-data',
     tone: 'indigo',
-    right: ['http-apis', 'auth-sessions', 'sql-modeling', 'api-design-contracts', 'transactions-consistency'],
-    left: ['caching-queues-search', 'backend-frameworks-deployment', 'background-jobs-integrations'],
+    right: ['http-apis', 'auth-sessions', 'sql-modeling', 'database-indexes-explain', 'api-design-contracts', 'transactions-consistency'],
+    left: ['caching-queues-search', 'backend-frameworks-deployment', 'background-jobs-integrations', 'backend-queues-webhooks'],
   },
   {
     id: 'architecture-systems',
@@ -3619,8 +4094,8 @@ export const roadmapSections: SectionLayout[] = [
   {
     id: 'cloud-platform',
     tone: 'plum',
-    right: ['linux-networking', 'docker-compose', 'cloud-fundamentals', 'network-edge-delivery'],
-    left: ['kubernetes-platform', 'ci-cd-iac', 'ops-runbooks-costs'],
+    right: ['linux-networking', 'systemd-service-operations', 'docker-compose', 'cloud-fundamentals', 'network-edge-delivery'],
+    left: ['kubernetes-platform', 'ci-cd-iac', 'reverse-proxy-tls-dns', 'ops-runbooks-costs'],
   },
   {
     id: 'computer-science',
@@ -3638,6 +4113,8 @@ export const roadmapSections: SectionLayout[] = [
       'c-linux-systems',
       'linux-libc-linking',
       'linux-kernel-uapi-modules',
+      'linux-threads-sync',
+      'linux-sockets-epoll',
     ],
     left: [
       'cpp-modern-core',
@@ -3652,8 +4129,14 @@ export const roadmapSections: SectionLayout[] = [
   {
     id: 'python-engineering',
     tone: 'sky',
-    right: ['python-language-core-deep', 'python-packaging-venvs', 'python-stdlib-automation', 'python-math-computing'],
-    left: ['python-typing-testing', 'python-async-services'],
+    right: [
+      'python-language-core-deep',
+      'python-packaging-venvs',
+      'python-tooling-quality',
+      'python-stdlib-automation',
+      'python-math-computing',
+    ],
+    left: ['python-typing-testing', 'python-async-services', 'python-profiling-bindings'],
   },
   {
     id: 'game-development',
@@ -3665,11 +4148,13 @@ export const roadmapSections: SectionLayout[] = [
       'web-game-math-rendering',
       'game-tools-assets',
       'animation-audio-pipelines',
+      'game-shaders-materials',
     ],
     left: [
       'game-math-physics',
       'engine-math-foundations',
       'engine-architecture',
+      'ecs-game-architecture',
       'graphics-low-level',
       'build-your-own-engine',
       'game-profiling-optimization',
@@ -3707,6 +4192,12 @@ export const roadmapSections: SectionLayout[] = [
       'embedded-linux-specialist',
       'cpp-performance-specialist',
     ],
+  },
+  {
+    id: 'resource-atlas',
+    tone: 'mint',
+    right: ['mobile-native-resource-atlas', 'data-engineering-resource-atlas', 'embedded-robotics-resource-atlas'],
+    left: ['security-research-resource-atlas', 'compiler-tools-resource-atlas'],
   },
   {
     id: 'mastery-growth',
@@ -4009,6 +4500,16 @@ const curatedTopicLinks: Record<string, TopicLinkHints> = {
     next: ['cpp-performance-specialist', 'systems-programming-specialist'],
     alternatives: ['cpp-performance-concurrency', 'python-engineering'],
   },
+  'linux-threads-sync': {
+    before: ['c-linux-systems', 'concurrency-runtime'],
+    next: ['linux-sockets-epoll', 'systems-programming-specialist'],
+    alternatives: ['cpp-performance-concurrency', 'python-async-services'],
+  },
+  'linux-sockets-epoll': {
+    before: ['linux-threads-sync', 'linux-networking'],
+    next: ['systems-programming-specialist', 'backend-data'],
+    alternatives: ['background-jobs-integrations', 'cpp-linux-build'],
+  },
   'cpp-math-geometry': {
     before: ['cpp-modern-core', 'game-math-physics'],
     next: ['cpp-linux-build', 'graphics-low-level'],
@@ -4019,6 +4520,16 @@ const curatedTopicLinks: Record<string, TopicLinkHints> = {
     next: ['python-engineering-specialist', 'data-ai-specialist'],
     alternatives: ['linux-math-libraries', 'web-game-math-rendering'],
   },
+  'python-tooling-quality': {
+    before: ['python-packaging-venvs', 'python-typing-testing'],
+    next: ['python-async-services', 'python-profiling-bindings'],
+    alternatives: ['developer-workflow', 'quality-security'],
+  },
+  'python-profiling-bindings': {
+    before: ['python-tooling-quality', 'python-math-computing'],
+    next: ['python-engineering-specialist', 'systems-native'],
+    alternatives: ['cpp-linux-build', 'data-ai-specialist'],
+  },
   'web-game-math-rendering': {
     before: ['javascript-typescript', 'game-dev-basics'],
     next: ['game-math-physics', 'graphics-low-level'],
@@ -4028,6 +4539,41 @@ const curatedTopicLinks: Record<string, TopicLinkHints> = {
     before: ['game-math-physics', 'game-dev-basics'],
     next: ['engine-architecture', 'graphics-low-level'],
     alternatives: ['cpp-math-geometry', 'web-game-math-rendering'],
+  },
+  'ecs-game-architecture': {
+    before: ['engine-architecture', 'game-dev-basics'],
+    next: ['graphics-low-level', 'build-your-own-engine'],
+    alternatives: ['monolith-modular', 'game-tools-assets'],
+  },
+  'game-shaders-materials': {
+    before: ['web-game-math-rendering', 'graphics-low-level'],
+    next: ['game-profiling-optimization', 'game-specialist'],
+    alternatives: ['engine-math-foundations', 'build-your-own-engine'],
+  },
+  'database-indexes-explain': {
+    before: ['sql-modeling', 'transactions-consistency'],
+    next: ['backend-queues-webhooks', 'backend-specialist'],
+    alternatives: ['performance-capacity', 'database-internals'],
+  },
+  'backend-queues-webhooks': {
+    before: ['background-jobs-integrations', 'services-events'],
+    next: ['backend-specialist', 'platform-specialist'],
+    alternatives: ['caching-queues-search', 'ops-runbooks-costs'],
+  },
+  'systemd-service-operations': {
+    before: ['linux-networking', 'docker-compose'],
+    next: ['ci-cd-iac', 'platform-specialist'],
+    alternatives: ['ops-runbooks-costs', 'systems-native'],
+  },
+  'reverse-proxy-tls-dns': {
+    before: ['cloud-fundamentals', 'linux-networking'],
+    next: ['ops-runbooks-costs', 'platform-specialist'],
+    alternatives: ['network-edge-delivery', 'backend-frameworks-deployment'],
+  },
+  'resource-atlas': {
+    before: ['specialization', 'mastery-growth'],
+    next: ['portfolio-proof-of-work', 'lifelong-learning-research'],
+    alternatives: ['frontend-specialist', 'research-open-source-specialist'],
   },
   'python-engineering-specialist': {
     before: ['python-engineering', 'backend-data'],
@@ -4106,6 +4652,14 @@ const projectIdeasByTopicId: Record<string, string[]> = {
     'ابنِ أداة عددية صغيرة في C أو C++ تستخدم libm وتتعامل بوضوح مع حالات NaN وInf وoverflow، ثم اشرح أين كان الخطأ العددي أو الربط بـ -lm مهمًا.',
     'جرّب مسألة جبر خطي أو تكامل عددي باستخدام GSL أو واجهات BLAS الأساسية، ثم قارن بينها وبين تنفيذ أبسط لتفهم متى تستحق مكتبة متخصصة.',
   ],
+  'linux-threads-sync': [
+    'ابنِ queue مهام صغيرة بخيوط متعددة ودوّن بدقة أين احتجت mutex وأين كان atomic أو flag بسيطًا كافيًا.',
+    'جرّب مثالًا صغيرًا على race condition ثم أصلحه واحتفظ بنسختي before/after كمادة تعليمية لنفسك.',
+  ],
+  'linux-sockets-epoll': [
+    'ابنِ echo server بسيطًا أولًا ثم أضف نسخة epoll مصغرة، وقارن بين البنية والقياس تحت أكثر من اتصال.',
+    'اكتب أداة تشخيص صغيرة تستعرض الاتصالات أو file descriptors أثناء عمل خادمك المحلي وتربط المخرجات بما يحدث داخل الكود.',
+  ],
   'cpp-math-geometry': [
     'ابنِ demo transforms صغيرة في C++ توضح الفرق بين translation وrotation وscale وlocal/world space، ثم اختبرها عدديًا وليس بصريًا فقط.',
     'استخدم Eigen أو بنية رياضية بسيطة لبناء كاميرا أو تحويلات هندسية، ثم وثّق أين ساعدتك المكتبة وأين كان التنفيذ اليدوي كافيًا.',
@@ -4114,6 +4668,14 @@ const projectIdeasByTopicId: Record<string, string[]> = {
     'ابنِ mini notebook أو أداة CLI تقارن بين float وdecimal وNumPy في مسألة صغيرة، ثم دوّن أين ظهرت الدقة أو الأداء أو الوضوح.',
     'نفّذ vector math أو تكاملًا عدديًا أو optimization بسيطة في Python مع مصادر رسمية فقط، ثم اشرح لماذا كان NumPy أو SciPy مناسبًا هنا.',
   ],
+  'python-tooling-quality': [
+    'حوّل مشروع Python بسيطًا إلى pyproject واضح مع Ruff وMypy واختبار واحد، ثم دوّن ما الذي تحسن فعليًا في القراءة والتشغيل.',
+    'ابنِ template مشروع صغير تعيد استخدامه لاحقًا بدل إعداد الأدوات من الصفر كل مرة.',
+  ],
+  'python-profiling-bindings': [
+    'قِس سكربت Python بطيئًا ثم حسّن hotspot واحدة فقط مع توثيق الوقت قبل وبعد بدل تحسينات عشوائية.',
+    'ابنِ binding صغيرة عبر pybind11 لدالة حسابية أو تحويل بيانات، ثم قرر بصدق هل كانت الكلفة الهندسية تستحق المكسب.',
+  ],
   'web-game-math-rendering': [
     'ابنِ لعبة 2D صغيرة في المتصفح باستخدام canvas وdelta time وcollision basic، ثم وثّق ما الذي كان رياضيًا بوضوح داخل اللعبة.',
     'جهّز demo rendering صغيرة على الويب فيها transforms أو camera بسيطة، أو جرّب نقل وحدة رسومية من C/C++ إلى المتصفح عبر Emscripten.',
@@ -4121,6 +4683,34 @@ const projectIdeasByTopicId: Record<string, string[]> = {
   'engine-math-foundations': [
     'ابنِ mini engine toy أو framework صغير يمر عبر transform hierarchy وكاميرا وتصادم بسيط، ثم دوّن قائمة الرياضيات التي احتجتها فعلًا لا التي ظننت أنك تحتاجها.',
     'خذ subsystem واحدة من محرك صغير مثل camera أو collision أو animation blending، ثم اشرح أي مفاهيم رياضية تخدمها وأي أجزاء تنظيمية أو معمارية حولها.',
+  ],
+  'ecs-game-architecture': [
+    'حوّل لعبة صغيرة أو مشهدًا بسيطًا من كائنات متداخلة إلى ECS مبسط وقارن وضوح التعديل والإضافة.',
+    'ابنِ نظامين فقط داخل ECS صغيرة مثل movement وlifetime ثم راقب أين أصبحت البيانات أوضح وأين ازداد التعقيد.',
+  ],
+  'game-shaders-materials': [
+    'ابنِ shader واحدة بسيطة بمدخلات واضحة ثم جرّب تعديل material parameters من داخل المحرك أو الـdemo بدل نسخ مؤثرات كثيرة.',
+    'جهّز مقارنة بصرية صغيرة بين unlit وlit surface على نفس المجسم أو العنصر لتثبيت فهمك للـnormals والإضاءة.',
+  ],
+  'database-indexes-explain': [
+    'خذ endpoint أو تقريرًا بطيئًا واستخدم EXPLAIN ANALYZE لتحديد عقدة واحدة فقط تسبب البطء ثم أصلحها بفهرس أو تعديل query.',
+    'أنشئ قاعدة بيانات تجريبية صغيرة مع بيانات كافية لتلاحظ الفرق بين وجود الفهرس وعدم وجوده فعليًا.',
+  ],
+  'backend-queues-webhooks': [
+    'ابنِ webhook receiver بسيطًا يمنع التكرار ويكتب trace id أو request id مع كل معالجة.',
+    'صمم worker صغيرة تتعامل مع إعادة المحاولة والـdead-letter بشكل مبسط ثم جرّب عليها فشلًا متعمدًا.',
+  ],
+  'systemd-service-operations': [
+    'حوّل خدمة محلية إلى systemd service مع restart policy وenvironment file ثم اكتب أوامر التشغيل والفحص في runbook من صفحة واحدة.',
+    'اختبر فشلًا متعمدًا في الخدمة ودوّن كيف التقطته من journalctl وما التعديل الذي حسّن التشخيص.',
+  ],
+  'reverse-proxy-tls-dns': [
+    'شغّل تطبيقًا خلف Nginx مع دومين أو subdomain تجريبي ثم اختبر طلبًا كاملًا من DNS حتى التطبيق.',
+    'فعّل HTTPS على بيئة staging صغيرة وسجل الخطوات التي ستعيد استخدامها في أي مشروع لاحق.',
+  ],
+  'resource-atlas': [
+    'اختر مسارًا واحدًا من الأطلس وأنهِ منه مصدرًا رسميًا واحدًا وtutorial واحدة خلال أسبوعين بدل التنقل بين خمسة مسارات معًا.',
+    'ابنِ جدول مقارنة صغيرًا بين مسارين من الأطلس يوضح لماذا ستؤجل أحدهما الآن وتبدأ بالآخر.',
   ],
   'python-engineering-specialist': [
     'ابنِ مشروع Python يجمع بين package واضح وCLI أو API واختبارات وملف تشغيل بسيط للفريق أو للمستخدم.',
@@ -4238,6 +4828,308 @@ function getFallbackSearchKeywords(topic: TopicDetail) {
     `${topic.title} project ideas`,
     `${firstTag} ${topic.level} roadmap`,
   ];
+}
+
+const commonMistakesByTopicId: Record<string, string[]> = {
+  'systems-native': [
+    'القفز إلى مشروع أنظمي كبير قبل تثبيت برنامج صغير تستطيع تشغيله وتصحيحه وقياسه بسهولة.',
+    'نسخ أوامر build أو flags من الإنترنت دون فهم أثرها على الربط والبيئة والـABI.',
+  ],
+  'linux-libc-linking': [
+    'الخلط بين ما توفره glibc وما توفره النواة مباشرة ثم لوم Linux كله عند أول خطأ ربط.',
+    'إضافة أعلام مثل -lm أو -ldl أو مسارات مكتبات عشوائيًا دون معرفة لماذا يحتاجها البرنامج.',
+  ],
+  'linux-kernel-uapi-modules': [
+    'القفز إلى kernel module معقدة قبل فهم ما إذا كان userland أو /proc أو /sys يكفي أصلًا.',
+    'اعتبار UAPI وواجهات النواة الداخلية شيئًا واحدًا ثم التعجب من انكسار الكود بين الإصدارات.',
+  ],
+  'linux-math-libraries': [
+    'معاملة float وdouble وكأنهما أعداد مثالية ثم تجاهل NaN وInf وأخطاء التقريب.',
+    'نسيان الربط بـ -lm أو اختيار مكتبة عددية ثقيلة قبل التأكد أن libm لا تكفيك.',
+  ],
+  'linux-threads-sync': [
+    'استخدام أكثر من lock أو atomic قبل رسم المشكلة نفسها على الورق أو في log بسيط.',
+    'تصحيح مشاكل التزامن بالحدس فقط بدل بناء repro صغير يمكن تكراره.',
+  ],
+  'linux-sockets-epoll': [
+    'الخلط بين blocking وnon-blocking I/O داخل نفس الخادم بلا خطة واضحة.',
+    'إهمال timeouts والأخطاء الشبكية واعتبار أن كل client سيتصرف بشكل مثالي دائمًا.',
+  ],
+  'backend-data': [
+    'وضع كل العمل داخل request واحد حتى لو كان بطيئًا أو قابلًا للتأجيل.',
+    'الاعتماد على الإطار أو ORM دون قراءة SQL أو logs أو سلوك قاعدة البيانات نفسها.',
+  ],
+  'database-indexes-explain': [
+    'إضافة فهرس لكل عمود يبدو مهمًا دون قراءة خطة التنفيذ أو ملاحظة أثره على الكتابة.',
+    'الحكم على البطء من زمن endpoint فقط دون معرفة أي عقدة في query plan سببت المشكلة.',
+  ],
+  'backend-queues-webhooks': [
+    'افتراض أن webhook تصل مرة واحدة دائمًا أو أن إعادة الإرسال لن تحدث.',
+    'إضافة retries بلا idempotency أو tracing ثم صعوبة معرفة لماذا تكرر التنفيذ.',
+  ],
+  'cloud-platform': [
+    'القفز إلى بنية تشغيل معقدة قبل فهم الخدمة على Linux محلي أو داخل container بسيط.',
+    'إهمال runbook والسجلات والصلاحيات والاعتماد على ذاكرة الفريق فقط.',
+  ],
+  'systemd-service-operations': [
+    'تشغيل الخدمة يدويًا في الطرفية ثم افتراض أن هذا يكفي كتشغيل مستقر للخادم.',
+    'ترك رسائل الخطأ غامضة داخل journalctl بسبب غياب logs واضحة أو environment file منضبط.',
+  ],
+  'reverse-proxy-tls-dns': [
+    'اعتبار DNS وproxy وTLS إعدادات مستقلة ثم تجاهل كيف تؤثر على بعضها في الإطلاق الفعلي.',
+    'نسخ إعداد Nginx أو HTTPS من مشروع آخر دون اختبار headers والتجديد والمسارات الفعلية.',
+  ],
+  'python-engineering': [
+    'تحويل المشروع إلى سكربتات كثيرة بلا بيئة واضحة أو أوامر تشغيل موحدة.',
+    'افتراض أن Python بطيئة أو فوضوية بطبيعتها قبل تحسين الهيكل وقياس الأداء.',
+  ],
+  'python-tooling-quality': [
+    'إدخال كل الأدوات دفعة واحدة على مشروع متعب ثم كرهها بدل إدخالها تدريجيًا.',
+    'اعتبار Ruff وMypy أهدافًا بحد ذاتها بدل استخدامها لتحسين القراءة والثقة في التغيير.',
+  ],
+  'python-profiling-bindings': [
+    'القفز إلى C أو C++ قبل قياس bottleneck الحقيقية داخل Python.',
+    'نقل جزء صغير إلى binding أصلية ثم إهمال بساطة الـAPI أو اختبارها من جهة Python.',
+  ],
+  'game-development': [
+    'البدء بمحرك أو لعبة أحلام قبل إنهاء لعبة صغيرة كاملة وقابلة للعب.',
+    'خلط منطق اللعب والرندر والأدوات في كتلة واحدة من أول يوم.',
+  ],
+  'ecs-game-architecture': [
+    'استخدام ECS بدافع الموضة ثم نشر components وأنظمة كثيرة بلا حدود أو naming واضح.',
+    'نسيان أن ترتيب التحديث وملكية البيانات أهم من شكل الجداول أو الحاويات نفسها.',
+  ],
+  'game-shaders-materials': [
+    'نسخ shader جاهزة كثيرة قبل فهم واحدة بسيطة جدًا تعمل من أول إلى آخر السطر.',
+    'مطاردة نتيجة بصرية فورية مع تجاهل الـnormals والتحويلات والقيم الأساسية للـmaterial.',
+  ],
+  'resource-atlas': [
+    'فتح ثلاثة أو أربعة أبواب من الأطلس في وقت واحد ثم عدم إنهاء أي واحد منها.',
+    'معاملة أطلس المصادر كبديل عن مشروع صغير يثبت أنك جرّبت المسار فعلًا.',
+  ],
+};
+
+const miniLabsByTopicId: Record<string, string[]> = {
+  'systems-native': [
+    'اكتب برنامجًا واحدًا من ملفين فقط يتعامل مع ملف أو عملية أو socket واحدة، ثم أضف logging قصيرًا يشرح ما يحدث.',
+    'نفّذ نسخة أولى صغيرة جدًا ثم نسخة ثانية أكثر ترتيبًا، وقارن أين ظهر الفرق في البناء أو التصحيح.',
+  ],
+  'linux-libc-linking': [
+    'ابنِ مكتبة .so صغيرة فيها دالة واحدة ثم اربط بها برنامجًا تجريبيًا ولاحظ ما يتغير عند استخدام ldd.',
+  ],
+  'linux-kernel-uapi-modules': [
+    'اقرأ قيمة مفهومة من /proc أو /sys ثم اربطها بسطر شرح واحد: ما الذي أتى من kernel وما الذي أضفته أنت في userland.',
+  ],
+  'linux-math-libraries': [
+    'اكتب برنامجًا صغيرًا يقارن بين نتيجة float وdouble أو بين قيمة صحيحة وNaN/Inf عند إدخال خاطئ متعمد.',
+  ],
+  'linux-threads-sync': [
+    'ابنِ queue مهام من منتج واحد ومستهلك واحد فقط قبل توسيعها إلى أكثر من خيط.',
+  ],
+  'linux-sockets-epoll': [
+    'نفّذ echo server بعميل واحد أولًا، ثم افتح عميلين فقط ولاحظ أين يصبح non-blocking مفيدًا.',
+  ],
+  'backend-data': [
+    'أنشئ endpoint واحدة مع log واضح وvalidation بسيطة وخطأ مفهوم، بدل API كاملة دفعة واحدة.',
+  ],
+  'database-indexes-explain': [
+    'شغّل EXPLAIN ANALYZE على query واحدة ثم أضف فهرسًا واحدًا فقط واحتفظ بصورة قبل/بعد للخطة.',
+  ],
+  'backend-queues-webhooks': [
+    'ابنِ webhook receiver واحدة ترفض التكرار عبر idempotency key بسيط أو جدول صغير.',
+  ],
+  'cloud-platform': [
+    'شغّل خدمة واحدة داخل container أو systemd فقط، ثم دوّن 5 أوامر تحتاجها لفهم حالتها عند أول عطل.',
+  ],
+  'systemd-service-operations': [
+    'حوّل خدمة محلية إلى unit واحدة مع Restart=on-failure ثم اختبر فشلًا متعمدًا وشاهد كيف تتصرف.',
+  ],
+  'reverse-proxy-tls-dns': [
+    'مرّر طلبًا واحدًا من دومين أو subdomain إلى تطبيقك خلف proxy ثم تحقق من header واحدة وlog واحدة فقط.',
+  ],
+  'python-engineering': [
+    'ابنِ CLI صغيرة من ملفين مع venv وpyproject وأمر test أو lint واحد.',
+  ],
+  'python-tooling-quality': [
+    'أدخل Ruff وMypy على ملف واحد أو اثنين فقط أولًا، ثم قرر ما الذي يستحق التعميم لاحقًا.',
+  ],
+  'python-profiling-bindings': [
+    'قِس دالة واحدة بـ cProfile ثم جرّب تحسينًا واحدًا فقط قبل التفكير في binding أصلية.',
+  ],
+  'game-development': [
+    'ابنِ loop واحدة ومشهدًا صغيرًا جدًا أو شخصية تتحرك فقط، ولا تضف نظام حفظ أو قوائم قبل إنهاء هذا الجزء.',
+  ],
+  'ecs-game-architecture': [
+    'حوّل entity واحدة أو نظام حركة واحدًا إلى ECS مبسط بدل إعادة هيكلة مشروع اللعبة كله دفعة واحدة.',
+  ],
+  'game-shaders-materials': [
+    'اكتب shader واحدة تغيّر اللون أو تعتمد على الوقت ثم أضف parameter واحدًا يمكن تعديله من المحرك أو الـdemo.',
+  ],
+  'resource-atlas': [
+    'اختر مصدرًا رسميًا واحدًا ومصدرًا تمهيديًا واحدًا فقط من الأطلس، ثم اكتب ما المشروع الصغير الذي ستبنيه بعدهما.',
+  ],
+};
+
+const officialResourcePattern = /(docs|documentation|manual|reference|man(?:\b|-)|kernel|library|api|guide|standard|tutorial)/i;
+const friendlyResourcePattern = /(tutorial|quickstart|quick start|getting started|get started|learn|beginner|academy|basics|guide)/i;
+
+function getFallbackCommonMistakes(topic: TopicDetail) {
+  if (topic.category.includes('اللغات والأنظمة') || topic.tags.some((tag) => ['Linux', 'C', 'C++'].includes(tag))) {
+    return [
+      'الانتقال من مثال صغير إلى مشروع كبير بسرعة أكبر من قدرتك على التصحيح والقياس.',
+      'ترك الأدوات والتجارب الصغيرة لصالح قراءة نظرية طويلة ثم التعثر عند أول خطأ عملي.',
+    ];
+  }
+
+  if (topic.category.includes('الخلفية')) {
+    return [
+      'التركيز على framework أو endpoint ونسيان logs وقاعدة البيانات وحدود العمل البطيء.',
+      'بناء مسار سعيد فقط دون التفكير في الفشل والتكرار والبيانات غير الصالحة.',
+    ];
+  }
+
+  if (topic.category.includes('السحابة') || topic.category.includes('المنصة')) {
+    return [
+      'إضافة طبقات تشغيل كثيرة قبل إتقان نسخة محلية واضحة يمكن لأي شخص إعادتها.',
+      'إهمال التوثيق التشغيلي القصير ثم الاعتماد على الذاكرة عند كل مشكلة.',
+    ];
+  }
+
+  if (topic.tags.includes('Python') || topic.title.includes('Python')) {
+    return [
+      'ترك المشروع يتحول إلى سكربتات كثيرة بلا نقطة دخول واضحة ولا بيئة ثابتة.',
+      'الحديث عن الأداء أو الجودة قبل القياس أو قبل تطبيق أبسط أدوات التنظيم.',
+    ];
+  }
+
+  if (topic.category.includes('الألعاب') || topic.category.includes('المحركات')) {
+    return [
+      'بدء لعبة أو محرك كبير قبل إنهاء نموذج صغير واضح وممتع وقابل للتجربة.',
+      'مزج الأنظمة البصرية والمنطقية والأصول دون حدود أو naming واضح منذ البداية.',
+    ];
+  }
+
+  if (topic.category.includes('دليل المصادر') || topic.category.includes('المراجع')) {
+    return [
+      'التنقل بين المصادر بلا مشروع أو ملخص صغير يثبت أنك فهمت ما قرأت.',
+      'التوسع في أكثر من باب في وقت واحد بدل إنهاء مسار واحد قصير ثم تقييمه.',
+    ];
+  }
+
+  return [
+    'الانتقال بين مصادر كثيرة قبل إنهاء مصدر واحد واضح والرجوع إليه عند الالتباس.',
+    'القراءة فقط دون مثال صغير أو ملاحظة قصيرة تثبت ما فهمته فعليًا.',
+  ];
+}
+
+function getFallbackMiniLabs(topic: TopicDetail) {
+  if (topic.category.includes('اللغات والأنظمة') || topic.tags.some((tag) => ['Linux', 'C', 'C++'].includes(tag))) {
+    return [
+      'اكتب برنامجًا صغيرًا من ملف واحد أو ملفين فقط يطبق الفكرة الأساسية، ثم أضف log واحدة أو check واحدة تكشف السلوك.',
+      'اختبر الحالة الصحيحة والحالة الخاطئة عمدًا، ثم دوّن في سطرين ما الذي تغير.',
+    ];
+  }
+
+  if (topic.category.includes('الخلفية')) {
+    return [
+      'ابنِ endpoint أو query واحدة مع validation وlog واضحين بدل خدمة كاملة.',
+      'حوّل خطوة بطيئة واحدة إلى background job أو تحسين query صغير ثم راقب الفرق.',
+    ];
+  }
+
+  if (topic.category.includes('السحابة') || topic.category.includes('المنصة')) {
+    return [
+      'شغّل service واحدة محليًا مع proxy أو container أو service unit واحدة فقط ثم وثق الخطوات.',
+      'نفّذ failure صغيرًا متعمدًا واكتب كيف اكتشفته بأداة واحدة من أدوات التشغيل.',
+    ];
+  }
+
+  if (topic.tags.includes('Python') || topic.title.includes('Python')) {
+    return [
+      'ابنِ CLI صغيرة مع أمر تشغيل واحد واختبار أو lint واحد فقط.',
+      'حسّن ملفًا واحدًا بالأنواع أو القياس أو التنظيم قبل تعميم التغيير على المشروع كله.',
+    ];
+  }
+
+  if (topic.category.includes('الألعاب') || topic.category.includes('المحركات')) {
+    return [
+      'ابنِ مشهدًا صغيرًا أو loop أو shader واحدة بدل نظام لعب كامل.',
+      'اختبر عنصرًا واحدًا متحركًا أو مادة واحدة أو تصادمًا واحدًا قبل التوسع.',
+    ];
+  }
+
+  if (topic.category.includes('دليل المصادر') || topic.category.includes('المراجع')) {
+    return [
+      'اختر مصدرًا رسميًا واحدًا ومصدرًا تمهيديًا واحدًا فقط من هذا الباب ثم حدد مشروعك الصغير التالي.',
+      'اكتب خطة 7 أيام قصيرة بدل تجميع عشرات الروابط مرة واحدة.',
+    ];
+  }
+
+  return [
+    'حوّل أول فكرة في الموضوع إلى مثال صغير جدًا أو خطوة عملية واحدة لا تستغرق وقتًا طويلًا.',
+    'اكتب سطرين: ماذا فهمت، ما الذي لم يتضح، وما السؤال التالي الذي ستبحث عنه.',
+  ];
+}
+
+function uniqueResources(resources: ResourceLink[]) {
+  return resources.filter((resource, index, collection) => collection.findIndex((item) => item.url === resource.url) === index);
+}
+
+export function getCommonMistakes(id: string, limit = 2) {
+  const topic = topicCatalog[id];
+
+  if (!topic) {
+    return [];
+  }
+
+  return uniqueText([...(commonMistakesByTopicId[id] ?? []), ...getFallbackCommonMistakes(topic)]).slice(0, limit);
+}
+
+export function getMiniLabs(id: string, limit = 2) {
+  const topic = topicCatalog[id];
+
+  if (!topic) {
+    return [];
+  }
+
+  return uniqueText([...(miniLabsByTopicId[id] ?? []), ...getFallbackMiniLabs(topic), ...(topic.build ?? [])]).slice(0, limit);
+}
+
+export function getResourceCollections(id: string) {
+  const topic = topicCatalog[id];
+
+  if (!topic) {
+    return {
+      official: [] as ResourceLink[],
+      friendly: [] as ResourceLink[],
+      more: [] as ResourceLink[],
+    };
+  }
+
+  const resources = uniqueResources(topic.resources);
+  const excluded = new Set<string>();
+
+  const official =
+    resources.find((resource) => officialResourcePattern.test(resource.label) && !excluded.has(resource.url)) ??
+    resources[0];
+
+  if (official) {
+    excluded.add(official.url);
+  }
+
+  const friendly =
+    resources.find((resource) => friendlyResourcePattern.test(resource.label) && !excluded.has(resource.url)) ??
+    resources.find((resource) => !excluded.has(resource.url));
+
+  if (friendly) {
+    excluded.add(friendly.url);
+  }
+
+  return {
+    official: official ? [official] : [],
+    friendly: friendly ? [friendly] : [],
+    more: resources.filter((resource) => !excluded.has(resource.url)),
+  };
 }
 
 export function getSuggestedTopicIds(id: string, limit = 2) {

@@ -13,9 +13,12 @@ import '@xyflow/react/dist/style.css';
 import { memo, startTransition, useDeferredValue, useEffect, useMemo, useState } from 'react';
 import {
   getAlternativeTopicIds,
+  getCommonMistakes,
+  getMiniLabs,
   getNextTopicIds,
   getPreparationTopicIds,
   getProjectIdeas,
+  getResourceCollections,
   getSearchKeywords,
   baseEdges,
   baseNodes,
@@ -337,8 +340,15 @@ export function RoadmapWorkspace() {
         nextTopics: [] as RoadmapTopic[],
         alternativeTopics: [] as RoadmapTopic[],
         projectIdeas: [] as string[],
+        miniLabs: [] as string[],
+        commonMistakes: [] as string[],
         searchKeywords: [] as string[],
         studyTips: [] as string[],
+        resourceCollections: {
+          official: [] as Array<{ label: string; url: string }>,
+          friendly: [] as Array<{ label: string; url: string }>,
+          more: [] as Array<{ label: string; url: string }>,
+        },
       };
     }
 
@@ -348,8 +358,11 @@ export function RoadmapWorkspace() {
       nextTopics: mapTopicIdsToTopics(getNextTopicIds(selectedId)),
       alternativeTopics: mapTopicIdsToTopics(getAlternativeTopicIds(selectedId)),
       projectIdeas: getProjectIdeas(selectedId),
+      miniLabs: getMiniLabs(selectedId),
+      commonMistakes: getCommonMistakes(selectedId),
       searchKeywords: getSearchKeywords(selectedId),
       studyTips: getTopicStudyTips(selectedId),
+      resourceCollections: getResourceCollections(selectedId),
     };
   }, [selectedId]);
 
@@ -361,7 +374,10 @@ export function RoadmapWorkspace() {
     });
   }, [activeLevel, activeTrackId, deferredSearchQuery]);
 
-  const quickSearchResults = useMemo(() => getQuickSearchResults(filterState), [filterState]);
+  const quickSearchResults = useMemo(
+    () => getQuickSearchResults(filterState, isCompactViewport ? 3 : 4),
+    [filterState, isCompactViewport],
+  );
 
   const nodes = useMemo(() => {
     if (!selectedId && !filterState.hasActiveFilters) {
@@ -568,8 +584,18 @@ export function RoadmapWorkspace() {
     setShareMessage('الرابط جاهز في شريط العنوان الحالي ويمكن نسخه يدويًا.');
   }
 
-  const { suggestedTopics, preparationTopics, nextTopics, alternativeTopics, projectIdeas, searchKeywords, studyTips } =
-    relatedContent;
+  const {
+    suggestedTopics,
+    preparationTopics,
+    nextTopics,
+    alternativeTopics,
+    projectIdeas,
+    miniLabs,
+    commonMistakes,
+    searchKeywords,
+    studyTips,
+    resourceCollections,
+  } = relatedContent;
   const filterSummary = shareMessage || (filterState.hasActiveFilters
     ? filterState.resultCount
       ? `تُعرض الآن ${filterState.resultCount} نتيجة مطابقة داخل الخريطة.`
@@ -583,7 +609,7 @@ export function RoadmapWorkspace() {
           <div className="topbar-brand">
             <strong>{roadmapMeta.title}</strong>
             <span>
-              {roadmapMeta.totalTracks} مسار رئيسي / {roadmapMeta.totalTopics} موضوع / آخر تحديث {roadmapMeta.updatedAt}
+              {roadmapMeta.totalTracks} مسار / {roadmapMeta.totalTopics} موضوع / تحديث {roadmapMeta.updatedAt}
             </span>
           </div>
 
@@ -762,6 +788,17 @@ export function RoadmapWorkspace() {
                 </section>
               ) : null}
 
+              {commonMistakes.length ? (
+                <section className="details-section">
+                  <h3>أخطاء شائعة بشكل مبسط</h3>
+                  <ul>
+                    {commonMistakes.map((mistake) => (
+                      <li key={mistake}>{mistake}</li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
+
               <section className="details-section">
                 <h3>ما الذي ستفهمه هنا</h3>
                 <ul>
@@ -784,6 +821,17 @@ export function RoadmapWorkspace() {
                 <section className="details-section">
                   <h3>ملاحظة مهمّة في 2026</h3>
                   <p className="details-note-inline">{selectedTopic.note2026}</p>
+                </section>
+              ) : null}
+
+              {miniLabs.length ? (
+                <section className="details-section">
+                  <h3>تمرين صغير أو mini-lab</h3>
+                  <ul>
+                    {miniLabs.map((lab) => (
+                      <li key={lab}>{lab}</li>
+                    ))}
+                  </ul>
                 </section>
               ) : null}
 
@@ -901,21 +949,69 @@ export function RoadmapWorkspace() {
 
               <section className="details-section">
                 <h3>مصادر موثوقة ومقترحة</h3>
-                <div className="resource-list">
-                  {selectedTopic.resources.map((resource) => (
-                    <a
-                      key={resource.url}
-                      className="resource-link"
-                      href={resource.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`افتح المصدر ${resource.label}`}
-                    >
-                      <strong>{resource.label}</strong>
-                      <span>{resource.url}</span>
-                    </a>
-                  ))}
-                </div>
+
+                {resourceCollections.official.length ? (
+                  <div className="resource-group">
+                    <h4>مصدر رسمي موثوق</h4>
+                    <div className="resource-list">
+                      {resourceCollections.official.map((resource) => (
+                        <a
+                          key={resource.url}
+                          className="resource-link"
+                          href={resource.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label={`افتح المصدر ${resource.label}`}
+                        >
+                          <strong>{resource.label}</strong>
+                          <span>{resource.url}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+
+                {resourceCollections.friendly.length ? (
+                  <div className="resource-group">
+                    <h4>مصدر مبسط للبدء</h4>
+                    <div className="resource-list">
+                      {resourceCollections.friendly.map((resource) => (
+                        <a
+                          key={resource.url}
+                          className="resource-link"
+                          href={resource.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label={`افتح المصدر ${resource.label}`}
+                        >
+                          <strong>{resource.label}</strong>
+                          <span>{resource.url}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+
+                {resourceCollections.more.length ? (
+                  <div className="resource-group">
+                    <h4>مصادر إضافية للتوسع</h4>
+                    <div className="resource-list">
+                      {resourceCollections.more.map((resource) => (
+                        <a
+                          key={resource.url}
+                          className="resource-link"
+                          href={resource.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label={`افتح المصدر ${resource.label}`}
+                        >
+                          <strong>{resource.label}</strong>
+                          <span>{resource.url}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </section>
             </aside>
           </>

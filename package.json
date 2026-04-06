@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "test": "vitest",
-    "test:run": "vitest run",
+    "test": "vitest --config vite.config.ts --environment=happy-dom --pool=vmThreads",
+    "test:run": "vitest run --config vite.config.ts --environment=happy-dom --pool=vmThreads",
     "check:content": "tsx scripts/check-roadmap-content.ts",
     "check:links": "tsx scripts/check-roadmap-content.ts --links",
     "preview": "vite preview",
@@ -25,6 +25,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "@vitejs/plugin-react-swc": "^4.3.0",
+    "happy-dom": "^20.8.9",
     "jsdom": "^29.0.1",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2",

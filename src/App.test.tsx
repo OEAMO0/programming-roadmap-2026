@@ -1,5 +1,5 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { baseNodes } from './data/roadmap';
 
 const flowNodeById = new Map(baseNodes.map((node) => [node.id, node]));
@@ -45,6 +45,7 @@ vi.mock('@xyflow/react', async () => {
     Background: () => null,
     BackgroundVariant: { Dots: 'dots' },
     Handle: () => null,
+    MarkerType: { ArrowClosed: 'arrowclosed' },
     Position: { Bottom: 'bottom', Left: 'left', Right: 'right', Top: 'top' },
     useReactFlow: () => mockFlowApi,
   };
@@ -66,6 +67,10 @@ function setMatchMedia(compact = false) {
 }
 
 describe('App', () => {
+  afterEach(() => {
+    cleanup();
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
     window.history.replaceState({}, '', '/');
@@ -92,7 +97,7 @@ describe('App', () => {
   it('syncs the quick search state into the URL and renders a quick result card', async () => {
     render(<App />);
 
-    fireEvent.change(screen.getByRole('searchbox', { name: 'ابحث داخل الخريطة' }), {
+    fireEvent.change(screen.getAllByRole('searchbox', { name: 'ابحث داخل الخريطة' })[0], {
       target: { value: 'NumPy' },
     });
 
@@ -101,5 +106,15 @@ describe('App', () => {
     await waitFor(() => {
       expect(window.location.search).toContain('q=NumPy');
     });
+  });
+
+  it('renders the enriched drawer sections for a topic', async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getAllByRole('button', { name: 'رياضيات Python: math و NumPy و SciPy بوعي عملي' })[0]);
+
+    expect(await screen.findByRole('heading', { name: 'أخطاء شائعة بشكل مبسط' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'تمرين صغير أو mini-lab' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'مصدر رسمي موثوق' })).toBeInTheDocument();
   });
 });

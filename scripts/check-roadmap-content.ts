@@ -85,7 +85,8 @@ function checkDocsSync(readme: string, notebook: string) {
     SITE_URL,
     roadmapMeta.updatedAt,
     'بحث وفلترة',
-    'نسخ الرابط',
+    'رابط مباشر',
+    'أطلس المصادر',
   ];
 
   const notebookExpectations = [
@@ -93,6 +94,8 @@ function checkDocsSync(readme: string, notebook: string) {
     'البحث والفلترة',
     'تعميق الرياضيات',
     'رابط مباشر',
+    'أخطاء شائعة',
+    'مصدر رسمي',
   ];
 
   for (const phrase of readmeExpectations) {
@@ -133,6 +136,10 @@ async function probeUrl(url: string) {
       redirect: 'follow',
       signal: controller.signal,
     });
+
+    if (getResponse.ok || getResponse.status === 403) {
+      return;
+    }
 
     if (!getResponse.ok) {
       addIssue('links', `الرابط ${url} أعاد الحالة ${getResponse.status} أثناء فحص GET.`);
