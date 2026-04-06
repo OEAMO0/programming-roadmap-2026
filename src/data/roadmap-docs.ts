@@ -29,7 +29,7 @@ export const docs = {
   owaspLlm: 'https://genai.owasp.org/resource/owasp-top-10-for-llm-applications-2025/',
   oauth: 'https://oauth.net/2/',
   oidc: 'https://openid.net/developers/how-connect-works/',
-  spdxLearn: 'https://spdx.dev/learn/',
+  spdxLearn: 'https://spdx.dev/learn',
   cyclonedxSbom: 'https://cyclonedx.org/capabilities/',
   libfuzzer: 'https://llvm.org/docs/LibFuzzer.html',
   nistIncidentResponse: 'https://csrc.nist.gov/pubs/sp/800/61/r2/final',

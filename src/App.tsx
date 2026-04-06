@@ -31,6 +31,7 @@ import {
   type TopicLevel,
 } from './data/roadmap';
 import { buildRoadmapFilterState, getQuickSearchResults, levelOptions, trackOptions } from './features/roadmap/filtering';
+import { buildRoadmapSeoState, syncRoadmapSeoDocument } from './features/roadmap/seo';
 import { buildRoadmapShareUrl, buildRoadmapUrlSearch, parseRoadmapUrlState } from './features/roadmap/url-state';
 
 type RoadmapFlowNode = Node<RoadmapNodeData, 'roadmapNode'>;
@@ -758,6 +759,13 @@ export function RoadmapWorkspace() {
     );
   }, [activeLevel, activeTrackId, isDrawerOpen, searchQuery, selectedId]);
 
+  const seoState = useMemo(() => buildRoadmapSeoState({
+    selectedTopic: isDrawerOpen ? selectedTopic : null,
+    searchQuery,
+    activeTrackId,
+    activeLevel,
+  }), [activeLevel, activeTrackId, isDrawerOpen, searchQuery, selectedTopic]);
+
   useEffect(() => {
     if (typeof window === 'undefined') {
       return;
@@ -777,6 +785,14 @@ export function RoadmapWorkspace() {
       window.history.replaceState(null, '', nextUrl);
     }
   }, [activeLevel, activeTrackId, isDrawerOpen, searchQuery, selectedId]);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') {
+      return;
+    }
+
+    syncRoadmapSeoDocument(seoState);
+  }, [seoState]);
 
   async function copyShareLink() {
     if (!shareUrl || typeof window === 'undefined') {
@@ -821,7 +837,7 @@ export function RoadmapWorkspace() {
       <header className="topbar">
         <div className="topbar-main">
           <div className="topbar-brand">
-            <strong>{roadmapMeta.title}</strong>
+            <h1 className="topbar-brand-title">{roadmapMeta.title}</h1>
             <span>
               {roadmapMeta.totalTracks} مسار / {roadmapMeta.totalTopics} موضوع / تحديث {roadmapMeta.updatedAt}
             </span>

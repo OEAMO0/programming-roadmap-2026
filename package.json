@@ -5,15 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "seo:generate": "tsx scripts/generate-seo-files.ts",
+    "build": "npm run seo:generate && tsc -b && vite build",
     "test": "vitest --config vite.config.ts --environment=happy-dom --pool=vmThreads",
     "test:run": "vitest run --config vite.config.ts --environment=happy-dom --pool=vmThreads",
     "test:e2e": "playwright test",
-    "check:content": "tsx scripts/check-roadmap-content.ts",
-    "check:links": "tsx scripts/check-roadmap-content.ts --links",
+    "check:content": "npm run seo:generate && tsx scripts/check-roadmap-content.ts",
+    "check:links": "npm run seo:generate && tsx scripts/check-roadmap-content.ts --links",
     "smoke:deploy": "tsx scripts/smoke-deploy.ts",
     "preview": "vite preview",
-    "deploy": "wrangler deploy && npm run smoke:deploy"
+    "deploy": "npm run build && wrangler deploy && npm run smoke:deploy"
   },
   "dependencies": {
     "@xyflow/react": "^12.10.2",

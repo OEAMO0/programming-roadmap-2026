@@ -116,7 +116,8 @@ a {
   min-width: 0;
 }
 
-.topbar-brand strong {
+.topbar-brand-title {
+  margin: 0;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -129,6 +130,106 @@ a {
 .topbar-brand span {
   color: var(--muted);
   font-size: 0.72rem;
+}
+
+.seo-fallback {
+  max-width: 1040px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 28px 20px 40px;
+  overflow: auto;
+  display: grid;
+  gap: 18px;
+}
+
+.seo-fallback-hero,
+.seo-fallback-section {
+  display: grid;
+  gap: 10px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--surface) 92%, var(--surface-subtle) 8%);
+  box-shadow: var(--shadow-sm);
+}
+
+.seo-fallback-eyebrow {
+  margin: 0;
+  color: color-mix(in srgb, var(--muted) 88%, var(--edge-accent) 12%);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.seo-fallback h1,
+.seo-fallback h2 {
+  margin: 0;
+  color: var(--text);
+  text-wrap: pretty;
+}
+
+.seo-fallback h1 {
+  font-size: clamp(1.5rem, 2.2vw, 2.2rem);
+  line-height: 1.2;
+}
+
+.seo-fallback h2 {
+  font-size: 1rem;
+}
+
+.seo-fallback p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.8;
+  text-wrap: pretty;
+}
+
+.seo-fallback-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.seo-fallback-card {
+  display: grid;
+  gap: 4px;
+  min-height: 100%;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--border) 78%, var(--edge-accent) 22%);
+  border-radius: 4px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: background 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.seo-fallback-card:hover {
+  background: color-mix(in srgb, var(--surface) 84%, var(--surface-selected) 16%);
+  border-color: color-mix(in srgb, var(--border) 60%, var(--edge-accent) 40%);
+}
+
+.seo-fallback-card strong {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.seo-fallback-card span {
+  color: var(--muted);
+  font-size: 0.77rem;
+  line-height: 1.65;
+}
+
+.seo-fallback-list {
+  margin: 0;
+  padding-inline-start: 18px;
+  display: grid;
+  gap: 6px;
+  color: var(--text);
+  line-height: 1.8;
+}
+
+.seo-fallback-note {
+  color: var(--muted);
+  font-size: 0.8rem;
 }
 
 .topbar-actions {
@@ -886,8 +987,22 @@ a {
     justify-content: flex-end;
   }
 
-  .topbar-brand strong {
+  .topbar-brand-title {
     font-size: 0.88rem;
+  }
+
+  .seo-fallback {
+    padding: 16px 14px 24px;
+    gap: 12px;
+  }
+
+  .seo-fallback-hero,
+  .seo-fallback-section {
+    padding: 14px;
+  }
+
+  .seo-fallback-grid {
+    grid-template-columns: 1fr;
   }
 
   .topbar-filters {

@@ -1,0 +1,20 @@
+{
+  "name": "خريطة تعلّم البرمجة 2026",
+  "short_name": "خريطة البرمجة",
+  "description": "خريطة تعلم برمجة تفاعلية بالعربية من البداية إلى التخصص.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ebe3d6",
+  "theme_color": "#ebe3d6",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">خريطة تعلم البرمجة 2026</title>
+  <desc id="desc">واجهة عربية تفاعلية لمسارات البرمجة والأنظمة والويب والأمن والذكاء الاصطناعي.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#0f766e" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.7">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <circle cx="940" cy="140" r="260" fill="url(#glow)" />
+  <circle cx="180" cy="520" r="220" fill="url(#glow)" />
+
+  <g opacity="0.2" stroke="#dbeafe" stroke-width="4">
+    <path d="M180 180h180" />
+    <path d="M360 180h180" />
+    <path d="M540 180h180" />
+    <path d="M300 315h180" />
+    <path d="M480 315h180" />
+    <path d="M660 315h180" />
+    <path d="M420 450h180" />
+    <path d="M600 450h180" />
+  </g>
+
+  <g fill="#fffdf9">
+    <rect x="130" y="145" width="112" height="54" rx="16" />
+    <rect x="310" y="145" width="112" height="54" rx="16" />
+    <rect x="490" y="145" width="112" height="54" rx="16" />
+    <rect x="670" y="145" width="112" height="54" rx="16" />
+    <rect x="250" y="280" width="112" height="54" rx="16" />
+    <rect x="430" y="280" width="112" height="54" rx="16" />
+    <rect x="610" y="280" width="112" height="54" rx="16" />
+    <rect x="370" y="415" width="112" height="54" rx="16" />
+    <rect x="550" y="415" width="112" height="54" rx="16" />
+  </g>
+
+  <text x="1030" y="228" fill="#fffdf9" font-size="58" font-weight="700" text-anchor="end" font-family="'Segoe UI', Tahoma, sans-serif">
+    خريطة تعلم البرمجة 2026
+  </text>
+  <text x="1030" y="292" fill="#dbeafe" font-size="28" text-anchor="end" font-family="'Segoe UI', Tahoma, sans-serif">
+    مسارات عربية تفاعلية من البداية حتى التخصص
+  </text>
+  <text x="1030" y="338" fill="#dbeafe" font-size="28" text-anchor="end" font-family="'Segoe UI', Tahoma, sans-serif">
+    Web / Backend / Systems / Security / AI
+  </text>
+</svg>
