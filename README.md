@@ -85,4 +85,4 @@ npm run build
 
 ## الرابط المباشر
 
-[افتح الموقع](https://programming-roadmap-2026.omadkdklilipo.workers.dev/)
+[افتح الموقع](https://programming-roadmap-2026.devbread.workers.dev/)
