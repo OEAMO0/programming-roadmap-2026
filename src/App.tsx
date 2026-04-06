@@ -22,12 +22,13 @@ import {
   getSuggestedTopicIds,
   getTopicStudyTips,
   roadmapMeta,
-  roadmapSections,
   topicCatalog,
   type Journey,
   type RoadmapNodeData,
   type TopicLevel,
 } from './data/roadmap';
+import { buildRoadmapFilterState, getQuickSearchResults, levelOptions, trackOptions } from './features/roadmap/filtering';
+import { buildRoadmapShareUrl, buildRoadmapUrlSearch, parseRoadmapUrlState } from './features/roadmap/url-state';
 
 type RoadmapFlowNode = Node<RoadmapNodeData, 'roadmapNode'>;
 type ThemeMode = 'light' | 'dark';
@@ -39,9 +40,6 @@ const COMPACT_VIEWPORT_QUERY = '(max-width: 760px)';
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 const DEFAULT_FIT_PADDING = 0.2;
 const COMPACT_FIT_PADDING = 0.14;
-const levelOptions: TopicLevel[] = ['ابدأ', 'أساسي', 'عملي', 'متقدم', '2026'];
-const arabicDiacriticsPattern = /[\u064b-\u065f\u0670\u06d6-\u06ed]/g;
-const nonSearchCharactersPattern = /[^\p{L}\p{N}]+/gu;
 
 const journeyStroke: Record<Journey, string> = {
   enter: '#16a34a',
@@ -118,35 +116,6 @@ function mapTopicIdsToTopics(ids: string[]): RoadmapTopic[] {
   return ids
     .map((topicId) => topicCatalog[topicId])
     .filter((topic): topic is RoadmapTopic => Boolean(topic));
-}
-
-function normalizeSearchText(value: string) {
-  return value
-    .normalize('NFKD')
-    .replace(arabicDiacriticsPattern, '')
-    .replace(/[ـ]/g, '')
-    .toLowerCase()
-    .replace(nonSearchCharactersPattern, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function buildTopicSearchDocument(topic: RoadmapTopic, trackTitle: string) {
-  return normalizeSearchText(
-    [
-      topic.title,
-      topic.category,
-      topic.level,
-      trackTitle,
-      topic.summary,
-      topic.note2026 ?? '',
-      ...topic.learn,
-      ...topic.build,
-      ...topic.tags,
-      ...(topic.searchKeywords ?? []),
-      ...topic.resources.flatMap((resource) => [resource.label, resource.url]),
-    ].join(' '),
-  );
 }
 
 function getTopicContextLine(topic: RoadmapTopic, journey: Journey) {
@@ -264,17 +233,32 @@ const nodeTypes = {
   roadmapNode: RoadmapNode,
 };
 
-function RoadmapWorkspace() {
+function getInitialRoadmapUrlState() {
+  if (typeof window === 'undefined') {
+    return {
+      topicId: null,
+      searchQuery: '',
+      activeTrackId: '',
+      activeLevel: '' as TopicLevel | '',
+    };
+  }
+
+  return parseRoadmapUrlState(window.location.search);
+}
+
+export function RoadmapWorkspace() {
+  const initialUrlState = getInitialRoadmapUrlState();
   const flow = useReactFlow<RoadmapFlowNode>();
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(() => initialUrlState.topicId);
+  const [isDrawerOpen, setDrawerOpen] = useState(() => Boolean(initialUrlState.topicId));
   const [theme, setTheme] = useState<ThemeMode>(getInitialTheme);
   const [showLegend, setShowLegend] = useState(getInitialLegendVisibility);
   const [isCompactViewport, setCompactViewport] = useState(() => safeMatchMedia(COMPACT_VIEWPORT_QUERY));
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => safeMatchMedia(REDUCED_MOTION_QUERY));
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeTrackId, setActiveTrackId] = useState('');
-  const [activeLevel, setActiveLevel] = useState<TopicLevel | ''>('');
+  const [searchQuery, setSearchQuery] = useState(() => initialUrlState.searchQuery);
+  const [activeTrackId, setActiveTrackId] = useState(() => initialUrlState.activeTrackId);
+  const [activeLevel, setActiveLevel] = useState<TopicLevel | ''>(() => initialUrlState.activeLevel);
+  const [shareMessage, setShareMessage] = useState('');
   const deferredSearchQuery = useDeferredValue(searchQuery);
 
   useEffect(() => {
@@ -321,6 +305,20 @@ function RoadmapWorkspace() {
     };
   }, [isDrawerOpen]);
 
+  useEffect(() => {
+    if (!shareMessage || typeof window === 'undefined') {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setShareMessage('');
+    }, 1800);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [shareMessage]);
+
   const selectedTopic = useMemo(() => {
     return selectedId ? topicCatalog[selectedId] ?? null : null;
   }, [selectedId]);
@@ -355,87 +353,15 @@ function RoadmapWorkspace() {
     };
   }, [selectedId]);
 
-  const trackOptions = useMemo(
-    () =>
-      roadmapSections.map((section) => ({
-        id: section.id,
-        title: topicCatalog[section.id]?.title ?? section.id,
-      })),
-    [],
-  );
-
-  const trackIdByTopicId = useMemo(() => {
-    const map = new Map<string, string>();
-
-    for (const section of roadmapSections) {
-      map.set(section.id, section.id);
-
-      for (const topicId of [...section.right, ...section.left]) {
-        map.set(topicId, section.id);
-      }
-    }
-
-    return map;
-  }, []);
-
-  const searchDocumentByTopicId = useMemo(() => {
-    const documents = new Map<string, string>();
-
-    for (const topic of Object.values(topicCatalog)) {
-      const trackId = trackIdByTopicId.get(topic.id) ?? topic.id;
-      const trackTitle = topicCatalog[trackId]?.title ?? '';
-      documents.set(topic.id, buildTopicSearchDocument(topic, trackTitle));
-    }
-
-    return documents;
-  }, [trackIdByTopicId]);
-
   const filterState = useMemo(() => {
-    const normalizedQuery = normalizeSearchText(deferredSearchQuery);
-    const queryTokens = normalizedQuery ? normalizedQuery.split(' ') : [];
-    const hasActiveFilters = Boolean(queryTokens.length || activeTrackId || activeLevel);
+    return buildRoadmapFilterState({
+      searchQuery: deferredSearchQuery,
+      activeTrackId,
+      activeLevel,
+    });
+  }, [activeLevel, activeTrackId, deferredSearchQuery]);
 
-    if (!hasActiveFilters) {
-      return {
-        hasActiveFilters: false,
-        directlyMatchedIds: new Set<string>(),
-        contextualIds: new Set<string>(),
-        resultCount: 0,
-      };
-    }
-
-    const directlyMatchedIds = new Set<string>();
-    const contextualIds = new Set<string>();
-
-    for (const topic of Object.values(topicCatalog)) {
-      const trackId = trackIdByTopicId.get(topic.id) ?? topic.id;
-      const searchDocument = searchDocumentByTopicId.get(topic.id) ?? '';
-      const matchesTrack = !activeTrackId || trackId === activeTrackId;
-      const matchesLevel = !activeLevel || topic.level === activeLevel;
-      const matchesQuery = !queryTokens.length || queryTokens.every((token) => searchDocument.includes(token));
-
-      if (!matchesTrack || !matchesLevel || !matchesQuery) {
-        continue;
-      }
-
-      directlyMatchedIds.add(topic.id);
-      contextualIds.add(topic.id);
-      contextualIds.add(trackId);
-    }
-
-    if (activeTrackId) {
-      contextualIds.add(activeTrackId);
-    }
-
-    const topicMatches = [...directlyMatchedIds].filter((topicId) => nodeById.get(topicId)?.data.variant === 'topic').length;
-
-    return {
-      hasActiveFilters: true,
-      directlyMatchedIds,
-      contextualIds,
-      resultCount: topicMatches || directlyMatchedIds.size,
-    };
-  }, [activeLevel, activeTrackId, deferredSearchQuery, searchDocumentByTopicId, trackIdByTopicId]);
+  const quickSearchResults = useMemo(() => getQuickSearchResults(filterState), [filterState]);
 
   const nodes = useMemo(() => {
     if (!selectedId && !filterState.hasActiveFilters) {
@@ -508,6 +434,38 @@ function RoadmapWorkspace() {
     instance.fitView({ duration: animationDuration, padding: fitPadding });
   }
 
+  function centerOnTopic(topicId: string) {
+    const node = flow.getNode(topicId);
+
+    if (!node) {
+      return;
+    }
+
+    const absolutePosition = node.position;
+    const width = node.measured?.width ?? (node.data.variant === 'section' ? 326 : 272);
+    const height = node.measured?.height ?? 116;
+    const nextZoom = isCompactViewport ? (node.data.variant === 'section' ? 0.58 : 0.76) : node.data.variant === 'section' ? 0.72 : 0.94;
+
+    flow.setCenter(absolutePosition.x + width / 2, absolutePosition.y + height / 2, {
+      duration: animationDuration,
+      zoom: nextZoom,
+    });
+  }
+
+  useEffect(() => {
+    if (!selectedId || !isDrawerOpen || typeof window === 'undefined') {
+      return;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      centerOnTopic(selectedId);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [animationDuration, isCompactViewport, isDrawerOpen, selectedId]);
+
   function focusTopic(topicId: string) {
     if (!nodeById.has(topicId) || !topicCatalog[topicId]) {
       return;
@@ -518,36 +476,12 @@ function RoadmapWorkspace() {
       setDrawerOpen(true);
     });
 
-    const centerOnTopic = () => {
-      const node = flow.getNode(topicId);
-
-      if (!node) {
-        return;
-      }
-
-      const absolutePosition = node.position;
-      const width = node.measured?.width ?? (node.data.variant === 'section' ? 326 : 272);
-      const height = node.measured?.height ?? 116;
-      const nextZoom = isCompactViewport
-        ? node.data.variant === 'section'
-          ? 0.58
-          : 0.76
-        : node.data.variant === 'section'
-          ? 0.72
-          : 0.94;
-
-      flow.setCenter(absolutePosition.x + width / 2, absolutePosition.y + height / 2, {
-        duration: animationDuration,
-        zoom: nextZoom,
-      });
-    };
-
     if (typeof window === 'undefined') {
-      centerOnTopic();
+      centerOnTopic(topicId);
       return;
     }
 
-    window.requestAnimationFrame(centerOnTopic);
+    window.requestAnimationFrame(() => centerOnTopic(topicId));
   }
 
   function resetViewport() {
@@ -580,13 +514,67 @@ function RoadmapWorkspace() {
     setActiveLevel('');
   }
 
+  const shareUrl = useMemo(() => {
+    if (typeof window === 'undefined') {
+      return '';
+    }
+
+    return buildRoadmapShareUrl(
+      {
+        topicId: isDrawerOpen ? selectedId : null,
+        searchQuery,
+        activeTrackId,
+        activeLevel,
+      },
+      window.location.href,
+    );
+  }, [activeLevel, activeTrackId, isDrawerOpen, searchQuery, selectedId]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const nextSearch = buildRoadmapUrlSearch({
+      topicId: isDrawerOpen ? selectedId : null,
+      searchQuery,
+      activeTrackId,
+      activeLevel,
+    });
+
+    const nextUrl = `${window.location.pathname}${nextSearch}${window.location.hash}`;
+    const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+
+    if (nextUrl !== currentUrl) {
+      window.history.replaceState(null, '', nextUrl);
+    }
+  }, [activeLevel, activeTrackId, isDrawerOpen, searchQuery, selectedId]);
+
+  async function copyShareLink() {
+    if (!shareUrl || typeof window === 'undefined') {
+      return;
+    }
+
+    try {
+      if (window.navigator.clipboard?.writeText) {
+        await window.navigator.clipboard.writeText(shareUrl);
+        setShareMessage('تم نسخ رابط الحالة الحالية.');
+        return;
+      }
+    } catch {
+      // Fall through to the fallback message below.
+    }
+
+    setShareMessage('الرابط جاهز في شريط العنوان الحالي ويمكن نسخه يدويًا.');
+  }
+
   const { suggestedTopics, preparationTopics, nextTopics, alternativeTopics, projectIdeas, searchKeywords, studyTips } =
     relatedContent;
-  const filterSummary = filterState.hasActiveFilters
+  const filterSummary = shareMessage || (filterState.hasActiveFilters
     ? filterState.resultCount
       ? `تُعرض الآن ${filterState.resultCount} نتيجة مطابقة داخل الخريطة.`
       : 'لا توجد نتيجة مطابقة الآن. جرّب كلمة أدق أو وسّع الفلاتر.'
-    : 'ابحث بالعنوان أو الكلمات المفتاحية، أو صفِّ الخريطة حسب المسار والمستوى.';
+    : 'ابحث بالعنوان أو الكلمات المفتاحية، أو صفِّ الخريطة حسب المسار والمستوى.');
 
   return (
     <div className="app-shell">
@@ -667,7 +655,30 @@ function RoadmapWorkspace() {
             مسح الفلاتر
           </button>
 
+          <button type="button" className="topbar-button topbar-button-secondary" onClick={copyShareLink}>
+            نسخ الرابط
+          </button>
+
           <span className="topbar-status">{filterSummary}</span>
+
+          {quickSearchResults.length ? (
+            <div className="topbar-results" aria-label="نتائج بحث سريعة">
+              {quickSearchResults.map((result) => (
+                <button
+                  key={result.id}
+                  type="button"
+                  className="topbar-result-card"
+                  onClick={() => focusTopic(result.id)}
+                  aria-label={`افتح موضوع ${result.title}`}
+                >
+                  <strong>{result.title}</strong>
+                  <span>
+                    {result.trackTitle} / {result.category} / {result.level}
+                  </span>
+                </button>
+              ))}
+            </div>
+          ) : null}
         </div>
       </header>
 

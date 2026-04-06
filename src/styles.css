@@ -1,12 +1,12 @@
 :root {
   color-scheme: light;
   font-family: 'Segoe UI Variable Display', Tahoma, 'Segoe UI', sans-serif;
-  --page-bg: #ebe5d8;
-  --surface: #fffdf8;
-  --surface-subtle: #f7f1e6;
-  --surface-selected: #edf5ef;
-  --border: #d5cbba;
-  --divider: #e5dccd;
+  --page-bg: #ece6db;
+  --surface: #fffdf9;
+  --surface-subtle: #f8f2e8;
+  --surface-selected: #eff5ef;
+  --border: #d7ccbc;
+  --divider: #e8dece;
   --text: #1b2129;
   --muted: #647284;
   --grid-line: rgba(86, 96, 110, 0.1);
@@ -24,10 +24,10 @@
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --page-bg: #0c1117;
-  --surface: #121922;
-  --surface-subtle: #17202a;
-  --surface-selected: #1b2632;
+  --page-bg: #0d1219;
+  --surface: #131b24;
+  --surface-subtle: #18222d;
+  --surface-selected: #1d2834;
   --border: #263244;
   --divider: #1f2a37;
   --text: #e7eef6;
@@ -85,7 +85,8 @@ a {
   gap: 14px;
   padding: 14px;
   background:
-    radial-gradient(circle at top right, color-mix(in srgb, var(--surface) 62%, transparent) 0, transparent 44%),
+    radial-gradient(circle at top right, color-mix(in srgb, var(--surface) 66%, transparent) 0, transparent 44%),
+    radial-gradient(circle at top left, color-mix(in srgb, var(--surface-subtle) 44%, transparent) 0, transparent 38%),
     var(--page-bg);
 }
 
@@ -95,7 +96,8 @@ a {
   padding: 12px 16px;
   border: 1px solid var(--border);
   border-radius: 4px;
-  background: color-mix(in srgb, var(--surface) 96%, transparent);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 98%, transparent), color-mix(in srgb, var(--surface-subtle) 92%, transparent));
   box-shadow: var(--shadow-sm);
 }
 
@@ -134,7 +136,13 @@ a {
 
 .topbar-filters {
   display: grid;
-  grid-template-columns: minmax(260px, 1.7fr) minmax(150px, 0.7fr) minmax(140px, 0.6fr) auto minmax(210px, 0.9fr);
+  grid-template-columns:
+    minmax(260px, 1.7fr)
+    minmax(150px, 0.7fr)
+    minmax(140px, 0.6fr)
+    auto
+    auto
+    minmax(210px, 0.9fr);
   gap: 8px;
   align-items: center;
 }
@@ -195,6 +203,45 @@ a {
   line-height: 1.55;
 }
 
+.topbar-results {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(196px, 1fr));
+  gap: 8px;
+}
+
+.topbar-result-card {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 10px 11px;
+  border: 1px solid color-mix(in srgb, var(--border) 80%, var(--edge-accent) 20%);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--surface-subtle) 80%, var(--surface) 20%);
+  color: var(--text);
+  text-align: right;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+
+.topbar-result-card:hover {
+  background: color-mix(in srgb, var(--surface-subtle) 70%, var(--surface-selected) 30%);
+  border-color: color-mix(in srgb, var(--border) 64%, var(--edge-accent) 36%);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+}
+
+.topbar-result-card strong {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.topbar-result-card span {
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
 .topbar-button:hover,
 .drawer-close:hover,
 .resource-link:hover {
@@ -230,7 +277,8 @@ a {
   direction: ltr;
   border: 1px solid var(--border);
   border-radius: 4px;
-  background: var(--surface-subtle);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface-subtle) 88%, var(--surface) 12%), var(--surface-subtle));
   isolation: isolate;
 }
 
@@ -671,7 +719,7 @@ a {
   }
 
   .topbar-filters {
-    grid-template-columns: minmax(220px, 1fr) repeat(2, minmax(136px, 0.6fr));
+    grid-template-columns: minmax(220px, 1fr) repeat(4, minmax(128px, max-content));
   }
 
   .topbar-status {
@@ -735,6 +783,7 @@ a {
   }
 
   .topbar-search-input,
+  .topbar-results,
   .topbar-status {
     grid-column: 1 / -1;
   }
