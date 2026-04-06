@@ -364,8 +364,10 @@ export function RoadmapWorkspace() {
   const [isCompactViewport, setCompactViewport] = useState(() => safeMatchMedia(COMPACT_VIEWPORT_QUERY));
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => safeMatchMedia(REDUCED_MOTION_QUERY));
   const [searchQuery, setSearchQuery] = useState(() => initialUrlState.searchQuery);
+  const [activeQuickResultIndex, setActiveQuickResultIndex] = useState(-1);
   const [activeTrackId, setActiveTrackId] = useState(() => initialUrlState.activeTrackId);
   const [activeLevel, setActiveLevel] = useState<TopicLevel | ''>(() => initialUrlState.activeLevel);
+  const [directTrackJumpId, setDirectTrackJumpId] = useState('');
   const [shareMessage, setShareMessage] = useState('');
   const deferredSearchQuery = useDeferredValue(searchQuery);
 
@@ -524,6 +526,40 @@ export function RoadmapWorkspace() {
     [filterState, isCompactViewport],
   );
 
+  useEffect(() => {
+    if (!quickSearchResults.length) {
+      setActiveQuickResultIndex(-1);
+      return;
+    }
+
+    setActiveQuickResultIndex((current) => {
+      if (current < 0) {
+        return 0;
+      }
+
+      return Math.min(current, quickSearchResults.length - 1);
+    });
+  }, [quickSearchResults]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || activeQuickResultIndex < 0) {
+      return;
+    }
+
+    const activeResult = quickSearchResults[activeQuickResultIndex];
+
+    if (!activeResult) {
+      return;
+    }
+
+    const element = document.getElementById(`quick-search-result-${activeResult.id}`);
+
+    element?.scrollIntoView({
+      block: 'nearest',
+      inline: 'nearest',
+    });
+  }, [activeQuickResultIndex, quickSearchResults]);
+
   const nodes = useMemo(() => {
     if (!selectedId && !filterState.hasActiveFilters) {
       return flowNodes;
@@ -639,6 +675,31 @@ export function RoadmapWorkspace() {
     setActionsMenuOpen(false);
   }
 
+  function openQuickSearchResult(index = activeQuickResultIndex) {
+    const nextIndex = index >= 0 ? index : 0;
+    const nextResult = quickSearchResults[nextIndex] ?? quickSearchResults[0];
+
+    if (!nextResult) {
+      return;
+    }
+
+    focusTopic(nextResult.id);
+  }
+
+  function moveActiveQuickResult(direction: 1 | -1) {
+    if (!quickSearchResults.length) {
+      return;
+    }
+
+    setActiveQuickResultIndex((current) => {
+      if (current < 0) {
+        return direction > 0 ? 0 : quickSearchResults.length - 1;
+      }
+
+      return (current + direction + quickSearchResults.length) % quickSearchResults.length;
+    });
+  }
+
   function resetViewport() {
     fitCanvas();
     setActionsMenuOpen(false);
@@ -675,6 +736,7 @@ export function RoadmapWorkspace() {
 
   function clearFilters() {
     setSearchQuery('');
+    setActiveQuickResultIndex(-1);
     setActiveTrackId('');
     setActiveLevel('');
     setActionsMenuOpen(false);
@@ -841,17 +903,60 @@ export function RoadmapWorkspace() {
             className="topbar-input topbar-search-input"
             placeholder="ابحث بعنوان الموضوع أو الكلمات المفتاحية أو المصدر"
             value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
+            onChange={(event) => {
+              setSearchQuery(event.target.value);
+              setActiveQuickResultIndex(-1);
+            }}
             onKeyDown={(event) => {
+              if (event.key === 'ArrowDown' && quickSearchResults.length) {
+                event.preventDefault();
+                moveActiveQuickResult(1);
+                return;
+              }
+
+              if (event.key === 'ArrowUp' && quickSearchResults.length) {
+                event.preventDefault();
+                moveActiveQuickResult(-1);
+                return;
+              }
+
               if (event.key === 'Enter' && quickSearchResults[0]) {
                 event.preventDefault();
-                focusTopic(quickSearchResults[0].id);
+                openQuickSearchResult();
               }
             }}
             aria-label="ابحث داخل الخريطة"
+            aria-activedescendant={
+              activeQuickResultIndex >= 0 && quickSearchResults[activeQuickResultIndex]
+                ? `quick-search-result-${quickSearchResults[activeQuickResultIndex].id}`
+                : undefined
+            }
             spellCheck={false}
             dir="rtl"
           />
+
+          <select
+            className="topbar-select topbar-jump-select"
+            value={directTrackJumpId}
+            onChange={(event) => {
+              const nextTrackId = event.target.value;
+              setDirectTrackJumpId('');
+
+              if (!nextTrackId) {
+                return;
+              }
+
+              focusTopic(nextTrackId);
+            }}
+            aria-label="اذهب إلى المسار مباشرة"
+          >
+            <option value="">اذهب إلى المسار مباشرة</option>
+            {trackOptions.map((track) => (
+              <option key={track.id} value={track.id}>
+                {track.title}
+              </option>
+            ))}
+          </select>
 
           <select
             className="topbar-select"
@@ -885,12 +990,15 @@ export function RoadmapWorkspace() {
 
           {quickSearchResults.length ? (
             <div className="topbar-results" aria-label="نتائج بحث سريعة">
-              {quickSearchResults.map((result) => (
+              {quickSearchResults.map((result, index) => (
                 <button
                   key={result.id}
+                  id={`quick-search-result-${result.id}`}
                   type="button"
                   className="topbar-result-card"
+                  data-active={index === activeQuickResultIndex || undefined}
                   onClick={() => focusTopic(result.id)}
+                  onMouseEnter={() => setActiveQuickResultIndex(index)}
                   aria-label={`افتح موضوع ${result.title}`}
                 >
                   <strong>{result.title}</strong>

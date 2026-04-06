@@ -143,7 +143,8 @@ a {
 .topbar-filters {
   display: grid;
   grid-template-columns:
-    minmax(206px, 1.7fr)
+    minmax(206px, 1.55fr)
+    minmax(152px, 0.88fr)
     minmax(132px, 0.72fr)
     minmax(118px, 0.58fr)
     minmax(162px, 0.82fr);
@@ -222,6 +223,10 @@ a {
   color: var(--muted);
   font-size: 0.73rem;
   line-height: 1.45;
+}
+
+.topbar-jump-select {
+  color: color-mix(in srgb, var(--text) 92%, var(--edge-accent) 8%);
 }
 
 .topbar-menu {
@@ -314,6 +319,12 @@ a {
   background: color-mix(in srgb, var(--surface-subtle) 70%, var(--surface-selected) 30%);
   border-color: color-mix(in srgb, var(--border) 64%, var(--edge-accent) 36%);
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+}
+
+.topbar-result-card[data-active='true'] {
+  background: color-mix(in srgb, var(--surface-subtle) 66%, var(--surface-selected) 34%);
+  border-color: color-mix(in srgb, var(--border) 52%, var(--edge-accent) 48%);
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 .topbar-result-card strong {
@@ -823,7 +834,11 @@ a {
   }
 
   .topbar-filters {
-    grid-template-columns: minmax(184px, 1fr) minmax(122px, max-content) minmax(112px, max-content);
+    grid-template-columns:
+      minmax(184px, 1fr)
+      minmax(132px, max-content)
+      minmax(122px, max-content)
+      minmax(112px, max-content);
   }
 
   .topbar-status {

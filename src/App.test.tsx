@@ -108,6 +108,37 @@ describe('App', () => {
     });
   });
 
+  it('navigates quick search results with the keyboard and opens the selected topic', async () => {
+    render(<App />);
+
+    const searchbox = screen.getAllByRole('searchbox', { name: 'ابحث داخل الخريطة' })[0];
+
+    fireEvent.change(searchbox, {
+      target: { value: 'Python' },
+    });
+
+    await screen.findAllByRole('button', { name: /افتح موضوع / });
+
+    fireEvent.keyDown(searchbox, { key: 'ArrowDown' });
+    fireEvent.keyDown(searchbox, { key: 'ArrowDown' });
+    fireEvent.keyDown(searchbox, { key: 'Enter' });
+
+    const activeResultId = (searchbox.getAttribute('aria-activedescendant') ?? '').replace('quick-search-result-', '');
+    const activeResultTitle = flowNodeById.get(activeResultId)?.data.title ?? '';
+
+    expect(await screen.findByRole('heading', { name: activeResultTitle })).toBeInTheDocument();
+  });
+
+  it('jumps directly to a major track without using filters first', async () => {
+    render(<App />);
+
+    fireEvent.change(screen.getByRole('combobox', { name: 'اذهب إلى المسار مباشرة' }), {
+      target: { value: 'frontend-web' },
+    });
+
+    expect(await screen.findByRole('heading', { name: 'الويب والواجهة الأمامية' })).toBeInTheDocument();
+  });
+
   it('renders the enriched drawer sections for a topic', async () => {
     render(<App />);
 

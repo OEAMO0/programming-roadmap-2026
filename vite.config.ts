@@ -7,6 +7,7 @@ export default defineConfig({
     environment: 'happy-dom',
     setupFiles: './src/test/setup.ts',
     pool: 'vmThreads',
+    include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
   },
   build: {
     rollupOptions: {

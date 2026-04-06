@@ -2,9 +2,9 @@
 
 واجهة ويب تفاعلية بالعربية لعرض خريطة تعلّم برمجة حديثة حتى تاريخ `2026-04-06`، مبنية فوق مكتبة جاهزة للرودماب والـ flow بدل بناء محرك الرسم من الصفر.
 
-## الموقع الحي
+## الموقع الرسمي
 
-[افتح النسخة المنشورة للموقع](https://programming-roadmap-2026.omadkdklilipo.workers.dev/)
+[افتح النسخة المنشورة للموقع](https://programming-roadmap-2026.devbread.workers.dev/)
 
 ## ما الموجود الآن؟
 
@@ -14,6 +14,8 @@
 - نافذة شرح جانبية تظهر عند الضغط على أي عنصر
 - وضع فاتح ووضع داكن
 - اختصارات سريعة للبحث: `/` أو `Ctrl/Cmd + K` ثم `Enter` لفتح أول نتيجة مطابقة
+- تنقل بالأسهم داخل نتائج البحث السريعة نفسها قبل الفتح
+- اختصار عملي باسم `اذهب إلى المسار مباشرة` للانتقال السريع إلى المسارات الكبيرة دون فلترة ثم تحريك يدوي داخل الخريطة
 - مسارات مترابطة من لماذا وُجدت البرمجة والكمبيوتر أصلًا حتى التخصص والنمو المهني
 - مسار إضافي لتطوير الألعاب والمحركات
 - مسارات أعمق للبرمجة منخفضة المستوى: `C` و `C++` و `Linux / OS`
@@ -30,15 +32,24 @@
 - مشاريع ختامية خفيفة للمسارات والتخصصات الأساسية لتقوية البورتفوليو والتطبيق العملي
 - تحسينات خفيفة لعرض الواجهة على الجوال والأجهزة الضيقة
 - نافذة شرح أغنى تعرض إرشادًا عمليًا: ما الذي تراجعه قبل الموضوع، ماذا بعده، أفكار مشاريع، وعبارات بحث مفيدة
+- توسعة أوضح داخل `Frontend / Web` تشمل التخزين المحلي و `Service Workers / PWA` و `IndexedDB` و `Canvas / WebGPU` و `frontend testing`
+- توسعة أوضح داخل `Architecture / Systems` تشمل `backpressure` و `graceful degradation` و `failure modes`
+- توسعة أوضح داخل `Quality / Security` تشمل `OAuth / OIDC` و `SBOM` و `dependency auditing` و `fuzzing` و `incident response basics`
+- توسعة أوضح داخل `AI Engineering` تشمل `chunking / indexing` و `eval datasets` و `cost control / caching` و `tool/agent failure handling`
+- توسعة أوضح داخل `Computer Science` تشمل `virtual memory` و `memory model` و `filesystems internals` و `consensus / replication basics`
 - تعميق إضافي داخل مسار `Linux / Systems` يشمل `glibc` والربط الديناميكي وواجهات النواة و `libm / GSL`
+- تعميق إضافي داخل مسار `Linux / Systems` يشمل أيضًا `strace / perf / valgrind` و `mmap` وقراءة `ELF`
 - تعميق رياضي جديد داخل `C++` و `Python` وألعاب الويب ومسار المحركات نفسه، مع مصادر رسمية أقوى مثل `Python docs` و `NumPy / SciPy` و `Eigen` و `MDN` و `Godot`
 - توسيع المسارات المطلوبة في `Linux / Systems` و`Backend / Data` و`Cloud / Platform` و`Python Engineering` و`Game Dev / Engines`
 - مسار مستقل جديد على شكل `أطلس المصادر` يجمع مراجع لمسارات خارج الخريطة الأساسية مثل الموبايل الأصلي، الأمن، هندسة البيانات، الأنظمة المضمنة، وأدوات اللغات
 - فحص محتوى وتوثيق وروابط عبر:
   - `npm run check:content`
   - `npm run check:links`
+- smoke check للرابط الرسمي بعد النشر عبر:
+  - `npm run smoke:deploy`
 - اختبارات أساسية للبحث ومشاركة الحالة وفتح النافذة عبر:
   - `npm run test:run`
+  - `npm run test:e2e`
 - المشروع متعمد أن يبقى مرجعًا متعدد المسارات، لذلك لا يضيف نظام تتبع تقدم شخصي داخل الخريطة
 
 ## التقنية المستخدمة
@@ -61,6 +72,14 @@ npm run dev
 ```bash
 npm run build
 ```
+
+## النشر
+
+```bash
+npm run deploy
+```
+
+أمر `deploy` يشغّل النشر ثم يتبعه `smoke:deploy` على الرابط الرسمي مباشرة.
 
 ## أهم الملفات
 
@@ -92,10 +111,21 @@ npm run build
 3. اربط الموضوع أو أعد ترتيبه داخل [src/data/roadmap-structure.ts](/D:/vscodeFiles/map/src/data/roadmap-structure.ts)
 4. شغّل المشروع وستظهر العقدة تلقائيًا داخل الخريطة
 
+## أفضل فرص التوسعة القادمة
+
+- `Frontend / Web`
+- `Architecture / Systems`
+- `Quality / Security`
+- `AI Engineering`
+- `Computer Science`
+
+ومن `أطلس المصادر`، أقوى المرشحين للتحويل لاحقًا إلى مسارات كاملة هم:
+
+- `Data Engineering`
+- `Security Research`
+- `Mobile Native`
+
 ## ملاحظة
 
 إذا كنت تريد فهم المشروع بالكامل قبل التعديل، ابدأ من [PROJECT_NOTEBOOK_AR.md](/D:/vscodeFiles/map/PROJECT_NOTEBOOK_AR.md) لأنه المرجع الأشمل للمشروع.
 
-## الرابط المباشر
-
-[افتح الموقع](https://programming-roadmap-2026.devbread.workers.dev/)

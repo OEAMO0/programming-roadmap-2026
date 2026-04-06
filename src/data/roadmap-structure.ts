@@ -34,8 +34,21 @@ export const roadmapSections: SectionLayout[] = [
   {
     id: 'frontend-web',
     tone: 'lime',
-    right: ['html-css-layout', 'javascript-typescript', 'frontend-framework', 'browser-rendering-dom', 'css-systems-responsive'],
-    left: ['routing-state-fetching', 'accessibility-performance', 'forms-validation-ux'],
+    right: [
+      'html-css-layout',
+      'javascript-typescript',
+      'browser-rendering-dom',
+      'css-systems-responsive',
+      'forms-validation-ux',
+      'routing-state-fetching',
+    ],
+    left: [
+      'frontend-framework',
+      'browser-storage-offline',
+      'frontend-testing-quality',
+      'accessibility-performance',
+      'canvas-webgpu-interactive',
+    ],
   },
   {
     id: 'backend-data',
@@ -46,14 +59,14 @@ export const roadmapSections: SectionLayout[] = [
   {
     id: 'architecture-systems',
     tone: 'amber',
-    right: ['monolith-modular', 'services-events', 'domain-boundaries'],
-    left: ['scalability-resilience', 'observability', 'performance-capacity'],
+    right: ['domain-boundaries', 'monolith-modular', 'services-events'],
+    left: ['scalability-resilience', 'architectural-failure-modes', 'observability', 'performance-capacity'],
   },
   {
     id: 'quality-security',
     tone: 'mint',
     right: ['testing-strategy', 'owasp-appsec', 'identity-access-control'],
-    left: ['supply-chain-secrets', 'threat-modeling-privacy', 'secure-coding-review'],
+    left: ['supply-chain-secrets', 'threat-modeling-privacy', 'secure-coding-review', 'fuzzing-incident-response'],
   },
   {
     id: 'cloud-platform',
@@ -64,8 +77,8 @@ export const roadmapSections: SectionLayout[] = [
   {
     id: 'computer-science',
     tone: 'coral',
-    right: ['operating-systems', 'algorithms-complexity', 'computer-architecture', 'networking-protocols'],
-    left: ['concurrency-runtime', 'distributed-systems', 'database-internals'],
+    right: ['computer-architecture', 'operating-systems', 'virtual-memory-filesystems', 'networking-protocols'],
+    left: ['algorithms-complexity', 'concurrency-runtime', 'distributed-systems', 'database-internals'],
   },
   {
     id: 'systems-native',
@@ -75,6 +88,7 @@ export const roadmapSections: SectionLayout[] = [
       'c-pointers-memory',
       'c-toolchain-debugging',
       'c-linux-systems',
+      'linux-tracing-profiling',
       'linux-libc-linking',
       'linux-kernel-uapi-modules',
       'linux-threads-sync',

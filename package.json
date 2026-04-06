@@ -8,10 +8,12 @@
     "build": "tsc -b && vite build",
     "test": "vitest --config vite.config.ts --environment=happy-dom --pool=vmThreads",
     "test:run": "vitest run --config vite.config.ts --environment=happy-dom --pool=vmThreads",
+    "test:e2e": "playwright test",
     "check:content": "tsx scripts/check-roadmap-content.ts",
     "check:links": "tsx scripts/check-roadmap-content.ts --links",
+    "smoke:deploy": "tsx scripts/smoke-deploy.ts",
     "preview": "vite preview",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy && npm run smoke:deploy"
   },
   "dependencies": {
     "@xyflow/react": "^12.10.2",
@@ -19,6 +21,7 @@
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^25.5.2",

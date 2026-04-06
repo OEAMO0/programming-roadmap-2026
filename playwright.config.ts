@@ -1,0 +1,28 @@
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests/e2e',
+  timeout: 45_000,
+  fullyParallel: false,
+  use: {
+    baseURL: 'http://127.0.0.1:4173',
+    locale: 'ar-EG',
+    timezoneId: 'Africa/Cairo',
+    permissions: ['clipboard-read', 'clipboard-write'],
+    trace: 'retain-on-failure',
+  },
+  webServer: {
+    command: 'npm run dev -- --host 127.0.0.1 --port 4173',
+    url: 'http://127.0.0.1:4173',
+    reuseExistingServer: true,
+    timeout: 120_000,
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+    },
+  ],
+});

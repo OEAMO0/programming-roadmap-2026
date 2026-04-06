@@ -490,15 +490,16 @@ const topicInputs = {
     level: 'عملي',
     category: 'الويب',
     summary:
-      'هذا المسار يحولك من كاتب مكونات إلى مهندس واجهة يفهم المنصة نفسها: HTML وCSS وJS وframeworks والأداء والإتاحة.',
+      'هذا المسار يحولك من كاتب مكونات إلى مهندس واجهة يفهم المنصة نفسها: HTML وCSS وJS وframeworks والأداء والإتاحة، وصولًا إلى التخزين المحلي وتجارب PWA والاختبارات الفعلية وحدود الرسم والتفاعل داخل المتصفح.',
     learn: [
       'ابدأ بالمنصة قبل framework.',
       'اربط بين البيانات والواجهة والانتقال والحالة والتحميل.',
       'ابنِ واجهات قابلة للتطوير وتحترم الأداء والإتاحة.',
+      'وسّع فهمك لاحقًا إلى قدرات المتصفح الأعمق مثل التخزين المحلي والعمل دون اتصال واختبارات الواجهة والرسم التفاعلي.',
     ],
     build: ['أنشئ dashboard حقيقي يقرأ بيانات ويعرض حالات loading وerror وempty بوضوح.'],
     note2026:
-      'المسار الأمامي اليوم يتقاطع مع SSR وstreaming وserver actions وdesign systems أكثر من أي وقت مضى.',
+      'المسار الأمامي اليوم يتقاطع مع SSR وstreaming وserver actions وdesign systems، ومع توقعات أعلى تجاه offline support وUX testing وقدرات المنصة نفسها أكثر من أي وقت مضى.',
     resources: [
       { label: 'MDN Web Docs', url: docs.mdn },
       { label: 'React Learn', url: docs.react },
@@ -587,6 +588,35 @@ const topicInputs = {
     ],
     tags: ['Routing', 'State', 'Fetching', 'Caching'],
   },
+  'browser-storage-offline': {
+    title: 'التخزين في المتصفح، Service Workers، وPWA',
+    level: 'متقدم',
+    category: 'الويب',
+    summary:
+      'بعض تطبيقات الويب الحديثة تحتاج أن تعيش خارج جلسة الصفحة الحالية: حفظ محلي، عمل جزئيًا دون اتصال، مزامنة لاحقة، وتجربة تشبه التطبيق. هنا تفهم Web Storage وIndexedDB وService Workers وPWA بعقلية هندسية لا كحيل متفرقة.',
+    learn: [
+      'فرّق بين Web Storage وIndexedDB وCache Storage: متى يكفي كل واحد، وما حدوده.',
+      'افهم كيف يعمل Service Worker كطبقة تحكم للطلبات والأصول والتحديثات والإشعارات والمزامنة.',
+      'تعلم معنى offline-first وbackground sync وتحديثات الـPWA من دون تخريب تجربة المستخدم أو نسخ البيانات.',
+      'صمم استراتيجية صلاحية وإبطال cache واضحة بدل تحويل التخزين المحلي إلى قاعدة بيانات فوضوية.',
+    ],
+    build: ['حوّل تطبيق قائمة مهام أو ملاحظات إلى تجربة PWA بسيطة تحفظ محليًا وتستعيد البيانات بعد انقطاع الشبكة ثم تزامنها عند العودة.'],
+    note2026:
+      'مع التطبيقات السريعة وتوقعات المستخدمين العالية، صارت ميزات التخزين المحلي والعمل دون اتصال ذات قيمة عملية حقيقية في لوحات التحكم والأدوات الداخلية ومنتجات الويب المتنقلة.',
+    resources: [
+      { label: 'MDN Progressive Web Apps', url: docs.mdnPwa },
+      { label: 'MDN Service Worker API', url: docs.mdnServiceWorker },
+      { label: 'MDN IndexedDB API', url: docs.mdnIndexedDb },
+      { label: 'MDN Web Storage API', url: docs.mdnWebStorage },
+    ],
+    tags: ['PWA', 'Service Worker', 'IndexedDB', 'Web Storage', 'Offline'],
+    searchKeywords: [
+      'service worker pwa indexeddb web storage roadmap',
+      'offline first web app mdn',
+      'cache storage indexeddb difference',
+      'pwa update flow service worker',
+    ],
+  },
   'accessibility-performance': {
     title: 'الإتاحة والأداء',
     level: 'عملي',
@@ -606,6 +636,61 @@ const topicInputs = {
       { label: 'React Learn', url: docs.react },
     ],
     tags: ['A11y', 'Performance', 'Web Vitals'],
+  },
+  'frontend-testing-quality': {
+    title: 'اختبارات الواجهة وتجربة المستخدم الحقيقية',
+    level: 'متقدم',
+    category: 'الويب',
+    summary:
+      'واجهة الويب لا تكفيها unit tests فقط. تحتاج اختبارات component وintegration وbrowser E2E تثبت أن البحث والتنقل والنسخ والحالات الحرجة تعمل فعلًا كما يراها المستخدم.',
+    learn: [
+      'فرّق بين اختبار المنطق، render، interaction، network mocking، وE2E داخل المتصفح الحقيقي.',
+      'اجعل اختبارات الواجهة تقيس السلوك الذي يراه المستخدم: loading, keyboard navigation, copy/share, focus, وerror states.',
+      'استخدم أدوات سريعة مثل Vitest وTesting Library للمسارات الصغيرة، ثم ثبت الرحلات الحرجة بـ Playwright أو ما شابهه.',
+      'تجنب الاختبارات الهشة المرتبطة بالتنفيذ الداخلي أو selectors غير مستقرة أو snapshots لا تقول شيئًا عن السلوك.',
+    ],
+    build: ['اكتب مسار E2E صغيرًا يفتح الصفحة ويبحث ويفتح التفاصيل وينسخ رابط الحالة، ثم شغّله تلقائيًا مع CI أو قبل النشر.'],
+    note2026:
+      'كثرة تغييرات الواجهة المولدة بسرعة تجعل اختبارات المتصفح الحقيقية أكثر أهمية من الماضي، خصوصًا في المنتجات التي تعتمد على حالات كثيرة واختصارات ولوحات تحكم.',
+    resources: [
+      { label: 'Vitest Guide', url: docs.vitest },
+      { label: 'Playwright Docs', url: docs.playwright },
+      { label: 'MDN Accessibility', url: docs.mdnA11y },
+    ],
+    tags: ['Frontend Testing', 'Component Tests', 'E2E', 'UX'],
+    searchKeywords: [
+      'frontend testing vitest playwright roadmap',
+      'ui e2e testing real user flows',
+      'component testing vs e2e frontend',
+    ],
+  },
+  'canvas-webgpu-interactive': {
+    title: 'Canvas وWebGPU وواجهات الويب التفاعلية',
+    level: 'متقدم',
+    category: 'الويب',
+    summary:
+      'المنصة الأمامية لا تقف عند DOM فقط. عندما تدخل الرسوم التفاعلية أو أدوات الرسم أو visualizations أو أجزاء قريبة من الألعاب، تحتاج Canvas وWebGL وWebGPU وفهم حدود الـGPU في الويب.',
+    learn: [
+      'حدد متى يكفي DOM وCSS ومتى تصبح Canvas أو WebGPU أو WebGL أنسب.',
+      'افهم دورة الرسم وإدارة الإطار وتحويل البيانات من CPU إلى GPU بشكل مبسط لكن عملي.',
+      'ابدأ بـ Canvas 2D ثم تعرّف على الفرق بين WebGL وWebGPU من زاوية الاستخدام لا الضجيج التسويقي.',
+      'راقب أثر الرسم المكثف على الأداء والذاكرة والتفاعل، ولا تنسَ حدود الوصولية عندما تخرج من DOM التقليدي.',
+    ],
+    build: ['ابنِ demo صغيرة للرسم أو visualization أو محرر مصغر يستخدم Canvas أولًا، ثم جرّب جزءًا محدودًا من WebGPU أو WebGL عند الحاجة الفعلية.'],
+    note2026:
+      'ظهور أدوات الويب التفاعلية الثقيلة وواجهات البيانات الغنية جعل معرفة حدود الـDOM وحدها غير كافية لبعض فئات المنتجات الحديثة.',
+    resources: [
+      { label: 'MDN Canvas Tutorial', url: docs.mdnCanvas },
+      { label: 'MDN WebGL Tutorial', url: docs.mdnWebgl },
+      { label: 'MDN WebGPU API', url: docs.mdnWebgpu },
+      { label: 'MDN Games', url: docs.mdnGames },
+    ],
+    tags: ['Canvas', 'WebGL', 'WebGPU', 'Graphics', 'Visualization'],
+    searchKeywords: [
+      'canvas webgpu webgl roadmap frontend',
+      'web visualization canvas gpu basics',
+      'when to use canvas vs dom',
+    ],
   },
   'backend-data': {
     title: 'الخلفية والبيانات',
@@ -777,8 +862,9 @@ const topicInputs = {
       'عندما تنقسم المنظومة إلى أكثر من خدمة، تحتاج لعقود أوضح، تأخير شبكي، وطرق تواصل تتحمل الفشل.',
     learn: [
       'افهم الفرق بين request/response وevent-driven communication.',
-      'تعرف على idempotency وإعادة المحاولة والتعويض.',
+      'تعرف على idempotency وإعادة المحاولة والتعويض من زاوية معمارية لا من زاوية queue واحدة فقط.',
       'فكر في ownership البيانات قبل التفكير في البروتوكول.',
+      'خطط من البداية لسلوك التكرار أو التأخير أو فقدان الرسائل بدل افتراض أن الشبكة نظيفة دائمًا.',
     ],
     build: ['صمم integration بسيطة بين خدمتين مع queue وإعادة محاولة واضحة.'],
     note2026:
@@ -798,6 +884,7 @@ const topicInputs = {
     learn: [
       'افهم bottlenecks في CPU وI/O وقواعد البيانات والاعتمادات الخارجية.',
       'طبق timeouts وretries وcircuit breakers عندما يلزم.',
+      'تعلم متى تستخدم backpressure أو queue sizing أو load shedding بدل ترك النظام يختنق بصمت.',
       'وازن بين consistency والlatency والكلفة.',
     ],
     build: ['اكتب قائمة فشل لخدمة حقيقية: ماذا يحدث إذا تعطلت قاعدة البيانات أو تأخر طرف خارجي؟'],
@@ -808,6 +895,33 @@ const topicInputs = {
       { label: 'Kubernetes Basics', url: docs.kubernetes },
     ],
     tags: ['Scalability', 'Reliability', 'Timeouts'],
+  },
+  'architectural-failure-modes': {
+    title: 'أنماط الفشل، backpressure، وgraceful degradation',
+    level: '2026',
+    category: 'الأنظمة',
+    summary:
+      'الأنظمة الكبيرة لا تفشل بشكل ثنائي فقط. هناك بطء، امتلاء طوابير، limits مزودين، تضاعف طلبات، وpartial outages. هذا الباب يعلّمك كيف تصمم سلوك النظام عندما تسوء الأمور بدل الاكتفاء بالتمني.',
+    learn: [
+      'سمِّ failure modes مبكرًا: timeout, slow dependency, full queue, duplicate event, stale cache, exhausted rate limit.',
+      'افهم backpressure وload shedding وqueue sizing ومتى ترفض العمل أو تبطئه بدل دفن المشكلة تحت الضغط.',
+      'صمم graceful degradation: ما الذي يمكن تعطيله أو تبسيطه مع بقاء الخدمة مفيدة للمستخدم أو للفريق.',
+      'اربط idempotency والتعافي من الفشل بالمعمارية نفسها، لا بطبقة worker أو retry policy معزولة فقط.',
+    ],
+    build: ['خذ خدمة أو workflow واحدًا واكتب جدول failure modes يوضح الاكتشاف والتخفيف ووضع degraded mode وسلوك الاسترجاع لكل حالة.'],
+    note2026:
+      'مع الاعتماد على APIs مدارة وLLM providers وأنظمة event-driven، صار التعامل الهادئ مع الفشل والضغط جزءًا أساسيًا من العمارة الحديثة.',
+    resources: [
+      { label: 'OpenTelemetry Docs', url: docs.opentelemetry },
+      { label: 'RabbitMQ Tutorials', url: docs.rabbitmqTutorials },
+      { label: 'Kubernetes Basics', url: docs.kubernetes },
+    ],
+    tags: ['Failure Modes', 'Backpressure', 'Graceful Degradation', 'Idempotency', 'Reliability'],
+    searchKeywords: [
+      'backpressure graceful degradation architecture',
+      'system failure modes idempotency design',
+      'load shedding retry timeout resilience',
+    ],
   },
   observability: {
     title: 'Observability والتشخيص',
@@ -897,7 +1011,8 @@ const topicInputs = {
       'تحديث مكتبة واحدة أو تسريب مفتاح API قد يكون أخطر من bug منطقي عادي، لذلك هذا الملف أصبح جزءًا أساسيًا من الأمن الحديث.',
     learn: [
       'أدر الأسرار عبر secret stores وبيئات منفصلة لا داخل المستودع.',
-      'راقب الاعتماديات والإصدارات والتنبيهات الأمنية.',
+      'راقب الاعتماديات والإصدارات والتنبيهات الأمنية، ولا تؤجل dependency auditing حتى نهاية المشروع.',
+      'افهم فائدة SBOM في رؤية ما يدخل منتجك فعلًا من مكونات ونسخ واعتماديات عابرة.',
       'راجع build pipeline والصلاحيات الممنوحة لها.',
     ],
     build: ['أعد تنظيم مشروع تجريبي بحيث لا توجد أسرار في الكود أو ملفات البيئة المشتركة.'],
@@ -906,8 +1021,10 @@ const topicInputs = {
     resources: [
       { label: 'OWASP Cheat Sheet Series', url: docs.owaspCheatsheets },
       { label: 'GitHub Actions', url: docs.ghActions },
+      { label: 'SPDX Learn', url: docs.spdxLearn },
+      { label: 'CycloneDX SBOM', url: docs.cyclonedxSbom },
     ],
-    tags: ['Secrets', 'Supply Chain', 'Dependencies'],
+    tags: ['Secrets', 'Supply Chain', 'Dependencies', 'SBOM'],
   },
   'threat-modeling-privacy': {
     title: 'نمذجة التهديد والخصوصية',
@@ -1059,6 +1176,7 @@ const topicInputs = {
     learn: [
       'تعرف على process, thread, memory space, file descriptors.',
       'افهم كيف تتعامل التطبيقات مع النظام والموارد.',
+      'كوّن صورة أولية عن virtual memory وpage cache والفرق بين الذاكرة الفعلية والمنطقية التي يراها البرنامج.',
       'اربط بين استهلاك الموارد وبين أثره على الأداء والاستقرار.',
     ],
     build: ['راقب برنامجًا أثناء التشغيل وحدد استهلاك الذاكرة والمعالج والملفات المفتوحة بشكل تقريبي.'],
@@ -1069,6 +1187,33 @@ const topicInputs = {
       { label: 'MIT OpenCourseWare', url: docs.mitOcw },
     ],
     tags: ['Operating Systems', 'Processes', 'Memory'],
+  },
+  'virtual-memory-filesystems': {
+    title: 'الذاكرة الافتراضية وداخل أنظمة الملفات',
+    level: '2026',
+    category: 'علوم الحاسب',
+    summary:
+      'كثير من السلوك الغامض في الأداء والأنظمة يرجع إلى شيئين يختبئان تحت التجريد: كيف تُترجم العناوين وتدار الصفحات، وكيف تُنظم الملفات والبلوكات والكاش والmetadata على القرص. هذا الباب يربط virtual memory وfilesystem internals بفهمك اليومي للبرامج.',
+    learn: [
+      'افهم الصفحات page tables وpage faults وworking set وmmap من زاوية عملية لا رياضية فقط.',
+      'تعرف على الفرق بين page cache وbuffering ولماذا يختلف أداء القراءة والكتابة بين مرة وأخرى.',
+      'افهم كيف تنظر أنظمة الملفات إلى inode وdirectories وjournaling وallocation بشكل مبسط لكن عملي.',
+      'اربط بين virtual memory وfilesystem behavior وبين استهلاك الذاكرة وstartup time وأدوات البيانات وقواعد البيانات.',
+    ],
+    build: ['قارن بين قراءة ملف كبير بطرق مختلفة أو راقب أثر page cache وmmap على أداة صغيرة، ثم اكتب شرحًا مبسطًا لما حدث داخل الذاكرة والملفات.'],
+    note2026:
+      'فهم هذه الطبقة يختصر كثيرًا من التخمين في مشاكل الأداء، قواعد البيانات، أدوات التطوير، والخدمات التي تتعامل مع ملفات أو بيانات كبيرة.',
+    resources: [
+      { label: 'OSTEP', url: docs.ostep },
+      { label: 'man7 mmap(2)', url: docs.manMmap },
+      { label: 'SQLite Docs', url: docs.sqlite },
+    ],
+    tags: ['Virtual Memory', 'Filesystems', 'mmap', 'Page Cache', 'Operating Systems'],
+    searchKeywords: [
+      'virtual memory filesystem internals roadmap',
+      'page cache mmap basics',
+      'inode journaling explained',
+    ],
   },
   'algorithms-complexity': {
     title: 'الخوارزميات والتعقيد',
@@ -1099,6 +1244,7 @@ const topicInputs = {
     learn: [
       'ميز بين concurrency وparallelism وasync I/O.',
       'افهم event loop أو thread pool بحسب بيئتك.',
+      'تعرف على memory model وحدود الترتيب visibility وordering عندما تتعامل مع shared state وatomics.',
       'تعرف على locks وshared state ومتى تتجنبها بتصميم أفضل.',
     ],
     build: ['حلل حالة سباق بسيطة أو مشكلة shared state ثم عدل التصميم لتجنبها.'],
@@ -1118,6 +1264,7 @@ const topicInputs = {
       'بمجرد أن يتجاوز التطبيق عملية واحدة أو خدمة واحدة تبدأ مشاكل جديدة: التأخير، الفشل الجزئي، والتوافق الزمني.',
     learn: [
       'افهم replication وconsistency والـtimeouts والفشل الجزئي.',
+      'تعرف على consensus basics مثل Raft أو Paxos على مستوى الفكرة: لماذا نحتاجها، ومتى لا نحتاجها.',
       'تعرف على trade-offs الشهيرة مثل availability مقابل consistency.',
       'اربط بين النظريات وبين اختياراتك اليومية في APIs وقواعد البيانات والqueues.',
     ],
@@ -1126,9 +1273,10 @@ const topicInputs = {
       'حتى التطبيقات الصغيرة أصبحت تعتمد على خدمات خارجية كثيرة، ما يعني أنك تعمل في بيئة موزعة سواء أحببت ذلك أم لا.',
     resources: [
       { label: 'MIT OpenCourseWare', url: docs.mitOcw },
+      { label: 'Raft', url: docs.raft },
       { label: 'OpenTelemetry Docs', url: docs.opentelemetry },
     ],
-    tags: ['Distributed Systems', 'Consistency', 'Failure'],
+    tags: ['Distributed Systems', 'Consistency', 'Failure', 'Consensus', 'Replication'],
   },
   'game-development': {
     title: 'تطوير الألعاب والمحركات',
@@ -1436,7 +1584,8 @@ const topicInputs = {
       'افهم التوكنز والسياق والهلوسة والقياس حتى لا تبني منتجًا على افتراضات غير صحيحة.',
     learn: [
       'تعرف على حدود السياق، درجة الحرارة، والبنية الرسائلية.',
-      'صمم evals بسيطة تقيس ما يهم المنتج حقًا.',
+      'صمم evals بسيطة تقيس ما يهم المنتج حقًا، لا ما يبدو رائعًا في demo سريع.',
+      'ابنِ eval datasets صغيرة لكنها ممثلة للحالات الحرجة وحدود المنتج بدل أمثلة عشوائية جميلة فقط.',
       'فرّق بين جودة output في العرض التجريبي وبين الثبات في الاستخدام الحقيقي.',
     ],
     build: ['أنشئ مجموعة حالات اختبار لمساعدك وقارن المخرجات يدويًا أو آليًا عبر rubrics واضحة.'],
@@ -1455,9 +1604,9 @@ const topicInputs = {
     summary:
       'عندما يحتاج النموذج إلى معرفة خاصة ببياناتك، يبدأ الحديث عن التضمينات والاسترجاع وإدارة السياق.',
     learn: [
-      'افهم chunking وretrieval وreranking وحدود كل منها.',
+      'افهم chunking وindexing وretrieval وreranking وحدود كل منها.',
       'ابدأ بمصادر صغيرة ونظيفة قبل التضخم في البيانات.',
-      'راقب الاسترجاع الخاطئ والوثائق القديمة وجودة المراجع.',
+      'راقب الاسترجاع الخاطئ والوثائق القديمة وجودة المراجع، ولا تفصل جودة الفهرسة عن جودة الإجابة.',
     ],
     build: ['ابنِ prototype بسيط يسترجع من مستنداتك ويرفق المصادر في الإجابة النهائية.'],
     note2026:
@@ -1478,6 +1627,7 @@ const topicInputs = {
       'افهم متى تحتاج agent loop ومتى يكفي workflow مباشر.',
       'صمم الأدوات بواجهات واضحة ومخرجات قابلة للتحقق.',
       'تعرف على MCP كبروتوكول لربط clients وservers والموارد والأدوات.',
+      'خطط من البداية لحالات فشل الأدوات أو الوكلاء: timeout، tool error، incomplete step، وfallback البشري أو البرمجي.',
     ],
     build: ['صمم أداة أو خادم MCP صغيرًا يعرض موردًا أو أداة مفيدة لمهام المطور اليومية.'],
     note2026:
@@ -2316,6 +2466,7 @@ const topicInputs = {
     learn: [
       'افهم الفرق بين latency وthroughput وresource utilization.',
       'تعلم أن تحدد bottleneck: هل هو CPU أم قاعدة البيانات أم الشبكة أم التخزين أم تصميم التدفق نفسه.',
+      'لاحظ متى تكون المشكلة في الحقيقة غياب backpressure أو queue limits أو load shedding لا بطء خادم واحد فقط.',
       'اربط بين المراقبة والقياس وبين قرار التحسين، بدل التحسين الأعمى.',
       'افهم أن بعض مشكلات الأداء هي في الحقيقة مشكلات تصميم بيانات أو تدفق أعمال.',
     ],
@@ -2342,6 +2493,7 @@ const topicInputs = {
       'فرّق بين authentication وauthorization وsession وtoken وroles وpermissions.',
       'افهم أن الصلاحيات جزء من منطق الأعمال لا مجرد طبقة تزيينية.',
       'تعلم نماذج شائعة مثل RBAC وclaims-based access وحدود كل واحد.',
+      'تعرّف على OAuth 2 وOpenID Connect عمليًا: authorization code flow وPKCE وtokens وحدود الاعتماد على provider خارجي.',
       'لاحظ أن أكثر أخطاء الأمن شيوعًا تأتي من سوء تحديد من يحق له ماذا.',
     ],
     build: [
@@ -2349,12 +2501,14 @@ const topicInputs = {
       'اختبر سيناريوهات مستخدم غير مخول وحاول كسر القيود بشكل واعٍ.',
     ],
     note2026:
-      'كلما دخلت الأنظمة متعددة الفرق والعملاء والواجهات، صار هذا الموضوع محوريًا في الأمان والتجربة معًا.',
+      'كلما دخلت الأنظمة متعددة الفرق والعملاء والواجهات وSSO وواجهات الطرف الثالث، صار هذا الموضوع محوريًا في الأمان والتجربة معًا.',
     resources: [
       { label: 'OWASP Cheat Sheets', url: docs.owaspCheatsheets },
+      { label: 'OAuth 2.0', url: docs.oauth },
+      { label: 'OpenID Connect', url: docs.oidc },
       { label: 'ASP.NET Core Docs', url: docs.dotnet },
     ],
-    tags: ['Identity', 'Auth', 'Authorization', 'Access Control'],
+    tags: ['Identity', 'Auth', 'Authorization', 'Access Control', 'OAuth', 'OIDC'],
   },
   'secure-coding-review': {
     title: 'البرمجة الآمنة والمراجعة الأمنية',
@@ -2380,6 +2534,33 @@ const topicInputs = {
       { label: 'OWASP LLM Top 10', url: docs.owaspLlm },
     ],
     tags: ['Security', 'Code Review', 'OWASP', 'Secure Coding'],
+  },
+  'fuzzing-incident-response': {
+    title: 'Fuzzing والاستجابة الأولية للحوادث',
+    level: '2026',
+    category: 'الجودة والأمان',
+    summary:
+      'بعض العيوب لا تظهر في الاختبارات اليدوية أو unit tests. الفَزّينغ fuzzing يكشف سلوك الحواف غير المتوقع، والاستجابة للحوادث تعلّم الفريق ماذا يفعل عندما يفشل المنع أصلًا.',
+    learn: [
+      'افهم متى يفيد fuzzing خاصة في parsers وinput-heavy code وواجهات الأمن والبرمجيات القريبة من النظام.',
+      'تعلم الفرق بين crash وrepro وtriage وcontainment وrecovery وpostmortem.',
+      'احتفظ بخطوات أولية واضحة: من يعلن؟ ما الذي تجمعه؟ كيف تقلل الضرر؟ ومتى تصعّد؟',
+      'اجعل incident response جزءًا من الجودة التشغيلية، لا وثيقة تُكتب بعد الأزمة فقط.',
+    ],
+    build: ['شغّل fuzzer بسيطًا على parser أو دالة تقبل مدخلات معقدة، ثم اكتب mini-runbook من صفحة واحدة لحادث أمني أو تعطّل إنتاجي محتمل.'],
+    note2026:
+      'سرعة التطوير لا تلغي الحوادث؛ بل تجعل وجود runbooks قصيرة وتجارب تحقق على الحواف أكثر قيمة من السابق.',
+    resources: [
+      { label: 'LLVM LibFuzzer', url: docs.libfuzzer },
+      { label: 'NIST Incident Response Guide', url: docs.nistIncidentResponse },
+      { label: 'OWASP Cheat Sheet Series', url: docs.owaspCheatsheets },
+    ],
+    tags: ['Fuzzing', 'Incident Response', 'Runbooks', 'Verification', 'Security Testing'],
+    searchKeywords: [
+      'fuzzing basics incident response roadmap',
+      'libfuzzer quickstart security testing',
+      'incident response runbook basics',
+    ],
   },
   'cloud-fundamentals': {
     title: 'ما هي السحابة فعلًا؟',
@@ -2734,7 +2915,8 @@ const topicInputs = {
       'حين يخرج النموذج إلى منتج حقيقي، تظهر الأسئلة الصعبة: كم يكلف؟ كم يتأخر؟ ماذا لو فشل؟ كيف نختار النموذج أو pipeline المناسب؟ هذا هو جانب التشغيل الحقيقي لتطبيقات الذكاء الاصطناعي.',
     learn: [
       'اربط بين حجم السياق وطول المخرجات وبين زمن الاستجابة والتكلفة.',
-      'افهم متى تحتاج caching أو batching أو fallbacks أو نماذج متعددة المستويات.',
+      'افهم متى تحتاج caching أو batching أو fallbacks أو نماذج متعددة المستويات، ومتى يكفي تقليل السياق أو ضغطه.',
+      'تعلم budget واضح للتكلفة والtokens والlatency بدل اعتبارها نتيجة جانبية للتجريب.',
       'تعلم أن reliability في AI apps تشمل الجودة والتكلفة والسرعة لا الصحة التقنية فقط.',
       'لاحظ أن قرار المنتج أحيانًا يكون اختيار تدفق أبسط بدل نموذج أقوى وأغلى.',
     ],
@@ -2759,6 +2941,7 @@ const topicInputs = {
     learn: [
       'تعلم الفرق بين تقييم يدوي وتقييم آلي ومؤشرات المنتج الفعلية.',
       'افهم معنى guardrails في المحتوى والأدوات والأذونات والنتائج المتوقعة.',
+      'اربط guardrails أيضًا بحالات فشل الأدوات أو الإجابات الناقصة أو الاستدعاءات المتكررة غير الضرورية.',
       'اربط بين الأمان والجودة والتكلفة في دورة تقييم واحدة بدلاً من فصلها تمامًا.',
       'لاحظ أن عدم وجود تقييم واضح يجعل التحسين لاحقًا عشوائيًا جدًا.',
     ],
@@ -3050,20 +3233,54 @@ const topicInputs = {
     learn: [
       'افهم open وread وwrite وclose وفكرة file descriptors.',
       'تعلّم أساسيات fork وexec وpipe والإشارات بشكل مبسط ثم عملي.',
+      'تعرف على mmap كجسر عملي بين الملفات والذاكرة عندما تحتاج أداءً أو نموذج تعامل مختلفًا مع البيانات.',
       'اربط بين برامج المستخدم userland وبين ما يقدمه Linux فعلًا من واجهات منخفضة المستوى.',
     ],
     build: [
       'ابنِ نسخة مبسطة من أداة Unix صغيرة مثل cat أو grep البسيط أو mini shell محدود جدًا.',
+      'جرّب قراءة ملف كبير مرة عبر read ومرة عبر mmap ولاحظ أين يختلف الأسلوب الذهني والأداء.',
     ],
     note2026:
       'هذا الباب هو أقرب نقطة تجمع بين C ونظام التشغيل وLinux بشكل عملي جدًا.',
     resources: [
       { label: 'Linux Kernel Docs', url: docs.linuxKernel },
       { label: 'man7 Linux man pages', url: docs.man7 },
+      { label: 'man7 mmap(2)', url: docs.manMmap },
       { label: 'OSTEP', url: docs.ostep },
     ],
-    tags: ['C', 'Linux', 'System Calls', 'Processes'],
-    searchKeywords: ['fork exec pipe tutorial', 'Linux system calls C', 'build a mini shell C'],
+    tags: ['C', 'Linux', 'System Calls', 'Processes', 'mmap'],
+    searchKeywords: ['fork exec pipe tutorial', 'Linux system calls C', 'build a mini shell C', 'mmap tutorial C Linux'],
+  },
+  'linux-tracing-profiling': {
+    title: 'تشخيص Linux عمليًا: strace و perf و Valgrind',
+    level: '2026',
+    category: 'اللغات والأنظمة',
+    summary:
+      'عندما لا يشرح لك الكود وحده ما يحدث، تحتاج أن ترى النظام من الخارج. أدوات مثل strace وperf وValgrind تكشف system calls وhotspots والتسريبات والأعطال بطريقة تقرّبك من السبب الحقيقي بدل التخمين.',
+    learn: [
+      'استخدم strace لرؤية system calls والملفات والاتصالات بدل تخمين أين يعلق البرنامج أو ماذا يفتح فعلًا.',
+      'افهم متى يلائم perf قياس CPU hotspots ومتى تحتاج benchmark أو profiler أبسط أو أدق.',
+      'استفد من Valgrind أو أدوات مشابهة لكشف memory leaks واستخدام الذاكرة غير الصحيح في المراحل المناسبة.',
+      'اربط ناتج الأدوات مع logs وreadelf وقياساتك التطبيقية حتى لا تعالج أعراضًا منفصلة عن السبب الحقيقي.',
+    ],
+    build: [
+      'خذ أداة أو خدمة Linux صغيرة وشخّصها بثلاث زوايا: system calls عبر strace، hotspot واحد عبر perf، وتسريب أو خطأ ذاكرة عبر Valgrind أو أداة مماثلة.',
+      'دوّن لكل أداة سؤالًا واحدًا تجيب عنه بوضوح بدل تشغيل عشر أدوات دفعة واحدة بلا فرضية.',
+    ],
+    note2026:
+      'المهندس الأنظمي الأقوى ليس من يملك حدسًا غامضًا، بل من يعرف أي أداة تقرّبه من الإجابة الصحيحة بأقل ضوضاء.',
+    resources: [
+      { label: 'strace Documentation', url: docs.strace },
+      { label: 'Linux perf docs', url: docs.kernelPerf },
+      { label: 'Valgrind Quick Start', url: docs.valgrindQuickStart },
+      { label: 'man7 Linux man pages', url: docs.man7 },
+    ],
+    tags: ['Linux', 'strace', 'perf', 'Valgrind', 'Profiling', 'Debugging'],
+    searchKeywords: [
+      'linux strace perf valgrind tutorial',
+      'debug linux process system calls',
+      'linux memory leak valgrind perf',
+    ],
   },
   'linux-libc-linking': {
     title: 'مكتبات Linux و glibc: headers والربط الديناميكي',
@@ -3075,7 +3292,7 @@ const topicInputs = {
       'افهم الفرق بين واجهات libc وواجهات Linux الخاصة بالنواة، ومتى تمر عبر glibc ومتى تقترب من syscall أو دوال أكثر انخفاضًا.',
       'تعلّم معنى shared objects وstatic libraries وSONAME والـloader، ولماذا قد يعمل البرنامج على جهاز ويكسر على جهاز آخر بسبب الربط أو النسخ.',
       'تمرّن على قراءة include files وfeature test macros وشرح سبب استخدام -lm أو -ldl أو أعلام بناء أخرى بدل نسخ الأوامر عشوائيًا.',
-      'افهم كيف تتعامل dlopen وdlsym وld.so مع تحميل الرموز والمكتبات وقت التشغيل في برامج Linux الحقيقية.',
+      'افهم كيف تتعامل dlopen وdlsym وld.so مع تحميل الرموز والمكتبات وقت التشغيل في برامج Linux الحقيقية، وكيف يساعدك readelf في قراءة صورة ELF نفسها.',
     ],
     build: [
       'ابنِ مكتبة مشتركة صغيرة .so ثم اربط بها برنامجًا بسيطًا، وبعدها أنشئ مثالًا ثانيًا يحملها وقت التشغيل باستخدام dlopen وdlsym.',
@@ -3087,6 +3304,7 @@ const topicInputs = {
       { label: 'GNU C Library', url: docs.glibc },
       { label: 'glibc Manual: Dynamic Linker', url: docs.glibcDynamicLinker },
       { label: 'libc(7)', url: docs.manLibc },
+      { label: 'elf(5)', url: docs.manElf },
       { label: 'ld.so(8)', url: docs.manLdSo },
       { label: 'dlopen(3)', url: docs.manDlopen },
       { label: 'dlsym(3)', url: docs.manDlsym },
@@ -3730,7 +3948,7 @@ const topicInputs = {
     level: '2026',
     category: 'المراجع',
     summary:
-      'هذا المسار المنفصل لا يشرح مسارًا واحدًا بالتفصيل، بل يجمع مراجع موثوقة لمسارات لم تُفرد لها الخريطة بابًا كاملًا بعد. استخدمه عندما تريد الاستكشاف دون تضخيم المسار الرئيسي.',
+      'هذا المسار المنفصل لا يشرح مسارًا واحدًا بالتفصيل، بل يجمع مراجع موثوقة لمسارات لم تُفرد لها الخريطة بابًا كاملًا بعد. استخدمه عندما تريد الاستكشاف دون تضخيم المسار الرئيسي، واعتبره أيضًا قائمة مرشحين لمسارات قد تتحول لاحقًا إلى أبواب كاملة.',
     learn: [
       'ابدأ من الصفحة التعريفية الرسمية أو الدليل التمهيدي، ثم اختر أداة واحدة فقط للتجربة العملية الأولى.',
       'لا تفتح كل الروابط دفعة واحدة؛ حدد مسارًا واحدًا من الأطلس ثم ابنِ له خطة قراءة وتجربة قصيرة.',
@@ -3740,7 +3958,7 @@ const topicInputs = {
       'اختر بابًا واحدًا من أطلس المصادر، ثم ابنِ خطة 10 أيام فيها مصدر رسمي واحد ومصدر تمهيدي وتجربة صغيرة واحدة فقط.',
     ],
     note2026:
-      'الإبقاء على هذه الأبواب في أطلس مستقل يحافظ على الخريطة الأساسية واضحة، لكنه يمنحك طريقًا منظمًا للتوسع عند الحاجة.',
+      'الإبقاء على هذه الأبواب في أطلس مستقل يحافظ على الخريطة الأساسية واضحة، لكنه يمنحك طريقًا منظمًا للتوسع عند الحاجة. أقوى المرشحين لتحويلهم لاحقًا إلى مسارات كاملة هم هندسة البيانات، الأمن البحثي، والموبايل الأصلي.',
     resources: [
       { label: 'GitHub Skills', url: docs.githubSkills },
       { label: 'MIT OpenCourseWare', url: docs.mitOcw },
@@ -3872,6 +4090,8 @@ export const roadmapMeta = {
   subtitle:
     'واجهة تفاعلية بالعربية تغطي الرحلة من لماذا وُجدت البرمجة والكمبيوتر أصلًا، حتى التخصص والمرجعية المهنية الحديثة.',
   updatedAt: '2026-04-06',
+  siteUrl: 'https://programming-roadmap-2026.devbread.workers.dev/',
+  legacySiteUrls: ['https://programming-roadmap-2026.omadkdklilipo.workers.dev/'],
   totalTracks: roadmapSections.length,
   totalTopics: Object.keys(topicCatalog).length,
 };
@@ -4097,6 +4317,21 @@ const curatedTopicLinks: Record<string, TopicLinkHints> = {
     next: ['portfolio-proof-of-work', 'writing-teaching-communication'],
     alternatives: ['product-engineering-specialist', 'mobile-specialist'],
   },
+  'browser-storage-offline': {
+    before: ['routing-state-fetching', 'frontend-framework'],
+    next: ['frontend-testing-quality', 'frontend-specialist'],
+    alternatives: ['mobile-native-resource-atlas', 'network-edge-delivery'],
+  },
+  'frontend-testing-quality': {
+    before: ['frontend-framework', 'testing-strategy'],
+    next: ['frontend-specialist', 'product-engineering-specialist'],
+    alternatives: ['accessibility-performance', 'testing-strategy'],
+  },
+  'canvas-webgpu-interactive': {
+    before: ['javascript-typescript', 'browser-rendering-dom'],
+    next: ['web-game-math-rendering', 'game-development'],
+    alternatives: ['graphics-low-level', 'frontend-specialist'],
+  },
   'backend-specialist': {
     before: ['backend-data', 'architecture-systems'],
     next: ['portfolio-proof-of-work', 'platform-specialist'],
@@ -4126,6 +4361,11 @@ const curatedTopicLinks: Record<string, TopicLinkHints> = {
     before: ['c-linux-systems', 'c-toolchain-debugging'],
     next: ['linux-kernel-uapi-modules', 'cpp-linux-build'],
     alternatives: ['linux-math-libraries', 'cpp-linux-build'],
+  },
+  'linux-tracing-profiling': {
+    before: ['c-toolchain-debugging', 'c-linux-systems'],
+    next: ['linux-libc-linking', 'systems-programming-specialist'],
+    alternatives: ['performance-capacity', 'cpp-performance-specialist'],
   },
   'linux-kernel-uapi-modules': {
     before: ['linux-libc-linking', 'c-linux-systems'],
@@ -4192,6 +4432,21 @@ const curatedTopicLinks: Record<string, TopicLinkHints> = {
     next: ['backend-queues-webhooks', 'backend-specialist'],
     alternatives: ['performance-capacity', 'database-internals'],
   },
+  'architectural-failure-modes': {
+    before: ['services-events', 'scalability-resilience'],
+    next: ['observability', 'platform-specialist'],
+    alternatives: ['ops-runbooks-costs', 'performance-capacity'],
+  },
+  'fuzzing-incident-response': {
+    before: ['testing-strategy', 'secure-coding-review'],
+    next: ['platform-specialist', 'research-open-source-specialist'],
+    alternatives: ['owasp-appsec', 'threat-modeling-privacy'],
+  },
+  'virtual-memory-filesystems': {
+    before: ['computer-architecture', 'operating-systems'],
+    next: ['systems-native', 'database-internals'],
+    alternatives: ['linux-libc-linking', 'c-linux-systems'],
+  },
   'backend-queues-webhooks': {
     before: ['background-jobs-integrations', 'services-events'],
     next: ['backend-specialist', 'platform-specialist'],
@@ -4248,6 +4503,30 @@ const projectIdeasByTopicId: Record<string, string[]> = {
   'systems-native': [
     'ابنِ mini shell بسيط يدعم أوامر أساسية وعمليات فرعية ثم وثّق كيف يعمل fork وexec لديك.',
     'ابنِ أداة فهرسة ملفات CLI في C أو C++ مع تحليل أداء بسيط وقرارات واضحة حول الذاكرة.',
+  ],
+  'browser-storage-offline': [
+    'حوّل أداة ملاحظات أو قائمة مهام إلى نسخة PWA تحفظ محليًا وتتعامل مع انقطاع الشبكة بتدرج واضح بدل فقدان العمل.',
+    'ابنِ cache strategy صغيرة لصفحة أو dashboard ثم اختبر ماذا يحدث عند تحديث الأصول أو البيانات القديمة.',
+  ],
+  'frontend-testing-quality': [
+    'ثبّت ثلاث طبقات فقط لواجهة صغيرة: اختبار منطق واحد، اختبار interaction واحد، ومسار E2E واحد يغطي رحلة المستخدم الحرجة.',
+    'ابنِ لوحة تحكم صغيرة ثم اكتب test يغطي keyboard navigation وcopy state وerror state بدل الاكتفاء بصور snapshot.',
+  ],
+  'architectural-failure-modes': [
+    'صمّم جدول failure modes لخدمة أو workflow واحد يوضح degraded mode وretry limits وfallback وownership لكل حالة.',
+    'ابنِ queue أو workflow صغيرًا ثم أضف عليه ضغطًا متعمدًا لترى أين تحتاج backpressure أو load shedding.',
+  ],
+  'fuzzing-incident-response': [
+    'شغّل fuzzer بسيطًا على parser أو input validator واحتفظ بثلاث حالات فشل أو edge cases خرجت بها كمادة تعلم عملية.',
+    'اكتب runbook من صفحة واحدة لحادث تعطل أو تسريب محتمل ثم جرّب عليه tabletop exercise قصيرة مع نفسك أو مع الفريق.',
+  ],
+  'virtual-memory-filesystems': [
+    'قارن بين قراءة ملف كبير عبر read وmmap ثم دوّن كيف اختلف التفكير في الذاكرة والملفات والقياس بين الطريقتين.',
+    'ابنِ أداة صغيرة تمشي على ملفات كثيرة، ثم راقب أثر page cache أو directory traversal على الأداء والانطباع الأولي.',
+  ],
+  'linux-tracing-profiling': [
+    'خذ أداة CLI أو خادمًا محليًا وشخّصه بثلاث لقطات: strace لطلب واحد، perf لhotspot واحدة، وValgrind لمسار ذاكرة واحد.',
+    'ابنِ تقريرًا صغيرًا من صفحة واحدة يربط بين مخرجات الأدوات وبين تغيير واحد فقط أجريته على البرنامج بعد القياس.',
   ],
   'python-engineering': [
     'ابنِ مجموعة أدوات أتمتة CLI تنظف ملفات أو تقارير أو بيانات وتعمل من مشروع منظم باختبارات أساسية.',

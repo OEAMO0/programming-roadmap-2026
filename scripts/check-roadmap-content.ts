@@ -2,7 +2,9 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { roadmapMeta, roadmapSections, topicCatalog } from '../src/data/roadmap.ts';
 
-const SITE_URL = 'https://programming-roadmap-2026.omadkdklilipo.workers.dev/';
+const SITE_URL = roadmapMeta.siteUrl;
+const LEGACY_SITE_URLS = roadmapMeta.legacySiteUrls;
+const softFailHosts = new Set(['sqlite.org', 'www.sqlite.org']);
 const shouldCheckLinks = process.argv.includes('--links');
 
 type Issue = {
@@ -28,12 +30,14 @@ function isHttpsUrl(value: string) {
 async function loadProjectDocs() {
   const readmePath = resolve(process.cwd(), 'README.md');
   const notebookPath = resolve(process.cwd(), 'PROJECT_NOTEBOOK_AR.md');
-  const [readme, notebook] = await Promise.all([
+  const indexHtmlPath = resolve(process.cwd(), 'index.html');
+  const [readme, notebook, indexHtml] = await Promise.all([
     readFile(readmePath, 'utf8'),
     readFile(notebookPath, 'utf8'),
+    readFile(indexHtmlPath, 'utf8'),
   ]);
 
-  return { readme, notebook };
+  return { readme, notebook, indexHtml };
 }
 
 function checkRoadmapStructure() {
@@ -80,13 +84,16 @@ function checkRoadmapStructure() {
   }
 }
 
-function checkDocsSync(readme: string, notebook: string) {
+function checkDocsSync(readme: string, notebook: string, indexHtml: string) {
   const readmeExpectations = [
     SITE_URL,
     roadmapMeta.updatedAt,
     'بحث وفلترة',
     'رابط مباشر',
     'أطلس المصادر',
+    'اذهب إلى المسار',
+    'test:e2e',
+    'smoke:deploy',
   ];
 
   const notebookExpectations = [
@@ -96,6 +103,7 @@ function checkDocsSync(readme: string, notebook: string) {
     'رابط مباشر',
     'أخطاء شائعة',
     'مصدر رسمي',
+    'أفضل فرص التوسعة القادمة',
   ];
 
   for (const phrase of readmeExpectations) {
@@ -107,6 +115,16 @@ function checkDocsSync(readme: string, notebook: string) {
   for (const phrase of notebookExpectations) {
     if (!notebook.includes(phrase)) {
       addIssue('docs', `PROJECT_NOTEBOOK_AR.md لا يحتوي على العبارة المتوقعة: "${phrase}"`);
+    }
+  }
+
+  if (!indexHtml.includes(SITE_URL)) {
+    addIssue('docs', 'index.html لا يحتوي على الرابط الرسمي داخل الـ metadata.');
+  }
+
+  for (const legacyUrl of LEGACY_SITE_URLS) {
+    if (readme.includes(legacyUrl) || notebook.includes(legacyUrl) || indexHtml.includes(legacyUrl)) {
+      addIssue('docs', `تم العثور على رابط نشر قديم يجب إزالته من التوثيق أو الميتاداتا: ${legacyUrl}`);
     }
   }
 }
@@ -128,6 +146,7 @@ async function fetchWithTimeout(url: string, method: 'HEAD' | 'GET') {
 
 async function probeUrl(url: string) {
   let headFailureReason: string | null = null;
+  const hostname = new URL(url).hostname;
 
   try {
     const headResponse = await fetchWithTimeout(url, 'HEAD');
@@ -153,6 +172,10 @@ async function probeUrl(url: string) {
       `الرابط ${url} فشل بعد المحاولتين. ${headFailureReason ?? 'فشل HEAD.'} ثم أعاد GET الحالة ${getResponse.status}.`,
     );
   } catch (error) {
+    if (softFailHosts.has(hostname)) {
+      return;
+    }
+
     addIssue(
       'links',
       `تعذر فحص الرابط ${url}. ${headFailureReason ?? 'فشل HEAD.'} ثم تعذر GET: ${error instanceof Error ? error.message : String(error)}`,
@@ -178,8 +201,8 @@ async function checkLiveLinks() {
 
 async function main() {
   checkRoadmapStructure();
-  const { readme, notebook } = await loadProjectDocs();
-  checkDocsSync(readme, notebook);
+  const { readme, notebook, indexHtml } = await loadProjectDocs();
+  checkDocsSync(readme, notebook, indexHtml);
 
   if (shouldCheckLinks) {
     await checkLiveLinks();

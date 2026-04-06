@@ -14,7 +14,11 @@
   - فلترة حسب المسار
   - فلترة حسب المستوى
   - مطابقة بالكلمات المفتاحية والمصادر
+  - تنقلًا بالأسهم داخل نتائج البحث السريعة نفسها
+  - أداة `اذهب إلى المسار مباشرة` للانتقال السريع إلى المسارات الكبيرة
   - رابط مباشر يشارك نفس الحالة الحالية للخريطة: الموضوع المفتوح والبحث والفلاتر
+- الرابط الرسمي الوحيد المعتمد في التوثيق والـmetadata هو:
+  - `https://programming-roadmap-2026.devbread.workers.dev/`
 - نافذة الشرح الجانبية لم تعد تكتفي بالملخص فقط، بل تعرض أيضًا:
   - سياق مختصر يوضح مكان الموضوع في المسار
   - قسم `كيف تدرسه بذكاء`
@@ -40,18 +44,44 @@
   - واجهات نواة Linux و `UAPI` ومدخل كتابة `kernel modules`
   - مكتبات الرياضيات على Linux مثل `libm` و `GSL`
 - تمت إضافة توسعات جديدة داخل المسارات التالية:
+  - `Frontend / Web` عبر:
+    - `Service Workers / PWA`
+    - `Web Storage / IndexedDB`
+    - `Canvas / WebGPU`
+    - `frontend testing`
+  - `Architecture / Systems` عبر:
+    - `failure modes`
+    - `backpressure`
+    - `graceful degradation`
   - `Linux / Systems` عبر:
     - `pthreads / mutex / atomics`
     - `sockets / epoll`
+    - `strace / perf / valgrind`
+    - `mmap / ELF`
   - `Backend / Data` عبر:
     - `Indexes / EXPLAIN`
     - `queues / webhooks / retries`
+  - `Quality / Security` عبر:
+    - `OAuth / OIDC`
+    - `SBOM / dependency auditing`
+    - `fuzzing`
+    - `incident response basics`
   - `Cloud / Platform` عبر:
     - `systemd`
     - `Nginx / TLS / DNS`
   - `Python Engineering` عبر:
     - `pyproject / Ruff / Mypy`
     - `profiling / pybind11`
+  - `AI Engineering` عبر:
+    - `chunking / indexing`
+    - `eval datasets`
+    - `cost control / caching`
+    - `tool/agent failure handling`
+  - `Computer Science` عبر:
+    - `virtual memory`
+    - `memory model`
+    - `filesystems internals`
+    - `consensus / replication basics`
   - `Game Dev / Engines` عبر:
     - `ECS`
     - `shaders / materials`
@@ -70,6 +100,8 @@
   - `npm run check:content`
   - `npm run check:links`
   - `npm run test:run`
+  - `npm run test:e2e`
+  - `npm run smoke:deploy`
 - لم تتم إضافة أي طبقة `progress tracking` للمستخدم عمدًا، لأن الخريطة تخدم أكثر من مسار مترابط وليست مصممة كقائمة إنجاز شخصية.
 
 قاعدة عمل مهمة من الآن:
@@ -629,15 +661,27 @@
 - إضافة حالات “مكتمل / أدرسه لاحقًا”
 - تحويل المشروع إلى منصة أكبر أو لوحة إدارة
 
-## 16. ما الذي ما زال ممكنًا تحسينه لاحقًا؟
+## 16. أفضل فرص التوسعة القادمة
 
-أهم الأشياء التي ما زالت ينقصها المشروع حاليًا:
+أفضل فرص التوسعة القادمة الآن داخل الخريطة نفسها:
+
+- `Frontend / Web`
+- `Architecture / Systems`
+- `Quality / Security`
+- `AI Engineering`
+- `Computer Science`
+
+ومن `أطلس المصادر`، أقوى المرشحين للتحويل لاحقًا إلى مسارات كاملة هم:
+
+- `Data Engineering`
+- `Security Research`
+- `Mobile Native`
+
+وما زال يمكن تحسينه لاحقًا أيضًا:
 
 - مراجعة توزيع بعض العقد يدويًا بعد التوسعات الأخيرة حتى تبقى الفراغات مريحة بصريًا في كل المقاسات
-- جعل التنقل بلوحة المفاتيح داخل نتائج البحث السريعة نفسها أعمق، مثل الأسهم لأعلى/أسفل ثم `Enter`
 - نقل `topicInputs` نفسها لاحقًا إلى ملفات أصغر بحسب المسارات إذا استمر تضخم المحتوى
 - تشغيل أوامر الفحص الحالية تلقائيًا داخل CI على GitHub بدل الاكتفاء بالتشغيل المحلي
-- توسيع بعض المسارات العامة لاحقًا بنفس جودة المصادر الحالية، خصوصًا `Web / Frontend` و`Architecture / Systems`
 - الاستمرار على قاعدة التوثيق الثابتة: أي تغيير ظاهر في الموقع يجب أن يتبعه تحديث مباشر لهذه المفكرة و `README`
 
 ## 17. ملخص تنفيذي سريع
@@ -650,9 +694,11 @@
 - تتضمن مسارات عميقة مبكرة
 - تتضمن مسار ألعاب ومحركات متكامل
 - تتضمن تعميقًا إضافيًا في Linux و `glibc` و `kernel modules` و `libm/GSL`
+- تتضمن الآن انتقالًا أسرع عبر `اذهب إلى المسار مباشرة` وتنقلًا بالأسهم داخل نتائج البحث
 - تتضمن تصنيف تقدم بالألوان
 - تتضمن وضع فاتح ووضع داكن
 - تتضمن لوحة شرح جانبية غنية بالإرشاد والمشاريع والبحث والمصادر
+- تتضمن smoke check بعد النشر واختبار E2E لمسار المستخدم الأساسي
 - قابلة للتوسع بسهولة
 
 ## 18. إذا أردت متابعة التطوير
