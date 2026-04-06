@@ -175,7 +175,7 @@ export const roadmapSections: SectionLayout[] = [
     id: 'resource-atlas',
     tone: 'mint',
     right: ['mobile-native-resource-atlas', 'data-engineering-resource-atlas', 'embedded-robotics-resource-atlas'],
-    left: ['security-research-resource-atlas', 'compiler-tools-resource-atlas'],
+    left: ['security-research-resource-atlas', 'desktop-apps-resource-atlas', 'compiler-tools-resource-atlas'],
   },
   {
     id: 'mastery-growth',

@@ -31,13 +31,22 @@ async function loadProjectDocs() {
   const readmePath = resolve(process.cwd(), 'README.md');
   const notebookPath = resolve(process.cwd(), 'PROJECT_NOTEBOOK_AR.md');
   const indexHtmlPath = resolve(process.cwd(), 'index.html');
+  const workflowPath = resolve(process.cwd(), '.github', 'workflows', 'ci.yml');
   const [readme, notebook, indexHtml] = await Promise.all([
     readFile(readmePath, 'utf8'),
     readFile(notebookPath, 'utf8'),
     readFile(indexHtmlPath, 'utf8'),
   ]);
 
-  return { readme, notebook, indexHtml };
+  let workflow = '';
+
+  try {
+    workflow = await readFile(workflowPath, 'utf8');
+  } catch {
+    workflow = '';
+  }
+
+  return { readme, notebook, indexHtml, workflow };
 }
 
 function checkRoadmapStructure() {
@@ -82,9 +91,16 @@ function checkRoadmapStructure() {
       addIssue('content', `الموضوع "${topicId}" موجود في topicCatalog لكنه غير مربوط داخل roadmapSections.`);
     }
   }
+  for (const [topicId, topic] of Object.entries(topicCatalog)) {
+    const isResourceAtlasTopic = topicId === 'resource-atlas' || topicId.endsWith('-resource-atlas');
+
+    if (isResourceAtlasTopic && topic.resources.length < 4) {
+      addIssue('content', `باب أطلس المصادر "${topicId}" يحتاج إلى 4 مصادر على الأقل ليبقى بابًا مرجعيًا قويًا.`);
+    }
+  }
 }
 
-function checkDocsSync(readme: string, notebook: string, indexHtml: string) {
+function checkDocsSync(readme: string, notebook: string, indexHtml: string, workflow: string) {
   const readmeExpectations = [
     SITE_URL,
     roadmapMeta.updatedAt,
@@ -94,6 +110,7 @@ function checkDocsSync(readme: string, notebook: string, indexHtml: string) {
     'اذهب إلى المسار',
     'test:e2e',
     'smoke:deploy',
+    'GitHub Actions',
   ];
 
   const notebookExpectations = [
@@ -104,6 +121,7 @@ function checkDocsSync(readme: string, notebook: string, indexHtml: string) {
     'أخطاء شائعة',
     'مصدر رسمي',
     'أفضل فرص التوسعة القادمة',
+    'GitHub Actions',
   ];
 
   for (const phrase of readmeExpectations) {
@@ -125,6 +143,17 @@ function checkDocsSync(readme: string, notebook: string, indexHtml: string) {
   for (const legacyUrl of LEGACY_SITE_URLS) {
     if (readme.includes(legacyUrl) || notebook.includes(legacyUrl) || indexHtml.includes(legacyUrl)) {
       addIssue('docs', `تم العثور على رابط نشر قديم يجب إزالته من التوثيق أو الميتاداتا: ${legacyUrl}`);
+    }
+  }
+
+  if (!workflow.trim()) {
+    addIssue('docs', 'ملف GitHub Actions غير موجود في .github/workflows/ci.yml.');
+    return;
+  }
+
+  for (const phrase of ['npm run build', 'npm run test:run', 'npm run test:e2e', 'npm run smoke:deploy']) {
+    if (!workflow.includes(phrase)) {
+      addIssue('docs', `ملف GitHub Actions لا يحتوي على الخطوة المتوقعة: "${phrase}"`);
     }
   }
 }
@@ -201,8 +230,8 @@ async function checkLiveLinks() {
 
 async function main() {
   checkRoadmapStructure();
-  const { readme, notebook, indexHtml } = await loadProjectDocs();
-  checkDocsSync(readme, notebook, indexHtml);
+  const { readme, notebook, indexHtml, workflow } = await loadProjectDocs();
+  checkDocsSync(readme, notebook, indexHtml, workflow);
 
   if (shouldCheckLinks) {
     await checkLiveLinks();

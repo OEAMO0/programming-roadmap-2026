@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Check content and docs
+        run: npm run check:content
+
+      - name: Run unit tests
+        run: npm run test:run
+
+      - name: Build app
+        run: npm run build
+
+      - name: Start preview server
+        run: |
+          nohup npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/roadmap-preview.log 2>&1 &
+
+          for attempt in {1..30}; do
+            if curl --silent --fail http://127.0.0.1:4173/ > /dev/null; then
+              exit 0
+            fi
+
+            sleep 2
+          done
+
+          cat /tmp/roadmap-preview.log
+          exit 1
+
+      - name: Smoke check preview
+        run: npm run smoke:deploy -- --url=http://127.0.0.1:4173/
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+
+      - name: Check external links
+        run: npm run check:links
+
+      - name: Upload debug artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-debug-artifacts
+          path: |
+            playwright-report
+            test-results
+            /tmp/roadmap-preview.log
+          if-no-files-found: ignore

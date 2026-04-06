@@ -41,7 +41,7 @@
 - تعميق إضافي داخل مسار `Linux / Systems` يشمل أيضًا `strace / perf / valgrind` و `mmap` وقراءة `ELF`
 - تعميق رياضي جديد داخل `C++` و `Python` وألعاب الويب ومسار المحركات نفسه، مع مصادر رسمية أقوى مثل `Python docs` و `NumPy / SciPy` و `Eigen` و `MDN` و `Godot`
 - توسيع المسارات المطلوبة في `Linux / Systems` و`Backend / Data` و`Cloud / Platform` و`Python Engineering` و`Game Dev / Engines`
-- مسار مستقل جديد على شكل `أطلس المصادر` يجمع مراجع لمسارات خارج الخريطة الأساسية مثل الموبايل الأصلي، الأمن، هندسة البيانات، الأنظمة المضمنة، وأدوات اللغات
+- مسار مرجعي مستقل على شكل `أطلس المصادر` يجمع وثائق وروابط رسمية لمسارات خارج الخريطة الأساسية مثل الموبايل الأصلي، الأمن، هندسة البيانات، الأنظمة المضمنة، تطبيقات سطح المكتب، وأدوات اللغات
 - فحص محتوى وتوثيق وروابط عبر:
   - `npm run check:content`
   - `npm run check:links`
@@ -50,6 +50,7 @@
 - اختبارات أساسية للبحث ومشاركة الحالة وفتح النافذة عبر:
   - `npm run test:run`
   - `npm run test:e2e`
+- يوجد الآن `GitHub Actions` يشغّل البناء والاختبارات وsmoke check المحلي وE2E وفحص الروابط تلقائيًا
 - المشروع متعمد أن يبقى مرجعًا متعدد المسارات، لذلك لا يضيف نظام تتبع تقدم شخصي داخل الخريطة
 
 ## التقنية المستخدمة
@@ -92,8 +93,17 @@ npm run deploy
 - [src/data/roadmap-structure.ts](/D:/vscodeFiles/map/src/data/roadmap-structure.ts)
   هذا الملف يحدد ترتيب المسارات الرئيسية وتوزيع الموضوعات داخل كل مسار.
 
+- [src/data/roadmap-topic-inputs.ts](/D:/vscodeFiles/map/src/data/roadmap-topic-inputs.ts)
+  هذا الملف يحتوي نصوص الموضوعات نفسها: العنوان، الشرح، نقاط التعلم، التدريب العملي، والمصادر.
+
+- [src/data/roadmap-guidance.ts](/D:/vscodeFiles/map/src/data/roadmap-guidance.ts)
+  هذا الملف يجمع الربط الإرشادي الإضافي مثل أفكار المشاريع والأخطاء الشائعة والمختبرات الصغيرة والمصادر المصنفة.
+
 - [src/data/roadmap.ts](/D:/vscodeFiles/map/src/data/roadmap.ts)
-  هذا الملف هو نقطة التجميع الأساسية: يحتوي نصوص المواضيع الحالية، ويجمع البنية والمصادر، ثم يحولها إلى `nodes` و `edges`.
+  هذا الملف هو نقطة التجميع الأساسية: يجمع الملفات السابقة، ويبني `topicCatalog` و`nodes` و`edges` وروابط الاقتراحات داخل الخريطة.
+
+- [.github/workflows/ci.yml](/D:/vscodeFiles/map/.github/workflows/ci.yml)
+  هذا الملف يشغّل GitHub Actions لفحص المحتوى والبناء والاختبارات وsmoke check وE2E وفحص الروابط.
 
 - [src/App.tsx](/D:/vscodeFiles/map/src/App.tsx)
   هذا الملف يحتوي منطق الواجهة التفاعلية، اختيار العقد، فتح نافذة الشرح، ضبط الكاميرا، وتبديل الوضع الفاتح والداكن.
@@ -106,10 +116,11 @@ npm run deploy
 
 ## كيف تعدل المحتوى؟
 
-1. عدّل نص الموضوع ومحتواه داخل [src/data/roadmap.ts](/D:/vscodeFiles/map/src/data/roadmap.ts)
+1. عدّل نص الموضوع ومحتواه داخل [src/data/roadmap-topic-inputs.ts](/D:/vscodeFiles/map/src/data/roadmap-topic-inputs.ts)
 2. إذا احتجت مصادر مرجعية مشتركة فحدّث [src/data/roadmap-docs.ts](/D:/vscodeFiles/map/src/data/roadmap-docs.ts)
-3. اربط الموضوع أو أعد ترتيبه داخل [src/data/roadmap-structure.ts](/D:/vscodeFiles/map/src/data/roadmap-structure.ts)
-4. شغّل المشروع وستظهر العقدة تلقائيًا داخل الخريطة
+3. إذا أردت تعديل الأخطاء الشائعة أو أفكار المشاريع أو منطق المصادر الإضافي فحدّث [src/data/roadmap-guidance.ts](/D:/vscodeFiles/map/src/data/roadmap-guidance.ts)
+4. اربط الموضوع أو أعد ترتيبه داخل [src/data/roadmap-structure.ts](/D:/vscodeFiles/map/src/data/roadmap-structure.ts)
+5. شغّل المشروع وستظهر العقدة تلقائيًا داخل الخريطة
 
 ## أفضل فرص التوسعة القادمة
 

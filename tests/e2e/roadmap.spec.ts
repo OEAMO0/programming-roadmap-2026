@@ -25,3 +25,24 @@ test('opens the site, searches, opens a topic, and copies the share link', async
   const clipboardText = await page.evaluate(async () => navigator.clipboard.readText());
   expect(clipboardText).toContain('topic=python-math-computing');
 });
+
+test('keeps the tools menu fully inside the viewport on narrow screens', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 740 });
+  await page.goto('/');
+
+  await page.getByRole('button', { name: 'المزيد من الأدوات' }).click();
+
+  const menu = page.locator('.topbar-menu');
+  await expect(menu).toBeVisible();
+
+  const menuBox = await menu.boundingBox();
+  const viewport = page.viewportSize();
+
+  expect(menuBox).not.toBeNull();
+  expect(viewport).not.toBeNull();
+
+  expect(menuBox!.x).toBeGreaterThanOrEqual(0);
+  expect(menuBox!.y).toBeGreaterThanOrEqual(0);
+  expect(menuBox!.x + menuBox!.width).toBeLessThanOrEqual(viewport!.width);
+  expect(menuBox!.y + menuBox!.height).toBeLessThanOrEqual(viewport!.height);
+});

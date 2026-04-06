@@ -232,9 +232,12 @@ a {
 .topbar-menu {
   position: absolute;
   top: calc(100% + 6px);
-  right: 0;
+  left: 0;
+  right: auto;
   z-index: 7;
-  min-width: 188px;
+  width: max-content;
+  min-width: min(188px, calc(100vw - 28px));
+  max-width: min(240px, calc(100vw - 28px));
   display: grid;
   gap: 4px;
   padding: 6px;
@@ -242,6 +245,7 @@ a {
   border-radius: 4px;
   background: color-mix(in srgb, var(--surface) 94%, var(--surface-subtle) 6%);
   box-shadow: 0 16px 28px rgba(15, 23, 42, 0.14);
+  overflow-x: hidden;
 }
 
 .topbar-menu-item {
@@ -916,8 +920,10 @@ a {
   }
 
   .topbar-menu {
-    right: 0;
-    min-width: min(200px, calc(100vw - 34px));
+    left: 0;
+    right: auto;
+    min-width: min(188px, calc(100vw - 24px));
+    max-width: calc(100vw - 24px);
   }
 
   .topbar-result-card {
