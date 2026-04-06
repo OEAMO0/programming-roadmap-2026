@@ -10,7 +10,7 @@ import {
   type NodeProps,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { memo, startTransition, useDeferredValue, useEffect, useMemo, useState } from 'react';
+import { memo, startTransition, useDeferredValue, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   getAlternativeTopicIds,
   getCommonMistakes,
@@ -201,6 +201,108 @@ function JourneyBadge({
   );
 }
 
+function TopbarIconFrame({ children }: { children: ReactNode }) {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      {children}
+    </svg>
+  );
+}
+
+function ZoomInIcon() {
+  return (
+    <TopbarIconFrame>
+      <circle cx="6.75" cy="6.75" r="4.5" fill="none" />
+      <path d="M6.75 4.8V8.7" />
+      <path d="M4.8 6.75H8.7" />
+      <path d="M10.4 10.4 13.2 13.2" />
+    </TopbarIconFrame>
+  );
+}
+
+function ZoomOutIcon() {
+  return (
+    <TopbarIconFrame>
+      <circle cx="6.75" cy="6.75" r="4.5" fill="none" />
+      <path d="M4.8 6.75H8.7" />
+      <path d="M10.4 10.4 13.2 13.2" />
+    </TopbarIconFrame>
+  );
+}
+
+function ResetIcon() {
+  return (
+    <TopbarIconFrame>
+      <path d="M8 3.1A4.9 4.9 0 1 1 3.6 5.9" fill="none" />
+      <path d="M3 2.8V6.2H6.3" fill="none" />
+    </TopbarIconFrame>
+  );
+}
+
+function LegendIcon() {
+  return (
+    <TopbarIconFrame>
+      <path d="M3 4h10" />
+      <path d="M3 8h10" />
+      <path d="M3 12h10" />
+      <circle cx="4.5" cy="4" r="0.8" />
+      <circle cx="7.5" cy="8" r="0.8" />
+      <circle cx="10.5" cy="12" r="0.8" />
+    </TopbarIconFrame>
+  );
+}
+
+function ThemeIcon({ theme }: { theme: ThemeMode }) {
+  return theme === 'dark' ? (
+    <TopbarIconFrame>
+      <circle cx="8" cy="8" r="3" />
+      <path d="M8 1.9V3.4" />
+      <path d="M8 12.6V14.1" />
+      <path d="M1.9 8H3.4" />
+      <path d="M12.6 8H14.1" />
+      <path d="M3.55 3.55 4.6 4.6" />
+      <path d="M11.4 11.4 12.45 12.45" />
+      <path d="M11.4 4.6 12.45 3.55" />
+      <path d="M3.55 12.45 4.6 11.4" />
+    </TopbarIconFrame>
+  ) : (
+    <TopbarIconFrame>
+      <path d="M10.9 2.4A5.55 5.55 0 1 0 13.6 10.8 5.8 5.8 0 0 1 10.9 2.4Z" fill="none" />
+    </TopbarIconFrame>
+  );
+}
+
+function ShareIcon() {
+  return (
+    <TopbarIconFrame>
+      <circle cx="4" cy="8" r="1.3" />
+      <circle cx="12" cy="4" r="1.3" />
+      <circle cx="12" cy="12" r="1.3" />
+      <path d="M5.15 7.3 10.85 4.7" fill="none" />
+      <path d="M5.15 8.7 10.85 11.3" fill="none" />
+    </TopbarIconFrame>
+  );
+}
+
+function ClearIcon() {
+  return (
+    <TopbarIconFrame>
+      <path d="M4 4 12 12" />
+      <path d="M12 4 4 12" />
+    </TopbarIconFrame>
+  );
+}
+
+function MenuIcon() {
+  return (
+    <TopbarIconFrame>
+      <circle cx="4" cy="8" r="1.1" />
+      <circle cx="8" cy="8" r="1.1" />
+      <circle cx="12" cy="8" r="1.1" />
+    </TopbarIconFrame>
+  );
+}
+
 const RoadmapNode = memo(function RoadmapNode({ data }: NodeProps<RoadmapFlowNode>) {
   return (
     <div
@@ -252,8 +354,11 @@ function getInitialRoadmapUrlState() {
 export function RoadmapWorkspace() {
   const initialUrlState = getInitialRoadmapUrlState();
   const flow = useReactFlow<RoadmapFlowNode>();
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const actionsMenuRef = useRef<HTMLDivElement | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(() => initialUrlState.topicId);
   const [isDrawerOpen, setDrawerOpen] = useState(() => Boolean(initialUrlState.topicId));
+  const [isActionsMenuOpen, setActionsMenuOpen] = useState(false);
   const [theme, setTheme] = useState<ThemeMode>(getInitialTheme);
   const [showLegend, setShowLegend] = useState(getInitialLegendVisibility);
   const [isCompactViewport, setCompactViewport] = useState(() => safeMatchMedia(COMPACT_VIEWPORT_QUERY));
@@ -291,13 +396,35 @@ export function RoadmapWorkspace() {
   }, []);
 
   useEffect(() => {
-    if (!isDrawerOpen || typeof window === 'undefined') {
+    if (typeof window === 'undefined') {
       return;
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setDrawerOpen(false);
+        setActionsMenuOpen(false);
+        return;
+      }
+
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+        searchInputRef.current?.select();
+        return;
+      }
+
+      const target = event.target;
+      const isTypingTarget =
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        (target instanceof HTMLElement && target.isContentEditable);
+
+      if (!isTypingTarget && event.key === '/') {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+        searchInputRef.current?.select();
       }
     };
 
@@ -306,7 +433,25 @@ export function RoadmapWorkspace() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isDrawerOpen]);
+  }, []);
+
+  useEffect(() => {
+    if (!isActionsMenuOpen || typeof window === 'undefined') {
+      return;
+    }
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!(event.target instanceof Node) || !actionsMenuRef.current?.contains(event.target)) {
+        setActionsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('pointerdown', handlePointerDown);
+
+    return () => {
+      window.removeEventListener('pointerdown', handlePointerDown);
+    };
+  }, [isActionsMenuOpen]);
 
   useEffect(() => {
     if (!shareMessage || typeof window === 'undefined') {
@@ -491,43 +636,48 @@ export function RoadmapWorkspace() {
       setSelectedId(topicId);
       setDrawerOpen(true);
     });
-
-    if (typeof window === 'undefined') {
-      centerOnTopic(topicId);
-      return;
-    }
-
-    window.requestAnimationFrame(() => centerOnTopic(topicId));
+    setActionsMenuOpen(false);
   }
 
   function resetViewport() {
     fitCanvas();
+    setActionsMenuOpen(false);
   }
 
   function zoomIn() {
     flow.zoomIn({ duration: zoomDuration });
+    setActionsMenuOpen(false);
   }
 
   function zoomOut() {
     flow.zoomOut({ duration: zoomDuration });
+    setActionsMenuOpen(false);
   }
 
   function closeDrawer() {
     setDrawerOpen(false);
+    setActionsMenuOpen(false);
   }
 
   function toggleTheme() {
     setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
+    setActionsMenuOpen(false);
   }
 
   function toggleLegend() {
     setShowLegend((current) => !current);
+    setActionsMenuOpen(false);
+  }
+
+  function toggleActionsMenu() {
+    setActionsMenuOpen((current) => !current);
   }
 
   function clearFilters() {
     setSearchQuery('');
     setActiveTrackId('');
     setActiveLevel('');
+    setActionsMenuOpen(false);
   }
 
   const shareUrl = useMemo(() => {
@@ -575,6 +725,7 @@ export function RoadmapWorkspace() {
       if (window.navigator.clipboard?.writeText) {
         await window.navigator.clipboard.writeText(shareUrl);
         setShareMessage('تم نسخ رابط الحالة الحالية.');
+        setActionsMenuOpen(false);
         return;
       }
     } catch {
@@ -582,6 +733,7 @@ export function RoadmapWorkspace() {
     }
 
     setShareMessage('الرابط جاهز في شريط العنوان الحالي ويمكن نسخه يدويًا.');
+    setActionsMenuOpen(false);
   }
 
   const {
@@ -613,32 +765,89 @@ export function RoadmapWorkspace() {
             </span>
           </div>
 
-          <div className="topbar-actions">
-            <button type="button" className="topbar-button is-icon-button" onClick={zoomIn} aria-label="تكبير">
-              +
+          <div className="topbar-actions" ref={actionsMenuRef}>
+            <button
+              type="button"
+              className="topbar-button is-icon-button"
+              onClick={zoomIn}
+              aria-label="تكبير"
+              title="تكبير"
+            >
+              <ZoomInIcon />
             </button>
-            <button type="button" className="topbar-button is-icon-button" onClick={zoomOut} aria-label="تصغير">
-              -
+            <button
+              type="button"
+              className="topbar-button is-icon-button"
+              onClick={zoomOut}
+              aria-label="تصغير"
+              title="تصغير"
+            >
+              <ZoomOutIcon />
             </button>
-            <button type="button" className="topbar-button" onClick={resetViewport}>
-              ضبط العرض
+            <button
+              type="button"
+              className={['topbar-button', 'is-icon-button', showLegend ? 'is-active' : ''].join(' ')}
+              onClick={toggleLegend}
+              aria-label={showLegend ? 'إخفاء الدليل' : 'إظهار الدليل'}
+              title={showLegend ? 'إخفاء الدليل' : 'إظهار الدليل'}
+            >
+              <LegendIcon />
             </button>
-            <button type="button" className="topbar-button" onClick={toggleLegend} aria-pressed={showLegend}>
-              {showLegend ? 'إخفاء الدليل' : 'إظهار الدليل'}
+            <button
+              type="button"
+              className={['topbar-button', 'is-icon-button', isActionsMenuOpen ? 'is-active' : ''].join(' ')}
+              onClick={toggleActionsMenu}
+              aria-label="المزيد من الأدوات"
+              aria-haspopup="menu"
+              aria-expanded={isActionsMenuOpen}
+              title="المزيد من الأدوات"
+            >
+              <MenuIcon />
             </button>
-            <button type="button" className="topbar-button" onClick={toggleTheme} aria-pressed={theme === 'dark'}>
-              {theme === 'dark' ? 'وضع فاتح' : 'وضع داكن'}
-            </button>
+
+            {isActionsMenuOpen ? (
+              <div className="topbar-menu" role="menu" aria-label="أدوات إضافية">
+                <button type="button" className="topbar-menu-item" onClick={resetViewport} role="menuitem">
+                  <ResetIcon />
+                  <span>ضبط العرض</span>
+                </button>
+                <button type="button" className="topbar-menu-item" onClick={copyShareLink} role="menuitem">
+                  <ShareIcon />
+                  <span>نسخ الرابط</span>
+                </button>
+                <button
+                  type="button"
+                  className="topbar-menu-item"
+                  onClick={clearFilters}
+                  role="menuitem"
+                  disabled={!filterState.hasActiveFilters}
+                >
+                  <ClearIcon />
+                  <span>مسح الفلاتر</span>
+                </button>
+                <button type="button" className="topbar-menu-item" onClick={toggleTheme} role="menuitem">
+                  <ThemeIcon theme={theme} />
+                  <span>{theme === 'dark' ? 'وضع فاتح' : 'وضع داكن'}</span>
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
 
         <div className="topbar-filters" aria-label="أدوات البحث والفلترة">
           <input
+            ref={searchInputRef}
             type="search"
             className="topbar-input topbar-search-input"
             placeholder="ابحث بعنوان الموضوع أو الكلمات المفتاحية أو المصدر"
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' && quickSearchResults[0]) {
+                event.preventDefault();
+                focusTopic(quickSearchResults[0].id);
+              }
+            }}
             aria-label="ابحث داخل الخريطة"
             spellCheck={false}
             dir="rtl"
@@ -671,19 +880,6 @@ export function RoadmapWorkspace() {
               </option>
             ))}
           </select>
-
-          <button
-            type="button"
-            className="topbar-button topbar-button-secondary"
-            onClick={clearFilters}
-            disabled={!filterState.hasActiveFilters}
-          >
-            مسح الفلاتر
-          </button>
-
-          <button type="button" className="topbar-button topbar-button-secondary" onClick={copyShareLink}>
-            نسخ الرابط
-          </button>
 
           <span className="topbar-status">{filterSummary}</span>
 
@@ -726,9 +922,10 @@ export function RoadmapWorkspace() {
             nodesConnectable={false}
             nodesFocusable={false}
             edgesFocusable={false}
+            elementsSelectable={false}
             onlyRenderVisibleElements
             fitView
-            fitViewOptions={{ padding: fitPadding }}
+            fitViewOptions={{ padding: fitPadding, includeHiddenNodes: false }}
             minZoom={0.32}
             maxZoom={1.6}
           >

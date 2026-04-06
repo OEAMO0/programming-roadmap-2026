@@ -4,14 +4,16 @@
 
 ## الموقع الحي
 
-[programming-roadmap-2026.omadkdklilipo.workers.dev](https://programming-roadmap-2026.omadkdklilipo.workers.dev/)
+[افتح النسخة المنشورة للموقع](https://programming-roadmap-2026.omadkdklilipo.workers.dev/)
 
 ## ما الموجود الآن؟
 
 - خريطة كبيرة قابلة للسحب والتكبير والتصغير
 - شريط علوي أخف مع بحث وفلترة دون تغيير شكل التصميم الأساسي
+- أزرار علوية مضغوطة بالأيقونات مع قائمة أدوات صغيرة لتقليل المساحة على البي سي والجوال
 - نافذة شرح جانبية تظهر عند الضغط على أي عنصر
 - وضع فاتح ووضع داكن
+- اختصارات سريعة للبحث: `/` أو `Ctrl/Cmd + K` ثم `Enter` لفتح أول نتيجة مطابقة
 - مسارات مترابطة من لماذا وُجدت البرمجة والكمبيوتر أصلًا حتى التخصص والنمو المهني
 - مسار إضافي لتطوير الألعاب والمحركات
 - مسارات أعمق للبرمجة منخفضة المستوى: `C` و `C++` و `Linux / OS`
@@ -37,6 +39,7 @@
   - `npm run check:links`
 - اختبارات أساسية للبحث ومشاركة الحالة وفتح النافذة عبر:
   - `npm run test:run`
+- المشروع متعمد أن يبقى مرجعًا متعدد المسارات، لذلك لا يضيف نظام تتبع تقدم شخصي داخل الخريطة
 
 ## التقنية المستخدمة
 
@@ -61,8 +64,17 @@ npm run build
 
 ## أهم الملفات
 
+- [src/data/roadmap-model.ts](/D:/vscodeFiles/map/src/data/roadmap-model.ts)
+  هذا الملف يحتوي الأنواع الأساسية والألوان المشتركة بين أجزاء بيانات الخريطة.
+
+- [src/data/roadmap-docs.ts](/D:/vscodeFiles/map/src/data/roadmap-docs.ts)
+  هذا الملف يجمع روابط المصادر المشتركة والمرجعية حتى لا تتكرر داخل المحتوى.
+
+- [src/data/roadmap-structure.ts](/D:/vscodeFiles/map/src/data/roadmap-structure.ts)
+  هذا الملف يحدد ترتيب المسارات الرئيسية وتوزيع الموضوعات داخل كل مسار.
+
 - [src/data/roadmap.ts](/D:/vscodeFiles/map/src/data/roadmap.ts)
-  هذا الملف يحتوي المحتوى الكامل، تعريف المواضيع، تعريف المسارات، ومنطق تحويلها إلى nodes و edges.
+  هذا الملف هو نقطة التجميع الأساسية: يحتوي نصوص المواضيع الحالية، ويجمع البنية والمصادر، ثم يحولها إلى `nodes` و `edges`.
 
 - [src/App.tsx](/D:/vscodeFiles/map/src/App.tsx)
   هذا الملف يحتوي منطق الواجهة التفاعلية، اختيار العقد، فتح نافذة الشرح، ضبط الكاميرا، وتبديل الوضع الفاتح والداكن.
@@ -75,9 +87,10 @@ npm run build
 
 ## كيف تعدل المحتوى؟
 
-1. عدّل الموضوع داخل [src/data/roadmap.ts](/D:/vscodeFiles/map/src/data/roadmap.ts)
-2. اربطه داخل `roadmapSections`
-3. شغّل المشروع وستظهر العقدة تلقائيًا داخل الخريطة
+1. عدّل نص الموضوع ومحتواه داخل [src/data/roadmap.ts](/D:/vscodeFiles/map/src/data/roadmap.ts)
+2. إذا احتجت مصادر مرجعية مشتركة فحدّث [src/data/roadmap-docs.ts](/D:/vscodeFiles/map/src/data/roadmap-docs.ts)
+3. اربط الموضوع أو أعد ترتيبه داخل [src/data/roadmap-structure.ts](/D:/vscodeFiles/map/src/data/roadmap-structure.ts)
+4. شغّل المشروع وستظهر العقدة تلقائيًا داخل الخريطة
 
 ## ملاحظة
 

@@ -40,8 +40,8 @@ export const roadmapSections: SectionLayout[] = [
   {
     id: 'backend-data',
     tone: 'indigo',
-    right: ['http-apis', 'auth-sessions', 'sql-modeling', 'api-design-contracts', 'transactions-consistency'],
-    left: ['caching-queues-search', 'backend-frameworks-deployment', 'background-jobs-integrations'],
+    right: ['http-apis', 'auth-sessions', 'sql-modeling', 'database-indexes-explain', 'api-design-contracts', 'transactions-consistency'],
+    left: ['caching-queues-search', 'backend-frameworks-deployment', 'background-jobs-integrations', 'backend-queues-webhooks'],
   },
   {
     id: 'architecture-systems',
@@ -58,8 +58,8 @@ export const roadmapSections: SectionLayout[] = [
   {
     id: 'cloud-platform',
     tone: 'plum',
-    right: ['linux-networking', 'docker-compose', 'cloud-fundamentals', 'network-edge-delivery'],
-    left: ['kubernetes-platform', 'ci-cd-iac', 'ops-runbooks-costs'],
+    right: ['linux-networking', 'systemd-service-operations', 'docker-compose', 'cloud-fundamentals', 'network-edge-delivery'],
+    left: ['kubernetes-platform', 'ci-cd-iac', 'reverse-proxy-tls-dns', 'ops-runbooks-costs'],
   },
   {
     id: 'computer-science',
@@ -77,6 +77,8 @@ export const roadmapSections: SectionLayout[] = [
       'c-linux-systems',
       'linux-libc-linking',
       'linux-kernel-uapi-modules',
+      'linux-threads-sync',
+      'linux-sockets-epoll',
     ],
     left: [
       'cpp-modern-core',
@@ -91,8 +93,14 @@ export const roadmapSections: SectionLayout[] = [
   {
     id: 'python-engineering',
     tone: 'sky',
-    right: ['python-language-core-deep', 'python-packaging-venvs', 'python-stdlib-automation', 'python-math-computing'],
-    left: ['python-typing-testing', 'python-async-services'],
+    right: [
+      'python-language-core-deep',
+      'python-packaging-venvs',
+      'python-tooling-quality',
+      'python-stdlib-automation',
+      'python-math-computing',
+    ],
+    left: ['python-typing-testing', 'python-async-services', 'python-profiling-bindings'],
   },
   {
     id: 'game-development',
@@ -104,11 +112,13 @@ export const roadmapSections: SectionLayout[] = [
       'web-game-math-rendering',
       'game-tools-assets',
       'animation-audio-pipelines',
+      'game-shaders-materials',
     ],
     left: [
       'game-math-physics',
       'engine-math-foundations',
       'engine-architecture',
+      'ecs-game-architecture',
       'graphics-low-level',
       'build-your-own-engine',
       'game-profiling-optimization',
@@ -146,6 +156,12 @@ export const roadmapSections: SectionLayout[] = [
       'embedded-linux-specialist',
       'cpp-performance-specialist',
     ],
+  },
+  {
+    id: 'resource-atlas',
+    tone: 'mint',
+    right: ['mobile-native-resource-atlas', 'data-engineering-resource-atlas', 'embedded-robotics-resource-atlas'],
+    left: ['security-research-resource-atlas', 'compiler-tools-resource-atlas'],
   },
   {
     id: 'mastery-growth',

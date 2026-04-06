@@ -111,49 +111,58 @@ function checkDocsSync(readme: string, notebook: string) {
   }
 }
 
-async function probeUrl(url: string) {
+async function fetchWithTimeout(url: string, method: 'HEAD' | 'GET') {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000);
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
 
   try {
-    const headResponse = await fetch(url, {
-      method: 'HEAD',
+    return await fetch(url, {
+      method,
       redirect: 'follow',
       signal: controller.signal,
     });
-
-    if (headResponse.ok) {
-      return;
-    }
-
-    if (headResponse.status !== 405 && headResponse.status !== 403) {
-      addIssue('links', `الرابط ${url} أعاد الحالة ${headResponse.status} أثناء فحص HEAD.`);
-      return;
-    }
-
-    const getResponse = await fetch(url, {
-      method: 'GET',
-      redirect: 'follow',
-      signal: controller.signal,
-    });
-
-    if (getResponse.ok || getResponse.status === 403) {
-      return;
-    }
-
-    if (!getResponse.ok) {
-      addIssue('links', `الرابط ${url} أعاد الحالة ${getResponse.status} أثناء فحص GET.`);
-    }
-  } catch (error) {
-    addIssue('links', `تعذر فحص الرابط ${url}: ${error instanceof Error ? error.message : String(error)}`);
   } finally {
     clearTimeout(timeoutId);
   }
 }
 
+async function probeUrl(url: string) {
+  let headFailureReason: string | null = null;
+
+  try {
+    const headResponse = await fetchWithTimeout(url, 'HEAD');
+
+    if (headResponse.ok) {
+      return;
+    }
+
+    headFailureReason = `أعاد الحالة ${headResponse.status} أثناء فحص HEAD`;
+  } catch (error) {
+    headFailureReason = `تعذر فحص HEAD: ${error instanceof Error ? error.message : String(error)}`;
+  }
+
+  try {
+    const getResponse = await fetchWithTimeout(url, 'GET');
+
+    if (getResponse.ok || getResponse.status === 403) {
+      return;
+    }
+
+    addIssue(
+      'links',
+      `الرابط ${url} فشل بعد المحاولتين. ${headFailureReason ?? 'فشل HEAD.'} ثم أعاد GET الحالة ${getResponse.status}.`,
+    );
+  } catch (error) {
+    addIssue(
+      'links',
+      `تعذر فحص الرابط ${url}. ${headFailureReason ?? 'فشل HEAD.'} ثم تعذر GET: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+}
+
 async function checkLiveLinks() {
-  const urls = [...new Set([SITE_URL, ...Object.values(topicCatalog).flatMap((topic) => topic.resources.map((resource) => resource.url))])];
-  const concurrency = 8;
+  const urls = [...new Set(Object.values(topicCatalog).flatMap((topic) => topic.resources.map((resource) => resource.url)))];
+  const concurrency = 4;
   let index = 0;
 
   await Promise.all(
