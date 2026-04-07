@@ -1,44 +1,39 @@
 import { describe, expect, it } from 'vitest';
-import { buildRoadmapFilterState, getQuickSearchResults, normalizeSearchText } from './filtering';
+import { buildRoadmapFilterState } from './filtering';
 
 describe('roadmap filtering helpers', () => {
-  it('normalizes Arabic diacritics and punctuation for search', () => {
-    expect(normalizeSearchText('الرِّياضيات ـ على Linux!!!')).toBe('الرياضيات على linux');
-  });
-
-  it('matches math content inside the Python engineering track', () => {
+  it('filters topics inside a selected track and level', () => {
     const filterState = buildRoadmapFilterState({
-      searchQuery: 'NumPy',
-      activeTrackId: 'python-engineering',
+      activeTrackId: 'linux-distribution-engineering',
       activeLevel: 'متقدم',
-    });
-
-    expect(filterState.directlyMatchedIds.has('python-math-computing')).toBe(true);
-    expect(filterState.resultCount).toBeGreaterThanOrEqual(1);
-
-    const quickResults = getQuickSearchResults(filterState);
-    expect(quickResults[0]?.id).toBe('python-math-computing');
-  });
-
-  it('supports filtering by Linux track and level without a search term', () => {
-    const filterState = buildRoadmapFilterState({
-      searchQuery: '',
-      activeTrackId: 'systems-native',
-      activeLevel: 'متقدم',
+      beginnerMode: false,
     });
 
     expect(filterState.hasActiveFilters).toBe(true);
-    expect(filterState.directlyMatchedIds.has('linux-math-libraries')).toBe(true);
-    expect(filterState.directlyMatchedIds.has('cpp-math-geometry')).toBe(true);
+    expect(filterState.directlyMatchedIds.has('linux-distro-on-existing-base')).toBe(true);
+    expect(filterState.directlyMatchedIds.has('linux-package-repositories-signing')).toBe(true);
+    expect(filterState.contextualIds.has('linux-distribution-engineering')).toBe(true);
   });
 
-  it('returns quick search cards only when the user typed a query', () => {
+  it('keeps only beginner-friendly topics when beginner mode is enabled', () => {
     const filterState = buildRoadmapFilterState({
-      searchQuery: '',
-      activeTrackId: 'python-engineering',
+      activeTrackId: 'linux-userland-operations',
       activeLevel: '',
+      beginnerMode: true,
     });
 
-    expect(getQuickSearchResults(filterState)).toEqual([]);
+    expect(filterState.directlyMatchedIds.has('linux-cli-filesystem-permissions')).toBe(true);
+    expect(filterState.directlyMatchedIds.has('linux-boot-initramfs')).toBe(false);
+  });
+
+  it('returns an empty state when there are no active filters', () => {
+    const filterState = buildRoadmapFilterState({
+      activeTrackId: '',
+      activeLevel: '',
+      beginnerMode: false,
+    });
+
+    expect(filterState.hasActiveFilters).toBe(false);
+    expect(filterState.resultCount).toBe(0);
   });
 });

@@ -43,6 +43,7 @@ vi.mock('@xyflow/react', async () => {
       );
     },
     Background: () => null,
+    MiniMap: () => null,
     BackgroundVariant: { Dots: 'dots' },
     Handle: () => null,
     MarkerType: { ArrowClosed: 'arrowclosed' },
@@ -55,7 +56,7 @@ import App from './App';
 
 function setMatchMedia(compact = false) {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-    matches: compact && query === '(max-width: 760px)',
+    matches: compact && query === '(max-width: 920px)',
     media: query,
     onchange: null,
     addListener: vi.fn(),
@@ -78,74 +79,52 @@ describe('App', () => {
     setMatchMedia(false);
   });
 
-  it('opens the drawer from a shared topic URL', async () => {
-    window.history.replaceState({}, '', '/?topic=python-math-computing');
-
+  it('renders the landing page by default', () => {
     render(<App />);
 
-    expect(await screen.findByRole('heading', { name: 'رياضيات Python: math و NumPy و SciPy بوعي عملي' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'خريطة تعلّم البرمجة 2026' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'افتح الخريطة التفاعلية' })).toBeInTheDocument();
   });
 
-  it('defaults the legend toggle to compact/mobile behavior when the viewport is narrow', () => {
-    setMatchMedia(true);
+  it('redirects old shared topic links on / to the new /map route and opens the drawer', async () => {
+    window.history.replaceState({}, '', '/?topic=linux-buildroot-lfs');
 
     render(<App />);
 
-    expect(screen.getByRole('button', { name: 'إظهار الدليل' })).toBeInTheDocument();
-  });
-
-  it('syncs the quick search state into the URL and renders a quick result card', async () => {
-    render(<App />);
-
-    fireEvent.change(screen.getAllByRole('searchbox', { name: 'ابحث داخل الخريطة' })[0], {
-      target: { value: 'NumPy' },
-    });
-
-    expect(await screen.findByRole('button', { name: 'افتح موضوع رياضيات Python: math و NumPy و SciPy بوعي عملي' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'من Linux From Scratch إلى Buildroot: البناء من الجذور' })).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(window.location.search).toContain('q=NumPy');
+      expect(window.location.pathname).toBe('/map');
     });
   });
 
-  it('navigates quick search results with the keyboard and opens the selected topic', async () => {
+  it('opens the map route from the landing page', async () => {
     render(<App />);
 
-    const searchbox = screen.getAllByRole('searchbox', { name: 'ابحث داخل الخريطة' })[0];
+    fireEvent.click(screen.getByRole('button', { name: 'افتح الخريطة التفاعلية' }));
 
-    fireEvent.change(searchbox, {
-      target: { value: 'Python' },
+    await waitFor(() => {
+      expect(window.location.pathname).toBe('/map');
     });
 
-    await screen.findAllByRole('button', { name: /افتح موضوع / });
-
-    fireEvent.keyDown(searchbox, { key: 'ArrowDown' });
-    fireEvent.keyDown(searchbox, { key: 'ArrowDown' });
-    fireEvent.keyDown(searchbox, { key: 'Enter' });
-
-    const activeResultId = (searchbox.getAttribute('aria-activedescendant') ?? '').replace('quick-search-result-', '');
-    const activeResultTitle = flowNodeById.get(activeResultId)?.data.title ?? '';
-
-    expect(await screen.findByRole('heading', { name: activeResultTitle })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'الرئيسية' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'وضع مبتدئ' })).toBeInTheDocument();
   });
 
-  it('jumps directly to a major track without using filters first', async () => {
+  it('opens a topic from the mocked flow and toggles it as favorite', async () => {
     render(<App />);
 
-    fireEvent.change(screen.getByRole('combobox', { name: 'اذهب إلى المسار مباشرة' }), {
-      target: { value: 'frontend-web' },
+    fireEvent.click(screen.getByRole('button', { name: 'افتح الخريطة التفاعلية' }));
+
+    await waitFor(() => {
+      expect(window.location.pathname).toBe('/map');
     });
 
-    expect(await screen.findByRole('heading', { name: 'الويب والواجهة الأمامية' })).toBeInTheDocument();
-  });
+    fireEvent.click(screen.getAllByRole('button', { name: 'Linux Distribution Engineering' })[0]);
 
-  it('renders the enriched drawer sections for a topic', async () => {
-    render(<App />);
+    expect(await screen.findByRole('heading', { name: 'Linux Distribution Engineering' })).toBeInTheDocument();
 
-    fireEvent.click(screen.getAllByRole('button', { name: 'رياضيات Python: math و NumPy و SciPy بوعي عملي' })[0]);
-
-    expect(await screen.findByRole('heading', { name: 'أخطاء شائعة بشكل مبسط' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'تمرين صغير أو mini-lab' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'مصدر رسمي موثوق' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'إضافة إلى المفضلة' }));
+    expect(screen.getByRole('button', { name: 'إزالة من المفضلة' })).toBeInTheDocument();
   });
 });

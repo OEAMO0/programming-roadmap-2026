@@ -1,48 +1,65 @@
 import { expect, test } from '@playwright/test';
 
-test('opens the site, searches, opens a topic, and copies the share link', async ({ page }) => {
+test('opens the landing page, enters the map, opens a topic, and copies the share link', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.getByText('خريطة تعلّم البرمجة 2026')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'خريطة تعلّم البرمجة 2026' })).toBeVisible();
+  await page.getByRole('button', { name: 'افتح الخريطة التفاعلية' }).click();
 
-  const searchbox = page.getByRole('searchbox', { name: 'ابحث داخل الخريطة' });
-  await searchbox.fill('NumPy');
+  await expect(page).toHaveURL(/\/map$/);
+  await expect(page.getByRole('button', { name: 'الرئيسية' })).toBeVisible();
 
-  const quickResult = page.getByRole('button', {
-    name: 'افتح موضوع رياضيات Python: math و NumPy و SciPy بوعي عملي',
-  });
-  await expect(quickResult).toBeVisible();
+  await page.getByRole('button', { name: 'الفهرس' }).click();
+  await page.locator('.overview-overlay').getByRole('button', { name: 'Linux Distribution Engineering' }).click();
 
-  await searchbox.press('Enter');
+  await expect(page.getByRole('heading', { name: 'Linux Distribution Engineering' })).toBeVisible();
 
-  await expect(page.getByRole('heading', { name: 'رياضيات Python: math و NumPy و SciPy بوعي عملي' })).toBeVisible();
-
-  await page.getByRole('button', { name: 'المزيد من الأدوات' }).click();
-  await page.getByRole('menuitem', { name: /نسخ الرابط/ }).click();
-
-  await expect(page.getByText('تم نسخ رابط الحالة الحالية.')).toBeVisible();
+  await page.getByRole('button', { name: 'نسخ الرابط' }).first().click();
 
   const clipboardText = await page.evaluate(async () => navigator.clipboard.readText());
-  expect(clipboardText).toContain('topic=python-math-computing');
+  expect(clipboardText).toContain('/map?topic=linux-distribution-engineering');
 });
 
-test('keeps the tools menu fully inside the viewport on narrow screens', async ({ page }) => {
-  await page.setViewportSize({ width: 360, height: 740 });
-  await page.goto('/');
+test('supports beginner mode and shows the index as an overlay without shrinking the map', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/map');
 
-  await page.getByRole('button', { name: 'المزيد من الأدوات' }).click();
+  const topbar = page.locator('.topbar').first();
+  await expect(topbar).toBeVisible();
+  await expect(page.locator('.compact-filters')).toHaveCount(0);
 
-  const menu = page.locator('.topbar-menu');
-  await expect(menu).toBeVisible();
+  await page.getByRole('button', { name: 'الأدوات' }).click();
+  const mobileTools = page.locator('.mobile-controls-sheet');
+  await expect(mobileTools).toBeVisible();
+  await mobileTools.getByRole('button', { name: 'وضع مبتدئ' }).click();
+  await expect(page.locator('.mobile-status-strip')).toContainText('تعرض الآن');
+  await mobileTools.getByRole('button', { name: 'إغلاق أدوات الجوال' }).click();
+  await expect(page.locator('.mobile-controls-sheet')).toHaveCount(0);
+  await page.getByRole('button', { name: 'الفهرس' }).click();
+  const overview = page.locator('.overview-overlay');
+  await expect(overview).toBeVisible();
 
-  const menuBox = await menu.boundingBox();
+  const topbarBox = await topbar.boundingBox();
+  const overviewBox = await overview.boundingBox();
   const viewport = page.viewportSize();
 
-  expect(menuBox).not.toBeNull();
+  expect(topbarBox).not.toBeNull();
+  expect(overviewBox).not.toBeNull();
   expect(viewport).not.toBeNull();
 
-  expect(menuBox!.x).toBeGreaterThanOrEqual(0);
-  expect(menuBox!.y).toBeGreaterThanOrEqual(0);
-  expect(menuBox!.x + menuBox!.width).toBeLessThanOrEqual(viewport!.width);
-  expect(menuBox!.y + menuBox!.height).toBeLessThanOrEqual(viewport!.height);
+  expect(topbarBox!.x).toBeGreaterThanOrEqual(0);
+  expect(topbarBox!.y).toBeGreaterThanOrEqual(0);
+  expect(topbarBox!.x + topbarBox!.width).toBeLessThanOrEqual(viewport!.width);
+  expect(overviewBox!.x).toBeGreaterThanOrEqual(0);
+  expect(overviewBox!.x + overviewBox!.width).toBeLessThanOrEqual(viewport!.width);
+  await expect(page.locator('.roadmap-minimap')).toHaveCount(0);
+
+  await overview.getByRole('button', { name: 'Linux Distribution Engineering' }).click();
+  const drawer = page.locator('.details-drawer');
+  await expect(drawer).toBeVisible();
+  const drawerBox = await drawer.boundingBox();
+
+  expect(drawerBox).not.toBeNull();
+  expect(drawerBox!.width).toBeLessThanOrEqual(viewport!.width);
+  expect(drawerBox!.y + drawerBox!.height).toBeLessThanOrEqual(viewport!.height + 1);
 });

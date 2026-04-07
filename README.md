@@ -1,63 +1,58 @@
 # خريطة تعلّم البرمجة 2026
 
-واجهة ويب تفاعلية بالعربية لعرض خريطة تعلّم برمجة حديثة حتى تاريخ `2026-04-06`، مبنية فوق مكتبة جاهزة للرودماب والـ flow بدل بناء محرك الرسم من الصفر.
+واجهة عربية تفاعلية محدثة حتى `2026-04-06`، لكن تركيزها الآن صار أوضح بكثير: مسارات أقل عددًا، أعلى قيمة، ومعظم العمق الحقيقي متجه إلى لينكس والأنظمة والنواة وبناء التوزيعات.
 
 ## الموقع الرسمي
 
 [افتح النسخة المنشورة للموقع](https://programming-roadmap-2026.devbread.workers.dev/)
 
-## ما الموجود الآن؟
+## ما الذي تغيّر؟
 
-- خريطة كبيرة قابلة للسحب والتكبير والتصغير
-- شريط علوي أخف مع بحث وفلترة دون تغيير شكل التصميم الأساسي
-- أزرار علوية مضغوطة بالأيقونات مع قائمة أدوات صغيرة لتقليل المساحة على البي سي والجوال
-- نافذة شرح جانبية تظهر عند الضغط على أي عنصر
+- يوجد الآن `صفحة هبوط` حقيقية على `/` بدل النص الذي كان يومض ثم يختفي.
+- الخريطة التفاعلية انتقلت إلى `/map`.
+- أُزيل شريط البحث الكبير نهائيًا.
+- استُبدل البحث بفلترة صغيرة وذكية: المسار، المستوى، و`وضع مبتدئ`.
+- أُضيفت `المفضلة` و`آخر ما فُتح` بدل أي محاولة لتتبع التقدم.
+- أُضيف فهرس جانبي سريع + `MiniMap` لتسهيل التنقل في الخريطة الكبيرة.
+- طبقة الوصول تحسنت عبر `skip link` و`aria-live` والفهرس القابل للوصول بلوحة المفاتيح.
+- صار هناك `Service Worker` فعلي مع `PWA` أبسط من السابق، وليس مجرد manifest فقط.
+
+## شكل المحتوى الآن
+
+- `9` مسارات ظاهرة فقط بدل التمدد الكبير السابق.
+- يوجد مسار ويب واحد واضح، لكن أكثر العمق الآن مخصص لـ:
+  - `Linux Userland / Operations`
+  - `Linux Systems Programming`
+  - `Linux Kernel Internals`
+  - `Linux Distribution Engineering`
+- في الأساسيات أُضيف عمق فعلي يبدأ من:
+  - البتات والبوابات والمنطق
+  - تمثيل الأعداد والنصوص والتعليمات
+  - الذاكرة والتنفيذ والترجمة
+- مسار `Linux Distribution Engineering` جديد ومقصود به صراحة:
+  - Linux From Scratch
+  - Buildroot
+  - Yocto
+  - packaging
+  - repositories/signing
+  - initramfs
+  - images/installers
+  - cross compilation
+  - testing/maintenance
+
+## أهم الميزات الحالية
+
+- صفحة هبوط تقود المستخدم إلى بداية مناسبة بدل إدخاله للخريطة مباشرة
+- خريطة قابلة للسحب والتكبير والتصغير
+- فلترة صغيرة بدل شريط بحث كبير
+- `وضع مبتدئ`
+- `المفضلة`
+- `آخر ما فُتح`
+- روابط مباشرة قابلة للمشاركة لكل موضوع
 - وضع فاتح ووضع داكن
-- اختصارات سريعة للبحث: `/` أو `Ctrl/Cmd + K` ثم `Enter` لفتح أول نتيجة مطابقة
-- تنقل بالأسهم داخل نتائج البحث السريعة نفسها قبل الفتح
-- اختصار عملي باسم `اذهب إلى المسار مباشرة` للانتقال السريع إلى المسارات الكبيرة دون فلترة ثم تحريك يدوي داخل الخريطة
-- مسارات مترابطة من لماذا وُجدت البرمجة والكمبيوتر أصلًا حتى التخصص والنمو المهني
-- مسار إضافي لتطوير الألعاب والمحركات
-- مسارات أعمق للبرمجة منخفضة المستوى: `C` و `C++` و `Linux / OS`
-- مسار إضافي لهندسة `Python` بشكل عملي ومتدرج
-- تخصصات جديدة مثل `Systems Programming Specialist` و `Python Engineering Specialist` و `Embedded / Linux Specialist` و `C++ Performance Specialist`
-- محتوى أعمق بكثير في كل مسار مع توسعة واضحة في البداية والنهاية
-- بحث وفلترة داخل الخريطة حسب المسار أو المستوى أو الكلمات المفتاحية
-- رابط مباشر يشارك نفس حالة الخريطة الحالية: الموضوع المفتوح، البحث، والفلاتر
-- نتائج بحث سريعة مختصرة تظهر عند الكتابة بدل الاعتماد فقط على تمييز العقد
-- أيقونات حالة بدل الشريط اللوني الجانبي داخل العقد
-- كلمات بحث مفيدة داخل نافذة الشرح عندما يكون الموضوع مناسبًا للبحث الذاتي
-- روابط إرشادية داخل نافذة الشرح: ما الذي يفيد قبله، ما الذي يأتي بعده، ومسار قريب أو بديل
-- أقسام إرشادية جديدة داخل نافذة الشرح: أخطاء شائعة بشكل مبسط، mini-lab صغير، ومصادر مقسمة إلى مصدر رسمي ومصدر مبسط ومصادر إضافية
-- مشاريع ختامية خفيفة للمسارات والتخصصات الأساسية لتقوية البورتفوليو والتطبيق العملي
-- تحسينات خفيفة لعرض الواجهة على الجوال والأجهزة الضيقة
-- نافذة شرح أغنى تعرض إرشادًا عمليًا: ما الذي تراجعه قبل الموضوع، ماذا بعده، أفكار مشاريع، وعبارات بحث مفيدة
-- توسعة أوضح داخل `Frontend / Web` تشمل التخزين المحلي و `Service Workers / PWA` و `IndexedDB` و `Canvas / WebGPU` و `frontend testing`
-- توسعة أوضح داخل `Architecture / Systems` تشمل `backpressure` و `graceful degradation` و `failure modes`
-- توسعة أوضح داخل `Quality / Security` تشمل `OAuth / OIDC` و `SBOM` و `dependency auditing` و `fuzzing` و `incident response basics`
-- توسعة أوضح داخل `AI Engineering` تشمل `chunking / indexing` و `eval datasets` و `cost control / caching` و `tool/agent failure handling`
-- توسعة أوضح داخل `Computer Science` تشمل `virtual memory` و `memory model` و `filesystems internals` و `consensus / replication basics`
-- تعميق إضافي داخل مسار `Linux / Systems` يشمل `glibc` والربط الديناميكي وواجهات النواة و `libm / GSL`
-- تعميق إضافي داخل مسار `Linux / Systems` يشمل أيضًا `strace / perf / valgrind` و `mmap` وقراءة `ELF`
-- تعميق رياضي جديد داخل `C++` و `Python` وألعاب الويب ومسار المحركات نفسه، مع مصادر رسمية أقوى مثل `Python docs` و `NumPy / SciPy` و `Eigen` و `MDN` و `Godot`
-- توسيع المسارات المطلوبة في `Linux / Systems` و`Backend / Data` و`Cloud / Platform` و`Python Engineering` و`Game Dev / Engines`
-- مسار مرجعي مستقل على شكل `أطلس المصادر` يجمع وثائق وروابط رسمية لمسارات خارج الخريطة الأساسية مثل الموبايل الأصلي، الأمن، هندسة البيانات، الأنظمة المضمنة، تطبيقات سطح المكتب، وأدوات اللغات
-- فحص محتوى وتوثيق وروابط عبر:
-  - `npm run check:content`
-  - `npm run check:links`
-- smoke check للرابط الرسمي بعد النشر عبر:
-  - `npm run smoke:deploy`
-- اختبارات أساسية للبحث ومشاركة الحالة وفتح النافذة عبر:
-  - `npm run test:run`
-  - `npm run test:e2e`
-- يوجد الآن `GitHub Actions` يشغّل البناء والاختبارات وsmoke check المحلي وE2E وفحص الروابط تلقائيًا
-- المشروع متعمد أن يبقى مرجعًا متعدد المسارات، لذلك لا يضيف نظام تتبع تقدم شخصي داخل الخريطة
-
-## التقنية المستخدمة
-
-- `React + Vite`
-- `@xyflow/react` لعرض العقد والأسهم والزوم والتحريك
-- تصميم RTL عربي
+- `Service Worker` + `site.webmanifest`
+- `GitHub Actions`
+- فحص محتوى وروابط وSEO قبل البناء والنشر
 
 ## التشغيل
 
@@ -66,12 +61,21 @@ npm install
 npm run dev
 ```
 
-ثم افتح الرابط الذي يعرضه Vite في المتصفح.
+ثم افتح الرابط الذي يعرضه Vite.
 
 ## البناء
 
 ```bash
 npm run build
+```
+
+## الاختبارات والفحوص
+
+```bash
+npm run test:run
+npm run test:e2e
+npm run check:content
+npm run check:links
 ```
 
 ## النشر
@@ -80,63 +84,52 @@ npm run build
 npm run deploy
 ```
 
-أمر `deploy` يشغّل النشر ثم يتبعه `smoke:deploy` على الرابط الرسمي مباشرة.
+أمر `deploy` يشغّل البناء ثم `wrangler deploy` ثم `smoke:deploy` على الرابط الرسمي.
 
 ## أهم الملفات
 
-- [src/data/roadmap-model.ts](/D:/vscodeFiles/map/src/data/roadmap-model.ts)
-  هذا الملف يحتوي الأنواع الأساسية والألوان المشتركة بين أجزاء بيانات الخريطة.
+- [src/App.tsx](/D:/vscodeFiles/map/src/App.tsx)
+  نقطة الدخول بين `صفحة هبوط` و`/map`.
 
-- [src/data/roadmap-docs.ts](/D:/vscodeFiles/map/src/data/roadmap-docs.ts)
-  هذا الملف يجمع روابط المصادر المشتركة والمرجعية حتى لا تتكرر داخل المحتوى.
+- [src/features/roadmap/home-page.tsx](/D:/vscodeFiles/map/src/features/roadmap/home-page.tsx)
+  واجهة الصفحة الرئيسية واختيارات البدء السريع.
+
+- [src/features/roadmap/map-workspace.tsx](/D:/vscodeFiles/map/src/features/roadmap/map-workspace.tsx)
+  الخريطة التفاعلية والفلاتر والمفضلة وآخر ما فُتح ونافذة التفاصيل.
 
 - [src/data/roadmap-structure.ts](/D:/vscodeFiles/map/src/data/roadmap-structure.ts)
-  هذا الملف يحدد ترتيب المسارات الرئيسية وتوزيع الموضوعات داخل كل مسار.
+  يحدد ترتيب المسارات الظاهرة الجديدة.
+
+- [src/data/roadmap-focused-inputs.ts](/D:/vscodeFiles/map/src/data/roadmap-focused-inputs.ts)
+  طبقة override للمحتوى الظاهر الآن، خصوصًا لينكس والنواة والتوزيعات.
 
 - [src/data/roadmap-topic-inputs.ts](/D:/vscodeFiles/map/src/data/roadmap-topic-inputs.ts)
-  هذا الملف يحتوي نصوص الموضوعات نفسها: العنوان، الشرح، نقاط التعلم، التدريب العملي، والمصادر.
+  المخزون التاريخي الكبير للمحتوى الأساسي.
 
-- [src/data/roadmap-guidance.ts](/D:/vscodeFiles/map/src/data/roadmap-guidance.ts)
-  هذا الملف يجمع الربط الإرشادي الإضافي مثل أفكار المشاريع والأخطاء الشائعة والمختبرات الصغيرة والمصادر المصنفة.
+- [src/data/roadmap-docs.ts](/D:/vscodeFiles/map/src/data/roadmap-docs.ts)
+  روابط المصادر الرسمية والمرجعية المشتركة.
 
-- [src/data/roadmap.ts](/D:/vscodeFiles/map/src/data/roadmap.ts)
-  هذا الملف هو نقطة التجميع الأساسية: يجمع الملفات السابقة، ويبني `topicCatalog` و`nodes` و`edges` وروابط الاقتراحات داخل الخريطة.
+- [src/features/roadmap/filtering.ts](/D:/vscodeFiles/map/src/features/roadmap/filtering.ts)
+  منطق الفلترة الصغيرة الجديدة.
+
+- [src/features/roadmap/seo.ts](/D:/vscodeFiles/map/src/features/roadmap/seo.ts)
+  SEO للصفحة الرئيسية، `/map`، وصفحات الموضوعات.
+
+- [public/sw.js](/D:/vscodeFiles/map/public/sw.js)
+  الـ `Service Worker` الخاص بالكاش البسيط والتنقلات.
+
+- [scripts/generate-seo-files.ts](/D:/vscodeFiles/map/scripts/generate-seo-files.ts)
+  يولد `sitemap.xml` و`robots.txt` و`site.webmanifest`.
 
 - [.github/workflows/ci.yml](/D:/vscodeFiles/map/.github/workflows/ci.yml)
-  هذا الملف يشغّل GitHub Actions لفحص المحتوى والبناء والاختبارات وsmoke check وE2E وفحص الروابط.
+  `GitHub Actions` للبناء والاختبارات وفحوص المحتوى والـ smoke check.
 
-- [src/App.tsx](/D:/vscodeFiles/map/src/App.tsx)
-  هذا الملف يحتوي منطق الواجهة التفاعلية، اختيار العقد، فتح نافذة الشرح، ضبط الكاميرا، وتبديل الوضع الفاتح والداكن.
+## لماذا هذا الترتيب؟
 
-- [src/styles.css](/D:/vscodeFiles/map/src/styles.css)
-  هذا الملف يحتوي نظام الألوان، الأحجام، شكل العقد، الشريط العلوي، ولوحة الشرح.
-
-- [PROJECT_NOTEBOOK_AR.md](/D:/vscodeFiles/map/PROJECT_NOTEBOOK_AR.md)
-  هذا هو ملف المفكرة الكامل للمشروع، ويشرح الفكرة، الهيكل، التعديلات، طريقة التوسعة، وكل القرارات المهمة.
-
-## كيف تعدل المحتوى؟
-
-1. عدّل نص الموضوع ومحتواه داخل [src/data/roadmap-topic-inputs.ts](/D:/vscodeFiles/map/src/data/roadmap-topic-inputs.ts)
-2. إذا احتجت مصادر مرجعية مشتركة فحدّث [src/data/roadmap-docs.ts](/D:/vscodeFiles/map/src/data/roadmap-docs.ts)
-3. إذا أردت تعديل الأخطاء الشائعة أو أفكار المشاريع أو منطق المصادر الإضافي فحدّث [src/data/roadmap-guidance.ts](/D:/vscodeFiles/map/src/data/roadmap-guidance.ts)
-4. اربط الموضوع أو أعد ترتيبه داخل [src/data/roadmap-structure.ts](/D:/vscodeFiles/map/src/data/roadmap-structure.ts)
-5. شغّل المشروع وستظهر العقدة تلقائيًا داخل الخريطة
-
-## أفضل فرص التوسعة القادمة
-
-- `Frontend / Web`
-- `Architecture / Systems`
-- `Quality / Security`
-- `AI Engineering`
-- `Computer Science`
-
-ومن `أطلس المصادر`، أقوى المرشحين للتحويل لاحقًا إلى مسارات كاملة هم:
-
-- `Data Engineering`
-- `Security Research`
-- `Mobile Native`
+- لأن الخريطة كانت واسعة أكثر من اللازم مقارنة بعمق بعض الأبواب.
+- لأن تجربة المستخدم لم تكن تستفيد فعليًا من شريط بحث كبير.
+- لأن أفضل قيمة في المشروع الآن هي جعل لينكس من مستوى الاستخدام اليومي حتى بناء التوزيعات مسارًا متماسكًا ومفصلًا.
 
 ## ملاحظة
 
-إذا كنت تريد فهم المشروع بالكامل قبل التعديل، ابدأ من [PROJECT_NOTEBOOK_AR.md](/D:/vscodeFiles/map/PROJECT_NOTEBOOK_AR.md) لأنه المرجع الأشمل للمشروع.
-
+إذا كنت تريد المرجع العربي الداخلي الأشمل للمشروع، ابدأ من [PROJECT_NOTEBOOK_AR.md](/D:/vscodeFiles/map/PROJECT_NOTEBOOK_AR.md).

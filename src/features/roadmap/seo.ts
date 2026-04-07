@@ -1,11 +1,14 @@
 import { roadmapMeta, roadmapSections, topicCatalog, type TopicDetail, type TopicLevel } from '../../data/roadmap';
 import { trackIdByTopicId } from './filtering';
 
+export type RoadmapRoute = 'home' | 'map';
+
 export type RoadmapSeoInput = {
+  route: RoadmapRoute;
   selectedTopic: TopicDetail | null;
-  searchQuery: string;
   activeTrackId: string;
   activeLevel: TopicLevel | '';
+  beginnerMode: boolean;
 };
 
 export type RoadmapSeoState = {
@@ -32,30 +35,33 @@ function trimForSnippet(value: string, maxLength = 170) {
 }
 
 const siteKeywords = [
+  'خريطة تعلم لينكس',
   'خريطة تعلم البرمجة',
-  'تعلم البرمجة بالعربية',
+  'تعلم لينكس بالعربية',
+  'Linux roadmap Arabic',
+  'Linux kernel',
+  'Linux distribution engineering',
+  'Systems programming',
   'تعلم البرمجة من الصفر',
-  'مسارات تعلم البرمجة',
-  'Programming Roadmap 2026',
-  'Frontend',
-  'Backend',
-  'Systems Programming',
-  'Security',
-  'AI Engineering',
 ];
 
-const socialImageUrl = new URL('/roadmap-social-card.svg', roadmapMeta.siteUrl).toString();
-const socialImageAlt = 'بطاقة خريطة تعلم البرمجة 2026 بالعربية';
-const homeSeoTitle = `${roadmapMeta.title} بالعربية | مسارات تفاعلية من البداية إلى التخصص`;
-const defaultDescription = trimForSnippet(
-  [
-    `خريطة تعلم برمجة تفاعلية بالعربية تضم ${roadmapMeta.totalTracks} مسارًا و${roadmapMeta.totalTopics} موضوعًا`,
-    'وتغطي الأساسيات والويب والباك إند والأنظمة والأمن والسحابة والهندسة البرمجية وAI Engineering بمراجع موثوقة وخطوات عملية.',
-  ].join(' '),
+const homeDescription = trimForSnippet(
+  `صفحة عربية مرتبة تقودك من فهم 0 و1 وطبقات الحاسوب إلى مسارات لينكس العميقة: الاستخدام اليومي، برمجة الأنظمة، النواة، وبناء التوزيعات، مع مسار ويب واحد ومصادر موثوقة.`,
 );
+const mapDescription = trimForSnippet(
+  `الخريطة التفاعلية تضم ${roadmapMeta.totalTracks} مسارات ظاهرة و${roadmapMeta.totalTopics} موضوعًا فعّالًا، مع تركيز كبير على لينكس والنواة وبناء التوزيعات ومصادر رسمية لكل باب.`,
+);
+const socialImageUrl = new URL('/roadmap-social-card.svg', roadmapMeta.siteUrl).toString();
+const socialImageAlt = 'بطاقة خريطة تعلم البرمجة 2026 بالعربية مع تركيز قوي على لينكس';
+
+function buildMapUrl(search = '') {
+  const url = new URL('/map', roadmapMeta.siteUrl);
+  url.search = search;
+  return url.toString();
+}
 
 function buildTopicCanonicalUrl(topicId: string) {
-  const url = new URL(roadmapMeta.siteUrl);
+  const url = new URL('/map', roadmapMeta.siteUrl);
   url.searchParams.set('topic', topicId);
   return url.toString();
 }
@@ -67,6 +73,7 @@ function getTrackContext(topicId: string) {
 }
 
 function buildStructuredData(input: {
+  route: RoadmapRoute;
   title: string;
   description: string;
   canonicalUrl: string;
@@ -79,145 +86,125 @@ function buildStructuredData(input: {
     alternateName: 'Programming Roadmap 2026',
     url: roadmapMeta.siteUrl,
     inLanguage: 'ar',
-    description: defaultDescription,
+    description: homeDescription,
     image: socialImageUrl,
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: `${roadmapMeta.siteUrl}?q={search_term_string}`,
-      'query-input': 'required name=search_term_string',
-    },
   };
 
-  if (!input.selectedTopic) {
-    const itemList = {
-      '@context': 'https://schema.org',
-      '@type': 'CollectionPage',
-      name: input.title,
-      url: input.canonicalUrl,
-      inLanguage: 'ar',
-      description: input.description,
-      isPartOf: {
-        '@type': 'WebSite',
-        name: roadmapMeta.title,
-        url: roadmapMeta.siteUrl,
-      },
-      image: socialImageUrl,
-      mainEntity: {
-        '@type': 'ItemList',
-        itemListOrder: 'https://schema.org/ItemListOrderAscending',
-        numberOfItems: roadmapSections.length,
-        itemListElement: roadmapSections.map((section, index) => ({
-          '@type': 'ListItem',
-          position: index + 1,
-          name: topicCatalog[section.id]?.title ?? section.id,
-          url: buildTopicCanonicalUrl(section.id),
-        })),
-      },
-    };
+  if (input.selectedTopic) {
+    const { trackId, trackTitle } = getTrackContext(input.selectedTopic.id);
 
-    return JSON.stringify([website, itemList], null, 2);
-  }
-
-  const { trackId, trackTitle } = getTrackContext(input.selectedTopic.id);
-  const topicPage = {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: input.title,
-    url: input.canonicalUrl,
-    inLanguage: 'ar',
-    description: input.description,
-    isPartOf: {
-      '@type': 'WebSite',
-      name: roadmapMeta.title,
-      url: roadmapMeta.siteUrl,
-    },
-    image: socialImageUrl,
-    breadcrumb: {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
+    return JSON.stringify(
+      [
+        website,
         {
-          '@type': 'ListItem',
-          position: 1,
-          name: roadmapMeta.title,
-          item: roadmapMeta.siteUrl,
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: trackTitle || input.selectedTopic.category,
-          item: buildTopicCanonicalUrl(trackId),
-        },
-        {
-          '@type': 'ListItem',
-          position: 3,
+          '@context': 'https://schema.org',
+          '@type': 'LearningResource',
           name: input.selectedTopic.title,
-          item: input.canonicalUrl,
+          url: input.canonicalUrl,
+          inLanguage: 'ar',
+          description: input.selectedTopic.summary,
+          educationalLevel: input.selectedTopic.level,
+          isAccessibleForFree: true,
+          learningResourceType: 'Interactive roadmap topic',
+          about: [trackTitle, input.selectedTopic.category].filter(Boolean),
+          teaches: input.selectedTopic.learn.slice(0, 4),
+          isPartOf: {
+            '@type': 'CollectionPage',
+            name: trackTitle || roadmapMeta.title,
+            url: buildTopicCanonicalUrl(trackId),
+          },
         },
       ],
-    },
-    mainEntity: {
-      '@type': 'LearningResource',
-      name: input.selectedTopic.title,
-      url: input.canonicalUrl,
-      description: input.selectedTopic.summary,
-      inLanguage: 'ar',
-      educationalLevel: input.selectedTopic.level,
-      learningResourceType: 'Interactive roadmap topic',
-      isAccessibleForFree: true,
-      keywords: [...input.selectedTopic.tags, input.selectedTopic.category, trackTitle].filter(Boolean).join(', '),
-      teaches: input.selectedTopic.learn.slice(0, 4),
-    },
-  };
+      null,
+      2,
+    );
+  }
 
-  return JSON.stringify([website, topicPage], null, 2);
+  if (input.route === 'home') {
+    return JSON.stringify(
+      [
+        website,
+        {
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: input.title,
+          url: input.canonicalUrl,
+          inLanguage: 'ar',
+          description: input.description,
+          mainEntity: {
+            '@type': 'ItemList',
+            itemListOrder: 'https://schema.org/ItemListOrderAscending',
+            numberOfItems: roadmapSections.length,
+            itemListElement: roadmapSections.map((section, index) => ({
+              '@type': 'ListItem',
+              position: index + 1,
+              name: topicCatalog[section.id]?.title ?? section.id,
+              url: buildTopicCanonicalUrl(section.id),
+            })),
+          },
+        },
+      ],
+      null,
+      2,
+    );
+  }
+
+  return JSON.stringify(
+    [
+      website,
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebApplication',
+        name: input.title,
+        url: input.canonicalUrl,
+        inLanguage: 'ar',
+        description: input.description,
+        applicationCategory: 'EducationalApplication',
+        operatingSystem: 'Any',
+        isAccessibleForFree: true,
+      },
+    ],
+    null,
+    2,
+  );
 }
 
 export function buildRoadmapSeoState({
+  route,
   selectedTopic,
-  searchQuery,
   activeTrackId,
   activeLevel,
+  beginnerMode,
 }: RoadmapSeoInput): RoadmapSeoState {
-  const normalizedQuery = searchQuery.trim();
-  const activeTrackTitle = activeTrackId ? topicCatalog[activeTrackId]?.title ?? '' : '';
-  const hasNonTopicFilters = Boolean(normalizedQuery || activeTrackId || activeLevel);
-
-  let title = homeSeoTitle;
-  let description = defaultDescription;
-  let canonicalUrl = roadmapMeta.siteUrl;
+  let title = `${roadmapMeta.title} بالعربية | مسارات لينكس والبرمجة من الصفر حتى التوزيعات`;
+  let description = route === 'home' ? homeDescription : mapDescription;
+  let canonicalUrl = route === 'home' ? roadmapMeta.siteUrl : buildMapUrl();
   let robots = 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
   let keywords = siteKeywords.join(', ');
 
   if (selectedTopic) {
     const { trackTitle } = getTrackContext(selectedTopic.id);
-    title = `${selectedTopic.title} | ${roadmapMeta.title} بالعربية`;
+    title = `${selectedTopic.title} | ${roadmapMeta.title}`;
     description = trimForSnippet(
-      `${selectedTopic.summary} ضمن مسار ${trackTitle || selectedTopic.category}، بمستوى ${selectedTopic.level} ومصادر موثوقة وخطوات عملية داخل خريطة تعلم البرمجة 2026.`,
+      `${selectedTopic.summary} ضمن مسار ${trackTitle || selectedTopic.category}، مع ما تتعلمه، ما تبنيه، ومراجع رسمية تقودك من الفهم إلى التطبيق.`,
     );
     canonicalUrl = buildTopicCanonicalUrl(selectedTopic.id);
     keywords = [...siteKeywords, selectedTopic.title, selectedTopic.category, selectedTopic.level, ...selectedTopic.tags].join(', ');
-  } else if (normalizedQuery) {
-    title = `نتائج البحث عن ${normalizedQuery} | ${roadmapMeta.title}`;
-    description = trimForSnippet(
-      `استكشف نتائج البحث عن ${normalizedQuery} داخل خريطة تعلم البرمجة 2026 بالعربية، مع مسارات مرتبة ومراجع موثوقة من البداية حتى التخصص.`,
-    );
-    robots = 'noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
-  } else if (activeTrackTitle) {
-    title = `${activeTrackTitle} | ${roadmapMeta.title} بالعربية`;
-    description = trimForSnippet(
-      `استكشف مسار ${activeTrackTitle} داخل خريطة تعلم البرمجة 2026 بالعربية، مع مواضيع مرتبة ومراجع موثوقة وتجارب عملية واضحة.`,
-    );
+  } else if (activeTrackId) {
+    const trackTitle = topicCatalog[activeTrackId]?.title ?? '';
+    title = `${trackTitle} | ${roadmapMeta.title}`;
+    description = trimForSnippet(`استكشف مسار ${trackTitle} داخل الخريطة التفاعلية، مع فلترة مركزة ومراجع عملية وعقد مترابطة.`);
     robots = 'noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
   } else if (activeLevel) {
     title = `مستوى ${activeLevel} | ${roadmapMeta.title}`;
-    description = trimForSnippet(
-      `استكشف موضوعات مستوى ${activeLevel} داخل خريطة تعلم البرمجة 2026 بالعربية، مع تنظيم واضح من الأساسيات حتى التعمق.`,
-    );
+    description = trimForSnippet(`اعرض موضوعات مستوى ${activeLevel} فقط داخل خريطة التعلم التفاعلية.`);
     robots = 'noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
-  }
-
-  if (!selectedTopic && !hasNonTopicFilters) {
-    description = defaultDescription;
+  } else if (beginnerMode) {
+    title = `الوضع المبتدئ | ${roadmapMeta.title}`;
+    description = trimForSnippet('اعرض فقط الموضوعات المناسبة للبداية داخل الخريطة التفاعلية.');
+    robots = 'noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
+  } else if (route === 'map') {
+    title = `الخريطة التفاعلية | ${roadmapMeta.title}`;
   }
 
   return {
@@ -227,6 +214,7 @@ export function buildRoadmapSeoState({
     robots,
     keywords,
     structuredData: buildStructuredData({
+      route,
       title,
       description,
       canonicalUrl,

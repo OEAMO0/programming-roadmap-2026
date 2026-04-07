@@ -18,7 +18,7 @@ function escapeXml(value: string) {
 }
 
 function buildTopicUrl(topicId: string) {
-  const url = new URL(roadmapMeta.siteUrl);
+  const url = new URL('/map', roadmapMeta.siteUrl);
   url.searchParams.set('topic', topicId);
   return url.toString();
 }
@@ -89,6 +89,11 @@ async function main() {
       loc: roadmapMeta.siteUrl,
       changefreq: 'daily',
       priority: '1.0',
+    },
+    {
+      loc: new URL('/map', roadmapMeta.siteUrl).toString(),
+      changefreq: 'daily',
+      priority: '0.9',
     },
     ...Object.keys(topicCatalog)
       .sort((left, right) => topicCatalog[left].title.localeCompare(topicCatalog[right].title, 'ar'))

@@ -10,29 +10,25 @@ const allowedLevels = new Set<TopicLevel>(['ابدأ', 'أساسي', 'عملي',
 export function parseRoadmapUrlState(search: string): RoadmapUrlState {
   const params = new URLSearchParams(search);
   const topicId = params.get('topic');
-  const searchQuery = params.get('q')?.trim() ?? '';
   const trackId = params.get('track') ?? '';
   const levelParam = params.get('level') ?? '';
+  const beginnerMode = params.get('beginner') === '1';
 
   return {
     topicId: topicId && validTopicIds.has(topicId) ? topicId : null,
-    searchQuery,
     activeTrackId: trackId && validTrackIds.has(trackId) ? trackId : '',
     activeLevel: allowedLevels.has(levelParam as TopicLevel) ? (levelParam as TopicLevel) : '',
+    beginnerMode,
   };
 }
 
 export function buildRoadmapUrlSearch({
   topicId,
-  searchQuery,
   activeTrackId,
   activeLevel,
+  beginnerMode,
 }: RoadmapUrlState) {
   const params = new URLSearchParams();
-
-  if (searchQuery.trim()) {
-    params.set('q', searchQuery.trim());
-  }
 
   if (activeTrackId) {
     params.set('track', activeTrackId);
@@ -40,6 +36,10 @@ export function buildRoadmapUrlSearch({
 
   if (activeLevel) {
     params.set('level', activeLevel);
+  }
+
+  if (beginnerMode) {
+    params.set('beginner', '1');
   }
 
   if (topicId) {

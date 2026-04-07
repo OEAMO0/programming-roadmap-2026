@@ -3,54 +3,56 @@ import { roadmapMeta, topicCatalog } from '../../data/roadmap';
 import { buildRoadmapSeoState, syncRoadmapSeoDocument } from './seo';
 
 describe('roadmap SEO', () => {
-  it('builds an indexable home page SEO state by default', () => {
+  it('builds an indexable home page SEO state', () => {
     const seo = buildRoadmapSeoState({
+      route: 'home',
       selectedTopic: null,
-      searchQuery: '',
       activeTrackId: '',
       activeLevel: '',
+      beginnerMode: false,
     });
 
     expect(seo.title).toContain(roadmapMeta.title);
-    expect(seo.title).toContain('مسارات تفاعلية');
-    expect(seo.canonicalUrl).toContain('programming-roadmap-2026.devbread.workers.dev');
+    expect(seo.canonicalUrl).toBe(roadmapMeta.siteUrl);
     expect(seo.robots).toContain('index,follow');
     expect(seo.structuredData).toContain('CollectionPage');
   });
 
-  it('builds a focused topic SEO state when a topic is open', () => {
+  it('builds a focused topic SEO state on /map topic pages', () => {
     const seo = buildRoadmapSeoState({
-      selectedTopic: topicCatalog['python-math-computing'],
-      searchQuery: '',
+      route: 'map',
+      selectedTopic: topicCatalog['linux-distribution-engineering'],
       activeTrackId: '',
       activeLevel: '',
+      beginnerMode: false,
     });
 
-    expect(seo.title).toContain('رياضيات Python');
-    expect(seo.canonicalUrl).toContain('topic=python-math-computing');
-    expect(seo.description).toContain('Python');
+    expect(seo.title).toContain('Linux Distribution Engineering');
+    expect(seo.canonicalUrl).toContain('/map?topic=linux-distribution-engineering');
     expect(seo.robots).toContain('index,follow');
+    expect(seo.structuredData).toContain('LearningResource');
   });
 
-  it('marks pure search views as noindex to avoid duplicate low-value pages', () => {
+  it('marks filtered map views as noindex', () => {
     const seo = buildRoadmapSeoState({
+      route: 'map',
       selectedTopic: null,
-      searchQuery: 'NumPy',
-      activeTrackId: '',
+      activeTrackId: 'linux-userland-operations',
       activeLevel: '',
+      beginnerMode: false,
     });
 
-    expect(seo.title).toContain('نتائج البحث');
     expect(seo.robots).toContain('noindex,follow');
-    expect(seo.canonicalUrl).toBe('https://programming-roadmap-2026.devbread.workers.dev/');
+    expect(seo.title).toContain(topicCatalog['linux-userland-operations'].title);
   });
 
   it('syncs the SEO state into document head tags', () => {
     const seo = buildRoadmapSeoState({
+      route: 'map',
       selectedTopic: topicCatalog['frontend-web'],
-      searchQuery: '',
       activeTrackId: '',
       activeLevel: '',
+      beginnerMode: false,
     });
 
     syncRoadmapSeoDocument(seo);
@@ -58,8 +60,6 @@ describe('roadmap SEO', () => {
     expect(document.title).toBe(seo.title);
     expect(document.head.querySelector('meta[name="description"]')?.getAttribute('content')).toBe(seo.description);
     expect(document.head.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe(seo.canonicalUrl);
-    expect(document.head.querySelector('meta[property="og:image"]')?.getAttribute('content')).toContain('roadmap-social-card.svg');
-    expect(document.head.querySelector('meta[name="twitter:card"]')?.getAttribute('content')).toBe('summary_large_image');
     expect(document.getElementById('roadmap-structured-data')?.textContent).toContain('LearningResource');
   });
 });

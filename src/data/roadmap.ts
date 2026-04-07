@@ -20,10 +20,12 @@ import {
   type SectionLayout,
   type Tone,
   type TopicDetail,
+  type TopicInput,
   type TopicLevel,
   type TopicLinkHints,
   tonePalette,
 } from './roadmap-model';
+import { focusedTopicInputs } from './roadmap-focused-inputs';
 import { roadmapSections } from './roadmap-structure';
 import { topicInputs } from './roadmap-topic-inputs';
 
@@ -31,8 +33,41 @@ export type { Journey, RoadmapNodeData, Tone, TopicDetail, TopicLevel } from './
 export { roadmapSections } from './roadmap-structure';
 export { tonePalette } from './roadmap-model';
 
+type TopicInputOverride = Partial<TopicDetail>;
+const baseTopicInputs = topicInputs as unknown as Record<string, TopicInput>;
+const focusedTopicInputMap = focusedTopicInputs as Record<string, TopicInputOverride>;
+
+function mergeTopicInput(baseTopic: TopicInputOverride | undefined, overrideTopic: TopicInputOverride | undefined) {
+  const merged = {
+    ...baseTopic,
+    ...overrideTopic,
+    learn: overrideTopic?.learn ?? baseTopic?.learn ?? [],
+    build: overrideTopic?.build ?? baseTopic?.build ?? [],
+    resources: overrideTopic?.resources ?? baseTopic?.resources ?? [],
+    tags: overrideTopic?.tags ?? baseTopic?.tags ?? [],
+    searchKeywords: overrideTopic?.searchKeywords ?? baseTopic?.searchKeywords,
+    fits: overrideTopic?.fits ?? baseTopic?.fits,
+    effort: overrideTopic?.effort ?? baseTopic?.effort,
+    finalProject: overrideTopic?.finalProject ?? baseTopic?.finalProject,
+  };
+
+  if (!merged.title || !merged.level || !merged.category || !merged.summary) {
+    throw new Error(`Topic "${String(overrideTopic?.title ?? baseTopic?.title ?? 'unknown')}" is missing required fields after merge.`);
+  }
+
+  return merged;
+}
+
+const activeTopicIds = new Set(
+  roadmapSections.flatMap((section) => [section.id, ...section.right, ...section.left]),
+);
+
 export const topicCatalog = Object.fromEntries(
-  Object.entries(topicInputs).map(([id, topic]) => [id, { id, ...topic }]),
+  [...activeTopicIds].map((id) => {
+    const mergedTopic = mergeTopicInput(baseTopicInputs[id], focusedTopicInputMap[id]);
+
+    return [id, { id, ...mergedTopic }];
+  }),
 ) as Record<string, TopicDetail>;
 
 export const roadmapMeta = {
@@ -97,6 +132,7 @@ export function buildRoadmapGraph() {
       type: 'roadmapNode',
       position: { x: 0, y: centerY },
       data: {
+        topicId: section.id,
         title: sectionTopic.title,
         category: sectionTopic.category,
         level: sectionTopic.level,
@@ -144,6 +180,7 @@ export function buildRoadmapGraph() {
           type: 'roadmapNode',
           position: { x: branchOffset, y },
           data: {
+            topicId,
             title: topic.title,
             category: topic.category,
             level: topic.level,

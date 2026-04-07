@@ -7,1045 +7,523 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=frontend-testing-quality</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map</loc>
     <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=backend-frameworks-deployment</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=choosing-first-language</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=unity-unreal-godot</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=deep-foundations</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=game-dev-basics</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=core-programming</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=llm-foundations-evals</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=testing-strategy</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=frontend-framework</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=resource-atlas</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=prompting-context-tool-use</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=c-toolchain-debugging</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=accessibility-performance</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=testing-basics</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=cpp-performance-concurrency</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=performance-capacity</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=game-tools-assets</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=background-jobs-integrations</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=multiplayer-netcode</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=programming-paradigms</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=python-typing-testing</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=animation-audio-pipelines</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=binary-data</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=secure-coding-review</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=networking-protocols</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=portfolio-proof-of-work</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=python-packaging-venvs</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=browser-storage-offline</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=specialization</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=runtime-execution</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=concurrency-runtime</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=ops-runbooks-costs</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=debugging-error-handling</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=lifelong-learning-research</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=problem-solving</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=algorithms-thinking</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=evaluation-guardrails</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=recursion-iteration-patterns</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=routing-state-fetching</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=docs-code-review</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=scalability-resilience</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=quality-security</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=state-data-flow</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=services-events</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=backend-data</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=algorithms-complexity</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=linux-threads-sync</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=functions-modules</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=virtual-memory-filesystems</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=memory-references</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=backend-queues-webhooks</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=graphics-low-level</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=linux-math-libraries</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=game-math-physics</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=cloud-platform</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=network-edge-delivery</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=hardware-software-os</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=database-indexes-explain</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=leadership-systems-thinking</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=game-profiling-optimization</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=caching-queues-search</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=writing-teaching-communication</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=c-pointers-memory</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=compilers-interpreters</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=variables-control-flow</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=editor-terminal</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=entry</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=auth-sessions</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=cpu-memory-storage</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=transactions-consistency</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=architecture-systems</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=filesystem-processes</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=logic-boolean-models</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=forms-validation-ux</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=identity-access-control</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=frontend-web</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-distribution-testing-maintenance</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=ai-security-governance</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=frontend-testing-quality</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=operating-systems</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=deep-foundations</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=css-systems-responsive</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=core-programming</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=architectural-failure-modes</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=frontend-framework</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=gameplay-programming</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-kernel-config-build</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=developer-workflow</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=c-toolchain-debugging</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=linux-tracing-profiling</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-cross-compilation-toolchains</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=api-design-contracts</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=accessibility-performance</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=game-development</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=testing-basics</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=domain-boundaries</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-release-images-installers</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=model-serving-latency-cost</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-boot-initramfs</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=web-game-math-rendering</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=bits-logic-circuits</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=cpp-math-geometry</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=browser-storage-offline</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=python-math-computing</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=runtime-execution</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=supply-chain-secrets</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=debugging-error-handling</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=abstraction-layers</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=problem-solving</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=computer-science</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=algorithms-thinking</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=reading-docs-debugging-tools</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=recursion-iteration-patterns</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=python-profiling-bindings</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=docs-code-review</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=learning-strategy-projects</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-threads-sync</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=build-your-own-engine</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=functions-modules</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=browser-rendering-dom</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=virtual-memory-filesystems</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=how-software-is-made</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=memory-references</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=internet-web-basics</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-math-libraries</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=why-computers-matter</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=hardware-software-os</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=origins-history</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-namespaces-cgroups-isolation</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=why-programming</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-processes-services</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=database-internals</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=c-pointers-memory</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=engine-math-foundations</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=mastery-growth</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=cloud-fundamentals</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=distributed-systems</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=digital-literacy</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=package-managers</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=security-research-resource-atlas</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=embedded-robotics-resource-atlas</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=compiler-tools-resource-atlas</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=mobile-native-resource-atlas</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=desktop-apps-resource-atlas</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=data-engineering-resource-atlas</loc>
-    <lastmod>2026-04-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=backend-specialist</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=compilers-interpreters</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=cpp-performance-specialist</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=variables-control-flow</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=data-ai-specialist</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=editor-terminal</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=embedded-linux-specialist</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-package-repositories-signing</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=frontend-specialist</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=cpu-memory-storage</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=game-specialist</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=logic-boolean-models</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=mobile-specialist</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=forms-validation-ux</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=platform-specialist</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=frontend-web</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=product-engineering-specialist</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=operating-systems</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=python-engineering-specialist</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-distro-on-existing-base</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=research-open-source-specialist</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=developer-workflow</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=systems-programming-specialist</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-kernel-debugging</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=computer-architecture</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-tracing-profiling</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=engine-architecture</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-init-userspace-integration</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=linux-libc-linking</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=number-representation-encodings</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=computer-components</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-kernel-labs-roadmap</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=history-of-computers</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-kernel-boot-flow</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=history-of-programming</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-cli-filesystem-permissions</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=threat-modeling-privacy</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=abstraction-layers</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=ai-engineering</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=reading-docs-debugging-tools</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=data-structures-core</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=learning-strategy-projects</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=project-structure-environments</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-kernel-contribution-workflow</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=linux-kernel-uapi-modules</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=browser-rendering-dom</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=agents-mcp</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=how-software-is-made</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=ai-assisted-development</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=why-computers-matter</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=c-language-core</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=origins-history</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=c-linux-systems</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=why-programming</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=systems-native</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=package-managers</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=cpp-modern-core</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-libc-linking</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=cpp-linux-build</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=computer-components</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=canvas-webgpu-interactive</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=history-of-computers</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=ci-cd-iac</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=history-of-programming</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=docker-compose</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-buildroot-lfs</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=ecs-game-architecture</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-device-model-drivers</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=embeddings-rag</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=data-structures-core</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=fuzzing-incident-response</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=project-structure-environments</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=git-github</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-kernel-uapi-modules</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=html-css-layout</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=c-language-core</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=http-apis</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=c-linux-systems</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=javascript-typescript</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=cpp-linux-build</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=kubernetes-platform</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-capabilities-seccomp</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=linux-networking</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=docker-compose</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=monolith-modular</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-ebpf-observability</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=reverse-proxy-tls-dns</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-filesystem-hierarchy-packaging</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=observability</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=git-github</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=owasp-appsec</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=html-css-layout</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=python-tooling-quality</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=javascript-typescript</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=python-engineering</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-networking</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=python-language-core-deep</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-distribution-engineering</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=python-stdlib-automation</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-kernel-internals</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=python-async-services</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-systems-programming</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=cpp-raii-memory</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-userland-operations</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=game-shaders-materials</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=reverse-proxy-tls-dns</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=linux-sockets-epoll</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-shell-text-pipelines</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=sql-modeling</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-sockets-epoll</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=cpp-stl-templates</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=systemd-service-operations</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://programming-roadmap-2026.devbread.workers.dev/?topic=systemd-service-operations</loc>
+    <loc>https://programming-roadmap-2026.devbread.workers.dev/map?topic=linux-yocto-layers-recipes</loc>
     <lastmod>2026-04-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>

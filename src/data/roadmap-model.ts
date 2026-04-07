@@ -31,6 +31,9 @@ export type TopicDetail = {
   resources: ResourceLink[];
   tags: string[];
   searchKeywords?: string[];
+  fits?: string[];
+  effort?: string;
+  finalProject?: string[];
 };
 
 export type TopicInput = Omit<TopicDetail, 'id'>;
@@ -49,6 +52,7 @@ export type TopicLinkHints = {
 };
 
 export type RoadmapNodeData = {
+  topicId: string;
   title: string;
   category: string;
   level: TopicLevel;

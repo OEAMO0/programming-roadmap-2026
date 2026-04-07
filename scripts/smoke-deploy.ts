@@ -43,9 +43,10 @@ async function runSmokeCheck(url: string, timeoutMs: number) {
 
   const html = await response.text();
   const expectedMarkers = [
-    `<title>${roadmapMeta.title}</title>`,
     roadmapMeta.siteUrl,
-    '<div id="root"></div>',
+    '<div id="root">',
+    '/map',
+    'roadmap-social-card.svg',
   ];
 
   for (const marker of expectedMarkers) {

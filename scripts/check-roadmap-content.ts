@@ -120,10 +120,12 @@ function checkDocsSync(
   const readmeExpectations = [
     SITE_URL,
     roadmapMeta.updatedAt,
-    'بحث وفلترة',
-    'رابط مباشر',
-    'أطلس المصادر',
-    'اذهب إلى المسار',
+    '/map',
+    'صفحة هبوط',
+    'وضع مبتدئ',
+    'المفضلة',
+    'آخر ما فُتح',
+    'Linux Distribution Engineering',
     'test:e2e',
     'smoke:deploy',
     'GitHub Actions',
@@ -131,12 +133,12 @@ function checkDocsSync(
 
   const notebookExpectations = [
     roadmapMeta.updatedAt,
-    'البحث والفلترة',
-    'رياضيات Python',
-    'رابط مباشر',
-    'أخطاء شائعة',
-    'مصدر رسمي',
-    'أفضل فرص التوسعة القادمة',
+    'صفحة هبوط',
+    'لينكس',
+    'النواة',
+    'التوزيعات',
+    'Service Worker',
+    'المفضلة',
     'GitHub Actions',
   ];
 
@@ -181,7 +183,11 @@ function checkDocsSync(
       addIssue('docs', 'ملف public/sitemap.xml لا يحتوي على الصفحة الرئيسية.');
     }
 
-    if (!sitemapXml.includes('topic=frontend-web')) {
+    if (!sitemapXml.includes('/map')) {
+      addIssue('docs', 'ملف public/sitemap.xml لا يحتوي على صفحة الخريطة /map.');
+    }
+
+    if (!sitemapXml.includes('topic=linux-distribution-engineering')) {
       addIssue('docs', 'ملف public/sitemap.xml لا يحتوي على صفحات موضوعات قابلة للفهرسة.');
     }
   }

@@ -3,12 +3,14 @@ import { buildRoadmapShareUrl, buildRoadmapUrlSearch, parseRoadmapUrlState } fro
 
 describe('roadmap url state helpers', () => {
   it('parses a valid shared state from the URL', () => {
-    const state = parseRoadmapUrlState('?q=NumPy&track=python-engineering&level=%D9%85%D8%AA%D9%82%D8%AF%D9%85&topic=python-math-computing');
+    const state = parseRoadmapUrlState(
+      '?track=linux-distribution-engineering&level=%D9%85%D8%AA%D9%82%D8%AF%D9%85&beginner=1&topic=linux-buildroot-lfs',
+    );
 
-    expect(state.searchQuery).toBe('NumPy');
-    expect(state.activeTrackId).toBe('python-engineering');
+    expect(state.activeTrackId).toBe('linux-distribution-engineering');
     expect(state.activeLevel).toBe('متقدم');
-    expect(state.topicId).toBe('python-math-computing');
+    expect(state.beginnerMode).toBe(true);
+    expect(state.topicId).toBe('linux-buildroot-lfs');
   });
 
   it('ignores invalid topic and filter values', () => {
@@ -17,20 +19,21 @@ describe('roadmap url state helpers', () => {
     expect(state.activeTrackId).toBe('');
     expect(state.activeLevel).toBe('');
     expect(state.topicId).toBeNull();
+    expect(state.beginnerMode).toBe(false);
   });
 
   it('builds a stable share url for the current state', () => {
     const url = buildRoadmapShareUrl(
       {
-        searchQuery: 'Linux math',
-        activeTrackId: 'systems-native',
+        activeTrackId: 'linux-kernel-internals',
         activeLevel: 'متقدم',
-        topicId: 'linux-math-libraries',
+        beginnerMode: false,
+        topicId: 'linux-kernel-config-build',
       },
-      'https://programming-roadmap-2026.omadkdklilipo.workers.dev/',
+      'https://programming-roadmap-2026.devbread.workers.dev/map',
     );
 
-    expect(buildRoadmapUrlSearch(parseRoadmapUrlState(new URL(url).search))).toContain('track=systems-native');
-    expect(url).toContain('topic=linux-math-libraries');
+    expect(buildRoadmapUrlSearch(parseRoadmapUrlState(new URL(url).search))).toContain('track=linux-kernel-internals');
+    expect(url).toContain('topic=linux-kernel-config-build');
   });
 });
